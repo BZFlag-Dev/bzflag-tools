@@ -15,6 +15,22 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+--
+-- Table structure for table `player_names`
+--
+DROP TABLE IF EXISTS `player_names`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `player_names` (
+  `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `PlayerName` text,
+  `LastPlayed` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=426 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
 --
 -- Table structure for table `player_updates`
 --
@@ -34,15 +50,6 @@ CREATE TABLE `player_updates` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `player_updates`
---
-
-LOCK TABLES `player_updates` WRITE;
-/*!40000 ALTER TABLE `player_updates` DISABLE KEYS */;
-/*!40000 ALTER TABLE `player_updates` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `server_totals`
 --
 
@@ -57,15 +64,6 @@ CREATE TABLE `server_totals` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `server_totals`
---
-
-LOCK TABLES `server_totals` WRITE;
-/*!40000 ALTER TABLE `server_totals` DISABLE KEYS */;
-/*!40000 ALTER TABLE `server_totals` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `server_updates`
@@ -83,15 +81,6 @@ CREATE TABLE `server_updates` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `server_updates`
---
-
-LOCK TABLES `server_updates` WRITE;
-/*!40000 ALTER TABLE `server_updates` DISABLE KEYS */;
-/*!40000 ALTER TABLE `server_updates` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Dumping routines for database 'bz_stats'
