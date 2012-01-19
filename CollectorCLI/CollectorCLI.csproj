@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -49,6 +50,10 @@
     <ProjectReference Include="..\Connector\Connector.csproj">
       <Project>{7E5EF4D9-CA19-41F3-B50A-A79A0637C437}</Project>
       <Name>Connector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DatabaseStore\DatabaseStore.csproj">
+      <Project>{3A2A2402-8CCB-4318-BA60-A8BC1A104D0E}</Project>
+      <Name>DatabaseStore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
