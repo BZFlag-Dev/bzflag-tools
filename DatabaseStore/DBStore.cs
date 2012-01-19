@@ -34,10 +34,19 @@ namespace DatabaseStore
                 "UID=" + Configuration.Username + ";PASSWORD=" + Configuration.Password + ";";
             }
 
-            MySqlConnection connection = new MySqlConnection(conString);
-            connection.Open();
+            try
+            {
+                MySqlConnection connection = new MySqlConnection(conString);
+                connection.Open();
 
-            return connection;
+                return connection;
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("error connecting to db " + ex.Message);
+                return null;
+            }
+           
         }
 
         public void StorePlayerData (BZConnect connector)
@@ -48,15 +57,24 @@ namespace DatabaseStore
 
             foreach (KeyValuePair<int,GameQuery.PlayerInfo> player in connector.GameInfo.Players)
             {
-                string query = String.Format("INSERT INTO player_updates (PlayerName, ServerName, Team, Score, Timestamp) VALUES (@PLAYER, @SERVER, @TEAM, @SCORE, NOW()");
+                string query = String.Format("INSERT INTO player_updates (PlayerName, ServerName, Team, Score, Timestamp) VALUES (@PLAYER, @SERVER, @TEAM, @SCORE, @TIMESTAMP)");
                 
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign));
-                command.Parameters.Add(new MySqlParameter("SERVER", connector.Host + ":" + connector.Port.ToString()));
-                command.Parameters.Add(new MySqlParameter("TEAM", player.Value.Team.ToString()));
-                command.Parameters.Add(new MySqlParameter("SCORE", player.Value.Wins.ToString() + ":" + player.Value.Losses.ToString() + ":"+ player.Value.TKs.ToString()));
-
-                command.ExecuteNonQuery();
+                try
+                {
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign));
+                    command.Parameters.Add(new MySqlParameter("SERVER", connector.Host + ":" + connector.Port.ToString()));
+                    command.Parameters.Add(new MySqlParameter("TEAM", player.Value.Team.ToString()));
+                    command.Parameters.Add(new MySqlParameter("SCORE", player.Value.Wins.ToString() + ":" + player.Value.Losses.ToString() + ":" + player.Value.TKs.ToString()));
+                    command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                    command.ExecuteNonQuery();
+                }
+                catch (System.Exception ex)
+                {
+                    Console.WriteLine("error in StorePlayerData " + ex.Message);
+                    Console.WriteLine(query);
+                }
+               
             }
 
             connection.Close();
@@ -69,16 +87,25 @@ namespace DatabaseStore
             if (connection == null)
                 return;
 
-            string query = String.Format("INSERT INTO server_updates (ServerName, Players, Observers, Timestamp) VALUES (@SERVER, @PLAYERS, @OBSERVERS,  NOW())");
-            MySqlCommand command = new MySqlCommand(query, connection);
+            try
+            {
+                string query = String.Format("INSERT INTO server_updates (ServerName, Players, Observers, Timestamp) VALUES (@SERVER, @PLAYERS, @OBSERVERS, @TIMESTAMP)");
+                MySqlCommand command = new MySqlCommand(query, connection);
 
-            command.Parameters.Add(new MySqlParameter("PLAYERS", server.NonObservers));
-            command.Parameters.Add(new MySqlParameter("SERVER", server.Host + ":" + server.Port.ToString()));
-            command.Parameters.Add(new MySqlParameter("OBSERVERS", server.TotalPlayers - server.NonObservers));
-            command.ExecuteNonQuery();
+                command.Parameters.Add(new MySqlParameter("PLAYERS", server.NonObservers));
+                command.Parameters.Add(new MySqlParameter("SERVER", server.Host + ":" + server.Port.ToString()));
+                command.Parameters.Add(new MySqlParameter("OBSERVERS", server.TotalPlayers - server.NonObservers));
+                command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                command.ExecuteNonQuery();
 
-            connection.Close();
-            connection.Dispose();
+                connection.Close();
+                connection.Dispose();
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("error in StoreServerData " + ex.Message);
+            }
+            
         }
 
         public void StoreTotalData(int players, int servers)
@@ -87,13 +114,22 @@ namespace DatabaseStore
             if (connection == null)
                 return;
 
-            string query = String.Format("INSERT INTO server_totals_log (Players, Servers, Timestamp) VALUES (@PLAYERS, @SERVERS, NOW())");
-            MySqlCommand command = new MySqlCommand(query, connection);
-            command.Parameters.Add(new MySqlParameter("PLAYERS", players));
-            command.Parameters.Add(new MySqlParameter("SERVERS", servers));
-            command.ExecuteNonQuery();
-            connection.Close();
-            connection.Dispose();
+            try
+            {
+                string query = String.Format("INSERT INTO server_totals (Players, Servers, Timestamp) VALUES (@PLAYERS, @SERVERS, @TIMESTAMP)");
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.Add(new MySqlParameter("PLAYERS", players));
+                command.Parameters.Add(new MySqlParameter("SERVERS", servers));
+                command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                command.ExecuteNonQuery();
+                connection.Close();
+                connection.Dispose();
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("error in StoreServerData " + ex.Message);
+            }
+            
         }
     }
 }

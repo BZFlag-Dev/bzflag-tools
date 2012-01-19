@@ -33,8 +33,7 @@ namespace CollectorCLI
             }
             else
             {
-                cfg.Delete();
-                FileStream fs = cfg.OpenWrite();
+                FileStream fs = cfg.OpenRead();
                 XmlSerializer xml = new XmlSerializer(typeof(DBStore.Config));
                 DBStore.Configuration = (DBStore.Config)xml.Deserialize(fs);
                 fs.Close();
