@@ -55,10 +55,11 @@ namespace DatabaseStore
             if (connection == null)
                 return;
 
+            DateTime now = DateTime.Now;
             foreach (KeyValuePair<int,GameQuery.PlayerInfo> player in connector.GameInfo.Players)
             {
                 string query = String.Format("INSERT INTO player_updates (PlayerName, ServerName, Team, Score, Timestamp) VALUES (@PLAYER, @SERVER, @TEAM, @SCORE, @TIMESTAMP)");
-                
+               
                 try
                 {
                     MySqlCommand command = new MySqlCommand(query, connection);
@@ -68,6 +69,35 @@ namespace DatabaseStore
                     command.Parameters.Add(new MySqlParameter("SCORE", player.Value.Wins.ToString() + ":" + player.Value.Losses.ToString() + ":" + player.Value.TKs.ToString()));
                     command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
                     command.ExecuteNonQuery();
+
+                    query = String.Format("SELECT ID FROM player_names WHERE PlayerName=@PLAYER");
+
+                    command = new MySqlCommand(query, connection);
+                    command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign));
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    if (reader != null && reader.Read())
+                    {
+                        Int64 ID = reader.GetInt64(0);
+
+                        reader.Close();
+                        query = String.Format("UPDATE player_names SET LastPlayed=@TIMESTAMP WHERE ID=@ID");
+
+                        command = new MySqlCommand(query, connection);
+                        command.Parameters.Add(new MySqlParameter("ID", ID));
+                        command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                        command.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        reader.Close();
+                        query = String.Format("INSERT INTO player_names (PlayerName, LastPlayed) VALUES (@PLAYER, @TIMESTAMP)");
+               
+                        command = new MySqlCommand(query, connection);
+                        command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign));
+                        command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                        command.ExecuteNonQuery();
+                    }
                 }
                 catch (System.Exception ex)
                 {
