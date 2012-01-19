@@ -138,18 +138,26 @@ namespace Connector
         {
             Servers.Clear();
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
-            WebResponse responce = request.GetResponse();
+                WebResponse responce = request.GetResponse();
 
-            Stream stream = responce.GetResponseStream();
-            StreamReader reader = new StreamReader(stream);
+                Stream stream = responce.GetResponseStream();
+                StreamReader reader = new StreamReader(stream);
 
-            while (!reader.EndOfStream)
-                Servers.Add(new ServerEntry(reader.ReadLine()));
+                while (!reader.EndOfStream)
+                    Servers.Add(new ServerEntry(reader.ReadLine()));
 
-            reader.Close();
-            stream.Close();
+                reader.Close();
+                stream.Close();
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("Error in list serer update : " + ex.Message);
+            }
+
         }
 
         public List<ServerEntry> ServersWithRealPlayers()
