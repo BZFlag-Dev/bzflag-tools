@@ -173,7 +173,7 @@ namespace DatabaseStore
                 else
                 {
                     reader.Close();
-                    query = String.Format("INSERT INTO server_names (Description, GameType, GameFlags, Teams, LastPlayed) VALUES (@DESCRIPTION, @GAMETYPE, @FLAGS, @TEAMS, @TIMESTAMP)");
+                    query = String.Format("INSERT INTO server_names (Description, GameType, GameFlags, Teams, LastUpdate) VALUES (@DESCRIPTION, @GAMETYPE, @FLAGS, @TEAMS, @TIMESTAMP)");
 
                     command = new MySqlCommand(query, connection);
                     command.Parameters.Add(new MySqlParameter("DESCRIPTION", server.Description));
