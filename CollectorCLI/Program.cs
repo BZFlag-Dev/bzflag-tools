@@ -50,24 +50,40 @@ namespace CollectorCLI
 
             double redoTime = 5*60;
 
+            bool GotList = false;
+
+            List<BZFSList.ServerEntry> serversWithPlayers = new List<BZFSList.ServerEntry>();
+            List<BZFSList.ServerEntry> allServers = new List<BZFSList.ServerEntry>();
+
             while (!done)
             {
-                if (timer == null || timer.ElapsedMilliseconds >= (redoTime * 1000))
+                double WaitTime = redoTime * 1000;
+
+                if (timer == null || timer.ElapsedMilliseconds >= WaitTime)
                 {
                     BZFSList list = new BZFSList();
-                    list.Update("http://my.bzflag.org/db/?action=LIST");
+                    GotList = list.Update("http://my.bzflag.org/db/?action=LIST");
 
-                  
-                    List<BZFSList.ServerEntry> servers = list.ServersWithRealPlayers(BZFSList.ServerEntry.BZFlagProduct, BZFSList.ServerEntry.BZFlagVersion);
+                    if (GotList)
+                    {
+                        serversWithPlayers = list.ServersWithRealPlayers(BZFSList.ServerEntry.BZFlagProduct, BZFSList.ServerEntry.BZFlagVersion);
+                        allServers = list.ServersOfProduct(BZFSList.ServerEntry.BZFlagProduct, BZFSList.ServerEntry.BZFlagVersion);
+                    }
 
-                    foreach (BZFSList.ServerEntry server in servers)
-                        new DBStore().StoreServerData(server);
+                    if (GotList)
+                    {
+                        foreach (BZFSList.ServerEntry server in allServers)
+                            new DBStore().StoreServerBasicInfo(server);
+                    }
+                   
+                    foreach (BZFSList.ServerEntry server in serversWithPlayers)
+                        new DBStore().StoreServerActivityData(server);
 
                     List<BZConnect> Connectors = new List<BZConnect>();
 
                     int totalPlayers = 0;
                     int totalServersWithPlayers = 0;
-                    foreach (BZConnect con in BZConnect.DoForeach(servers, LogFunc, 5))
+                    foreach (BZConnect con in BZConnect.DoForeach(serversWithPlayers, LogFunc, 5))
                     {
                         totalServersWithPlayers++;
 
@@ -80,7 +96,6 @@ namespace CollectorCLI
                                 totalPlayers++;
                         }
                     }
-
 
                     FileInfo file = new FileInfo("results.csv");
                     StreamWriter sw = file.AppendText();

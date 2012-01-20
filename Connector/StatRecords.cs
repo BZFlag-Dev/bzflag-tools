@@ -40,6 +40,34 @@ namespace Connector
                 BadFlagAntidote = (optionsMask & 0x0100) != 0;
                 NoTeamKills = (optionsMask & 0x0400) != 0;
             }
+
+            public override string ToString()
+            {
+                string ret = "";
+                if (SuperFlags)
+                    ret += "SuperFlags,";
+                if (Jumping)
+                    ret += "Jumping,";
+                if (Inertia)
+                    ret += "Inertia,";
+                if (Inertia)
+                    ret += "Inertia,";
+                if (Ricochet)
+                    ret += "Ricochet,";
+                if (BadFlagShakable)
+                    ret += "BadFlagShakable,";
+                if (BadFlagAntidote)
+                    ret += "BadFlagAntidote,";
+                if (HandicapEnabled)
+                    ret += "HandicapEnabled,";
+                if (NoTeamKills)
+                    ret += "NoTeamKills,";
+
+                if (ret.Length > 0)
+                    ret = ret.TrimEnd(",".ToCharArray());
+
+                return ret;
+            }
         }
 
         public enum GameType
@@ -105,6 +133,20 @@ namespace Connector
         public TeamInfo GetTeam(int team)
         {
             return GetTeam(IDToTeam(team));
+        }
+
+        public string GetTeamList()
+        {
+            string ret = "";
+            foreach (KeyValuePair<TeamColors, TeamInfo> team in Teams)
+            {
+                if (team.Value.MaxSize > 0)
+                    ret += team.Key.ToString() + ",";
+            }
+
+            if (ret.Length > 0)
+                ret = ret.TrimEnd(",".ToCharArray());
+            return ret;
         }
 
         public class PlayerInfo

@@ -82,6 +82,27 @@ CREATE TABLE `server_updates` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+--
+-- Table structure for table `server_names`
+--
+
+DROP TABLE IF EXISTS `server_names`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `server_names` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ServerName` text,
+  `Description` text,
+  `GameType` tinytext,
+  `GameFlags` text,
+  `Teams` text,
+  `LastUpdate` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
 --
 -- Dumping routines for database 'bz_stats'
 --

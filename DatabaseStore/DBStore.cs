@@ -111,12 +111,11 @@ namespace DatabaseStore
             connection.Dispose();
         }
 
-        public void StoreServerData(BZFSList.ServerEntry server)
+        public void StoreServerActivityData(BZFSList.ServerEntry server)
         {
             MySqlConnection connection = Connect();
             if (connection == null)
                 return;
-
             try
             {
                 string query = String.Format("INSERT INTO server_updates (ServerName, Players, Observers, Timestamp) VALUES (@SERVER, @PLAYERS, @OBSERVERS, @TIMESTAMP)");
@@ -135,7 +134,64 @@ namespace DatabaseStore
             {
                 Console.WriteLine("error in StoreServerData " + ex.Message);
             }
-            
+        }
+
+        public void StoreServerBasicInfo(BZFSList.ServerEntry server)
+        {
+            MySqlConnection connection = Connect();
+            if (connection == null)
+                return;
+
+            DateTime now = DateTime.Now;
+            string serverName = server.Host + ":" + server.Port.ToString();
+            string query = string.Empty;
+
+            try
+            {
+                query = String.Format("SELECT ID FROM server_names WHERE ServerName=@SERVER");
+
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.Add(new MySqlParameter("SERVER", serverName));
+                MySqlDataReader reader = command.ExecuteReader();
+
+                if (reader != null && reader.Read())
+                {
+                    Int64 ID = reader.GetInt64(0);
+
+                    reader.Close();
+                    query = String.Format("UPDATE server_names SET Description=@DESCRIPTION, GameType=@GAMETYPE, GameFlags=@FLAGS, Teams=@TEAMS, LastUpdate=@TIMESTAMP WHERE ID=@ID");
+
+                    command = new MySqlCommand(query, connection);
+                    command.Parameters.Add(new MySqlParameter("ID", ID));
+                    command.Parameters.Add(new MySqlParameter("DESCRIPTION", server.Description));
+                    command.Parameters.Add(new MySqlParameter("GAMETYPE", server.GameInfo.ServerGameType.ToString()));
+                    command.Parameters.Add(new MySqlParameter("FLAGS", server.GameInfo.Options.ToString()));
+                    command.Parameters.Add(new MySqlParameter("TEAMS", server.GameInfo.GetTeamList()));
+                    command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                    command.ExecuteNonQuery();
+                }
+                else
+                {
+                    reader.Close();
+                    query = String.Format("INSERT INTO server_names (Description, GameType, GameFlags, Teams, LastPlayed) VALUES (@DESCRIPTION, @GAMETYPE, @FLAGS, @TEAMS, @TIMESTAMP)");
+
+                    command = new MySqlCommand(query, connection);
+                    command.Parameters.Add(new MySqlParameter("DESCRIPTION", server.Description));
+                    command.Parameters.Add(new MySqlParameter("GAMETYPE", server.GameInfo.ServerGameType.ToString()));
+                    command.Parameters.Add(new MySqlParameter("FLAGS", server.GameInfo.Options.ToString()));
+                    command.Parameters.Add(new MySqlParameter("TEAMS", server.GameInfo.GetTeamList()));
+                    command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine("error in StoreServerBasicInfo " + ex.Message);
+                Console.WriteLine(query);
+            }
+
+            connection.Close();
+            connection.Dispose();
         }
 
         public void StoreTotalData(int players, int servers)

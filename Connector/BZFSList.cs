@@ -134,7 +134,7 @@ namespace Connector
 
         public List<ServerEntry> Servers = new List<ServerEntry>();
 
-        public void Update(string url)
+        public bool Update(string url)
         {
             Servers.Clear();
 
@@ -152,12 +152,13 @@ namespace Connector
 
                 reader.Close();
                 stream.Close();
+                return true;
             }
             catch (System.Exception ex)
             {
                 Console.WriteLine("Error in list serer update : " + ex.Message);
             }
-
+            return false;
         }
 
         public List<ServerEntry> ServersWithRealPlayers()
