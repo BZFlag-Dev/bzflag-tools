@@ -223,9 +223,10 @@ namespace DatabaseStore
                 else
                 {
                     reader.Close();
-                    query = String.Format("INSERT INTO server_names (Description, GameType, GameFlags, Teams, LastUpdate) VALUES (@DESCRIPTION, @GAMETYPE, @FLAGS, @TEAMS, @TIMESTAMP)");
+                    query = String.Format("INSERT INTO server_names (ServerName, Description, GameType, GameFlags, Teams, LastUpdate) VALUES (@SERVER, @DESCRIPTION, @GAMETYPE, @FLAGS, @TEAMS, @TIMESTAMP)");
 
                     command = new MySqlCommand(query, connection);
+                    command.Parameters.Add(new MySqlParameter("SERVER", serverName));
                     command.Parameters.Add(new MySqlParameter("DESCRIPTION", server.Description));
                     command.Parameters.Add(new MySqlParameter("GAMETYPE", server.GameInfo.ServerGameType.ToString()));
                     command.Parameters.Add(new MySqlParameter("FLAGS", server.GameInfo.Options.ToString()));
