@@ -18,7 +18,7 @@ namespace CollectorCLI
     {
         public static void LogFunc(BZConnect con)
         {
-            new DBStore().StorePlayerData(con);
+            DBStore.NewDBConnect().StorePlayerData(con);
         }
 
         public static void LoadConfig ()
@@ -73,11 +73,11 @@ namespace CollectorCLI
                     if (GotList)
                     {
                         foreach (BZFSList.ServerEntry server in allServers)
-                            new DBStore().StoreServerBasicInfo(server);
+                            DBStore.NewDBConnect().StoreServerBasicInfo(server);
                     }
                    
                     foreach (BZFSList.ServerEntry server in serversWithPlayers)
-                        new DBStore().StoreServerActivityData(server);
+                        DBStore.NewDBConnect().StoreServerActivityData(server);
 
                     List<BZConnect> Connectors = new List<BZConnect>();
 
@@ -106,7 +106,7 @@ namespace CollectorCLI
                     sw.Close();
                     file = null;
 
-                    new DBStore().StoreTotalData(totalPlayers, totalServersWithPlayers);
+                    DBStore.NewDBConnect().StoreTotalData(totalPlayers, totalServersWithPlayers);
 
                     Console.WriteLine(line);
                     if (timer == null)

@@ -16,22 +16,72 @@ namespace DatabaseStore
             public string Username = string.Empty;
             public string Password = string.Empty;
             public string Database = string.Empty;
+
+            public string DatabaseSystem = "MYSQL";
+
+            public class ConfigItem
+            {
+                public string Key = string.Empty;
+                public string Value = string.Empty;
+            }
+
+            public List<ConfigItem> ExtraItems = new List<ConfigItem>();
         }
 
         public static Config Configuration = new Config();
+
+        protected DBStore()
+        {
+
+        }
+
+        public static DBStore NewDBConnect()
+        {
+            lock (Configuration)
+            {
+                if (Configuration.DatabaseSystem == "MYSQL")
+                    return new MYSQLDb();
+            }
+
+            return new DBStore();
+        }
+
+        public virtual void StorePlayerData (BZConnect connector)
+        {
+        }
+
+        public virtual void StoreServerActivityData(BZFSList.ServerEntry server)
+        { 
+        }
+
+        public virtual void StoreServerBasicInfo(BZFSList.ServerEntry server)
+        { 
+        }
+
+        public virtual void StoreTotalData(int players, int servers)
+        {
+        }
+    }
+
+    public class MYSQLDb : DBStore
+    {
+        internal MYSQLDb()
+        {
+
+        }
 
         protected MySqlConnection Connect()
         {
             string conString = string.Empty;
 
-            lock (Configuration)
+            lock (DBStore.Configuration)
             {
-                if (Configuration.Host == string.Empty)
+                if (DBStore.Configuration.Host == string.Empty)
                     return null;
 
-                conString = "SERVER=" + Configuration.Host + ";Port=" + Configuration.Port + ";" +
-                "DATABASE=" + Configuration.Database + ";" +
-                "UID=" + Configuration.Username + ";PASSWORD=" + Configuration.Password + ";";
+                conString = "SERVER=" + DBStore.Configuration.Host + ";Port=" + DBStore.Configuration.Port + ";" +
+                "DATABASE=" + DBStore.Configuration.Database + ";" +
+                "UID=" + DBStore.Configuration.Username + ";PASSWORD=" + DBStore.Configuration.Password + ";";
             }
 
             try
@@ -46,20 +96,20 @@ namespace DatabaseStore
                 Console.WriteLine("error connecting to db " + ex.Message);
                 return null;
             }
-           
+
         }
 
-        public void StorePlayerData (BZConnect connector)
+        public override void StorePlayerData(BZConnect connector)
         {
             MySqlConnection connection = Connect();
             if (connection == null)
                 return;
 
             DateTime now = DateTime.Now;
-            foreach (KeyValuePair<int,GameQuery.PlayerInfo> player in connector.GameInfo.Players)
+            foreach (KeyValuePair<int, GameQuery.PlayerInfo> player in connector.GameInfo.Players)
             {
                 string query = String.Format("INSERT INTO player_updates (PlayerName, ServerName, Team, Score, Timestamp) VALUES (@PLAYER, @SERVER, @TEAM, @SCORE, @TIMESTAMP)");
-               
+
                 try
                 {
                     MySqlCommand command = new MySqlCommand(query, connection);
@@ -92,7 +142,7 @@ namespace DatabaseStore
                     {
                         reader.Close();
                         query = String.Format("INSERT INTO player_names (PlayerName, LastPlayed) VALUES (@PLAYER, @TIMESTAMP)");
-               
+
                         command = new MySqlCommand(query, connection);
                         command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign));
                         command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
@@ -104,14 +154,14 @@ namespace DatabaseStore
                     Console.WriteLine("error in StorePlayerData " + ex.Message);
                     Console.WriteLine(query);
                 }
-               
+
             }
 
             connection.Close();
             connection.Dispose();
         }
 
-        public void StoreServerActivityData(BZFSList.ServerEntry server)
+        public override void StoreServerActivityData(BZFSList.ServerEntry server)
         {
             MySqlConnection connection = Connect();
             if (connection == null)
@@ -136,7 +186,7 @@ namespace DatabaseStore
             }
         }
 
-        public void StoreServerBasicInfo(BZFSList.ServerEntry server)
+        public override void StoreServerBasicInfo(BZFSList.ServerEntry server)
         {
             MySqlConnection connection = Connect();
             if (connection == null)
@@ -194,7 +244,7 @@ namespace DatabaseStore
             connection.Dispose();
         }
 
-        public void StoreTotalData(int players, int servers)
+        public override void StoreTotalData(int players, int servers)
         {
             MySqlConnection connection = Connect();
             if (connection == null)
@@ -215,7 +265,6 @@ namespace DatabaseStore
             {
                 Console.WriteLine("error in StoreServerData " + ex.Message);
             }
-            
         }
     }
 }
