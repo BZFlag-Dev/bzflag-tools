@@ -45,6 +45,9 @@ CREATE TABLE `player_updates` (
   `Team` text,
   `Score` text,
   `Timestamp` datetime DEFAULT NULL,
+  `Wins` int(11),
+  `Losses` int(11),
+  `Teamkills` int(11),
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;

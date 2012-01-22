@@ -108,7 +108,7 @@ namespace DatabaseStore
             DateTime now = DateTime.Now;
             foreach (KeyValuePair<int, GameQuery.PlayerInfo> player in connector.GameInfo.Players)
             {
-                string query = String.Format("INSERT INTO player_updates (PlayerName, ServerName, Team, Score, Timestamp) VALUES (@PLAYER, @SERVER, @TEAM, @SCORE, @TIMESTAMP)");
+                string query = String.Format("INSERT INTO player_updates (PlayerName, ServerName, Team, Score, Wins, Losses, Teamkills, Timestamp) VALUES (@PLAYER, @SERVER, @TEAM, @SCORE, @WINS, @LOSSES, @TKS, @TIMESTAMP)");
 
                 try
                 {
@@ -118,6 +118,11 @@ namespace DatabaseStore
                     command.Parameters.Add(new MySqlParameter("TEAM", player.Value.Team.ToString()));
                     command.Parameters.Add(new MySqlParameter("SCORE", player.Value.Wins.ToString() + ":" + player.Value.Losses.ToString() + ":" + player.Value.TKs.ToString()));
                     command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+
+                    command.Parameters.Add(new MySqlParameter("WINS", player.Value.Wins.ToString()));
+                    command.Parameters.Add(new MySqlParameter("LOSSES", player.Value.Losses.ToString()));
+                    command.Parameters.Add(new MySqlParameter("TKS", player.Value.TKs.ToString()));
+
                     command.ExecuteNonQuery();
 
                     query = String.Format("SELECT ID FROM player_names WHERE PlayerName=@PLAYER");
