@@ -6,6 +6,7 @@
 		echo "	<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
 				<html>
 				<head>
+				<meta http-equiv=\"refresh\" content=\"300\"> 
 				<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
 				<title>Untitled Document</title>
 				<style type=\"text/css\">
@@ -37,14 +38,37 @@
 			font-family:Arial, Helvetica, sans-serif;
 			}
 			
-			h2.statbox{
+			tr.statbox{
+			margin-top: 10px;
+			borer-top: solid black;
+			vertical-align: top;
+			}
+			
+			.statbox{
 				margin:0;
 				pading:0;
+				font-size:80%;
 			}
 			
 			h2.statbox{
 				margin:0;
 				pading:0;
+			}
+			
+			table.current_table{
+			border: solid black;
+			margin-left: 10px;
+			margin-right: 10px;
+			padding-left:15px;
+			vertical-align: top;
+			}
+			
+			.stat_table_header{
+			color: red;
+			height: 35px;
+			margin-bottom: 10px;
+			font-size:80%;
+			width: 300px;
 			}
 			
 			-->
@@ -69,6 +93,75 @@
 	{
 		echo "</body>
 				<html>";
+	}
+	
+	function doScores ( $now )
+	{
+		$db = ConnectToDB();
+		
+		// popular server
+		
+		$query = "SELECT ID, ServerName, Players, Observers FROM server_updates WHERE Timestamp > '$now' ORDER BY Players DESC LIMIT 1";
+		$popularServer = GetFirstQueryResults ( SQLGet($query));
+		if ($popularServer)
+		{
+			$popName = $popularServer[1];
+			$popPlayers = $popularServer[2];
+			$popObservers = $popularServer[3];
+			
+			echo "<h2>Most Popular Server</h2>
+			<h3>$popName</h3>
+			<h3>Players: $popPlayers</h3>
+			<h3>Observers: $popObservers</h3>";
+		}
+		
+		// top score
+		$query = "SELECT ID, PlayerName, ServerName, Score, Team FROM player_updates WHERE Timestamp > '$now' ORDER BY Wins DESC LIMIT 1";
+		$bestPlayer = GetFirstQueryResults (SQLGet($query));
+		
+		if ($bestPlayer)
+		{
+			$bestName = $bestPlayer[1];
+			$bestServer = $bestPlayer[2];
+			$bestScore = $bestPlayer[3];
+			$bestTeam = $bestPlayer[4];
+			
+			echo "<h2>Most Wins</h2>
+			<h3>$bestName($bestTeam) $bestScore</h3>
+			</h4>&nbsp;on $bestServer</h4>";
+		}
+		
+		// low score
+		$query = "SELECT ID, PlayerName, ServerName, Score, Team FROM player_updates WHERE Timestamp > '$now' ORDER BY Losses DESC LIMIT 1";
+		$worstPlayer = GetFirstQueryResults (SQLGet($query));
+		
+		if ($worstPlayer)
+		{
+			$bestName = $worstPlayer[1];
+			$bestServer = $worstPlayer[2];
+			$bestScore = $worstPlayer[3];
+			$bestTeam = $worstPlayer[4];
+			
+			echo "<h2>Worst Player</h2>
+			<h3>$bestName($bestTeam) $bestScore</h3>
+			</h4>&nbsp;on $bestServer</h4>";
+		}
+		
+		// teamkills
+		$query = "SELECT ID, PlayerName, ServerName, Score, Team FROM player_updates WHERE Timestamp > '$now' ORDER BY Teamkills DESC LIMIT 1";
+		$worstPlayer = GetFirstQueryResults (SQLGet($query));
+		
+		if ($worstPlayer)
+		{
+			$bestName = $worstPlayer[1];
+			$bestServer = $worstPlayer[2];
+			$bestScore = $worstPlayer[3];
+			$bestTeam = $worstPlayer[4];
+			
+			echo "<h2>Biggest Jerk</h2>
+			<h3>$bestName($bestTeam) $bestScore</h3>
+			</h4>&nbsp;on $bestServer</h4>";
+		}
 	}
 	
 	function doPastStats( $days )
@@ -99,69 +192,10 @@
 		
 		echo "<h2>Server Populations</h2>
 		<h3>Available Servers: $servers_total</h3>
-		<h3>Most Popular Time: $maximumTime GMT $mostPlayers Players, $mostServers Servers</h3>
-		<h3>Least Popular Time: $minimumTime GMT $leastPlayers Players, $leastServers Servers</h3>";
+		<h3>Most Popular Time: $maximumTime GMT</h3><h4>$mostPlayers Players, $mostServers Servers</43>
+		<h3>Least Popular Time: $minimumTime GMT</h3><h4>$leastPlayers Players, $leastServers Servers</h4>";
 		
-		// popular server
-		
-		$query = "SELECT ID, ServerName, Players, Observers FROM server_updates WHERE Timestamp > '$now' ORDER BY Players DESC LIMIT 1";
-		$popularServer = GetFirstQueryResults ( SQLGet($query));
-		if ($popularServer)
-		{
-			$popName = $popularServer[1];
-			$popPlayers = $popularServer[2];
-			$popObservers = $popularServer[3];
-			
-			echo "<h2>Most Popular Server</h2>
-			<h3>$popName</h3>
-			<h3>Players: $popPlayers</h3>
-			<h3>Observers: $popObservers</h3>";
-		}
-		
-		// top score
-		$query = "SELECT ID, PlayerName, ServerName, Score, Team FROM player_updates WHERE Timestamp > '$now' ORDER BY Wins DESC LIMIT 1";
-		$bestPlayer = GetFirstQueryResults (SQLGet($query));
-		
-		if ($bestPlayer)
-		{
-			$bestName = $bestPlayer[1];
-			$bestServer = $bestPlayer[2];
-			$bestScore = $bestPlayer[3];
-			$bestTeam = $bestPlayer[4];
-			
-			echo "<h2>Most Wins</h2>
-			<h3>$bestName($bestTeam) $bestScore on $bestServer</h3>";
-		}
-		
-		// low score
-		$query = "SELECT ID, PlayerName, ServerName, Score, Team FROM player_updates WHERE Timestamp > '$now' ORDER BY Losses DESC LIMIT 1";
-		$worstPlayer = GetFirstQueryResults (SQLGet($query));
-		
-		if ($worstPlayer)
-		{
-			$bestName = $worstPlayer[1];
-			$bestServer = $worstPlayer[2];
-			$bestScore = $worstPlayer[3];
-			$bestTeam = $worstPlayer[4];
-			
-			echo "<h2>Worst Player</h2>
-			<h3>$bestName($bestTeam) $bestScore on $bestServer</h3>";
-		}
-		
-		// teamkills
-		$query = "SELECT ID, PlayerName, ServerName, Score, Team FROM player_updates WHERE Timestamp > '$now' ORDER BY Teamkills DESC LIMIT 1";
-		$worstPlayer = GetFirstQueryResults (SQLGet($query));
-		
-		if ($worstPlayer)
-		{
-			$bestName = $worstPlayer[1];
-			$bestServer = $worstPlayer[2];
-			$bestScore = $worstPlayer[3];
-			$bestTeam = $worstPlayer[4];
-			
-			echo "<h2>Biggest Jerk</h2>
-			<h3>$bestName($bestTeam) $bestScore on $bestServer</h3>";
-		}
+		doScores($now);
 	}
 	
 	function doCurrentStats()
@@ -183,71 +217,13 @@
 		$servers_total = count(GetResults ( SQLGet($query)));
 		
 		echo "<h2>Servers</h2>
-		<h4>Last Update: $time GMT</h4>
 		<h3>Available Servers: $servers_total</h3>
-		<h3>Current Games: $servers</h3>
-		<h3>Current Players: $players</h3>";
+		<h3>Current Games: $servers</h3><h4>&nbsp;</h4>
+		<h3>Current Players: $players</h3><h4>&nbsp;</h4>";
 		
 		// popular server
-		
-		$query = "SELECT ID, ServerName, Players, Observers FROM server_updates WHERE Timestamp > '$now' ORDER BY Players DESC LIMIT 1";
-		$popularServer = GetFirstQueryResults ( SQLGet($query));
-		if ($popularServer)
-		{
-			$popName = $popularServer[1];
-			$popPlayers = $popularServer[2];
-			$popObservers = $popularServer[3];
-			
-			echo "<h2>Popular Server</h2>
-			<h3>$popName</h3>
-			<h3>Players: $popPlayers</h3>
-			<h3>Observers: $popObservers</h3>";
-		}
-		
-		// top score
-		$query = "SELECT ID, PlayerName, ServerName, Score, Team FROM player_updates WHERE Timestamp > '$now' ORDER BY Wins DESC LIMIT 1";
-		$bestPlayer = GetFirstQueryResults (SQLGet($query));
-		
-		if ($bestPlayer)
-		{
-			$bestName = $bestPlayer[1];
-			$bestServer = $bestPlayer[2];
-			$bestScore = $bestPlayer[3];
-			$bestTeam = $bestPlayer[4];
-			
-			echo "<h2>Most Wins</h2>
-			<h3>$bestName($bestTeam) $bestScore on $bestServer</h3>";
-		}
-		
-		// low score
-		$query = "SELECT ID, PlayerName, ServerName, Score, Team FROM player_updates WHERE Timestamp > '$now' ORDER BY Losses DESC LIMIT 1";
-		$worstPlayer = GetFirstQueryResults (SQLGet($query));
-		
-		if ($worstPlayer)
-		{
-			$bestName = $worstPlayer[1];
-			$bestServer = $worstPlayer[2];
-			$bestScore = $worstPlayer[3];
-			$bestTeam = $worstPlayer[4];
-			
-			echo "<h2>Worst Player</h2>
-			<h3>$bestName($bestTeam) $bestScore on $bestServer</h3>";
-		}
-		
-		// teamkills
-		$query = "SELECT ID, PlayerName, ServerName, Score, Team FROM player_updates WHERE Timestamp > '$now' ORDER BY Teamkills DESC LIMIT 1";
-		$worstPlayer = GetFirstQueryResults (SQLGet($query));
-		
-		if ($worstPlayer)
-		{
-			$bestName = $worstPlayer[1];
-			$bestServer = $worstPlayer[2];
-			$bestScore = $worstPlayer[3];
-			$bestTeam = $worstPlayer[4];
-			
-			echo "<h2>Biggest Jerk</h2>
-			<h3>$bestName($bestTeam) $bestScore on $bestServer</h3>";
-		}
+
+		doScores($now);
 	}
 	
 	function doOldPage()
@@ -299,11 +275,30 @@
 		}
 	}
 	
+	function doCurrentHeader()
+	{
+		$db = ConnectToDB();
+		$now  = date ("Y-m-d H:i:s", time() - (6*60));
+	
+		$query = "SELECT ID, Players, Servers, Timestamp FROM server_totals ORDER BY Timestamp DESC LIMIT 1";
+	
+		$lastUpdate = GetFirstQueryResults ( SQLGet($query));
+		$id = $lastUpdate[0];
+		$players = $lastUpdate[1];
+		$servers = $lastUpdate[2];
+		$time = $lastUpdate[3];
+		
+		$query = "SELECT ID FROM server_names WHERE LastUpdate > '$now'";
+	
+		$servers_total = count(GetResults ( SQLGet($query)));
+		return "<h1>Current</h1><strong>Last update" . $time ."</strong>";
+	}
+	
 	function doCurrent()
 	{
-		echo "<table class=\"current_table\" border=\"0\" cellpading=\"5px\" cellspacing=\"0\">
-			<tr><td><h1>Current</h1></td><td><h1>Today</h1></td><td><h1>This Week</h1></td></tr>
-			<tr><td><div class=\"statbox\">";
+		echo "<table class=\"current_table\">
+			<tr><td><div class=\"stat_table_header\">" . doCurrentHeader() . "</div></td><td><div class=\"stat_table_header\"><h1>Today</h1></div></td><td><div class=\"stat_table_header\"><h1>This Week</h1></div></td></tr>
+			<tr class=\"statbox\"><td><div class=\"statbox\">";
 			
 		doCurrentStats();
 		echo "</div></td><td><div class=\"statbox\">";
