@@ -26,22 +26,22 @@
 			
 			#topnav
 			{
-			margin:0;
-			padding:5px;
-			margin-top:5px;
-			margin-bottom:10px;
-			background-color:#039;
-			background-position:bottom;
-			background-repeat:repeat-x;
-			font-size:16px;
-			color:#FFF;
-			font-family:Arial, Helvetica, sans-serif;
+				margin:0;
+				padding:5px;
+				margin-top:5px;
+				margin-bottom:10px;
+				background-color:#039;
+				background-position:bottom;
+				background-repeat:repeat-x;
+				font-size:16px;
+				color:#FFF;
+				font-family:Arial, Helvetica, sans-serif;
 			}
 			
 			tr.statbox{
-			margin-top: 10px;
-			borer-top: solid black;
-			vertical-align: top;
+				margin-top: 10px;
+				borer-top: solid black;
+				vertical-align: top;
 			}
 			
 			.statbox{
@@ -56,19 +56,19 @@
 			}
 			
 			table.current_table{
-			border: solid black;
-			margin-left: 10px;
-			margin-right: 10px;
-			padding-left:15px;
-			vertical-align: top;
+				border: solid black;
+				margin-left: 10px;
+				margin-right: 10px;
+				padding-left:15px;
+				vertical-align: top;
 			}
 			
 			.stat_table_header{
-			color: red;
-			height: 35px;
-			margin-bottom: 10px;
-			font-size:80%;
-			width: 300px;
+				color: red;
+				height: 35px;
+				margin-bottom: 10px;
+				font-size:80%;
+				width: 300px;
 			}
 			
 			-->
