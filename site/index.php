@@ -297,7 +297,11 @@
 	function doCurrent()
 	{
 		echo "<table class=\"current_table\">
-			<tr><td><div class=\"stat_table_header\">" . doCurrentHeader() . "</div></td><td><div class=\"stat_table_header\"><h1>Today</h1></div></td><td><div class=\"stat_table_header\"><h1>This Week</h1></div></td></tr>
+			<tr><td><div class=\"stat_table_header\">" . doCurrentHeader() . "</div></td>
+			<td><div class=\"stat_table_header\"><h1>Today</h1></div></td>
+			<td><div class=\"stat_table_header\"><h1>This Week</h1></div></td>
+			<td><div class=\"stat_table_header\"><h1>This Month</h1></div></td>
+			</tr>
 			<tr class=\"statbox\"><td><div class=\"statbox\">";
 			
 		doCurrentStats();
@@ -305,6 +309,8 @@
 		doPastStats(1);
 		echo "</div></td><td><div class=\"statbox\">";
 		doPastStats(7);
+		echo "</div></td><td><div class=\"statbox\">";
+		doPastStats(30);
 		echo "</div></td></tr></table>";
 	}
 	
