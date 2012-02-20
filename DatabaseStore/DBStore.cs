@@ -113,7 +113,7 @@ namespace DatabaseStore
                 try
                 {
                     MySqlCommand command = new MySqlCommand(query, connection);
-                    command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign));
+                    command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign.Trim().Replace("\0","")));
                     command.Parameters.Add(new MySqlParameter("SERVER", connector.Host + ":" + connector.Port.ToString()));
                     command.Parameters.Add(new MySqlParameter("TEAM", player.Value.Team.ToString()));
                     command.Parameters.Add(new MySqlParameter("SCORE", player.Value.Wins.ToString() + ":" + player.Value.Losses.ToString() + ":" + player.Value.TKs.ToString()));
@@ -128,7 +128,7 @@ namespace DatabaseStore
                     query = String.Format("SELECT ID FROM player_names WHERE PlayerName=@PLAYER");
 
                     command = new MySqlCommand(query, connection);
-                    command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign));
+                    command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign.Trim().Replace("\0", "")));
                     MySqlDataReader reader = command.ExecuteReader();
 
                     if (reader != null && reader.Read())
@@ -149,7 +149,7 @@ namespace DatabaseStore
                         query = String.Format("INSERT INTO player_names (PlayerName, LastPlayed) VALUES (@PLAYER, @TIMESTAMP)");
 
                         command = new MySqlCommand(query, connection);
-                        command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign));
+                        command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign.Trim().Replace("\0", "")));
                         command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
                         command.ExecuteNonQuery();
                     }
