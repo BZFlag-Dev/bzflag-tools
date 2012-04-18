@@ -100,7 +100,7 @@ namespace CollectorCLI
                     FileInfo file = new FileInfo("results.csv");
                     StreamWriter sw = file.AppendText();
 
-                    string line = DateTime.Now.ToString() + "," + totalServersWithPlayers.ToString() + "," + totalPlayers.ToString();
+                    string line = DateTime.Now.ToUniversalTime().ToString() + "," + totalServersWithPlayers.ToString() + "," + totalPlayers.ToString();
 
                     sw.WriteLine(line);
                     sw.Close();

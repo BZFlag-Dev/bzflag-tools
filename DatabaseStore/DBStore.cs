@@ -105,7 +105,7 @@ namespace DatabaseStore
             if (connection == null)
                 return;
 
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.Now.ToUniversalTime();
             foreach (KeyValuePair<int, GameQuery.PlayerInfo> player in connector.GameInfo.Players)
             {
                 string query = String.Format("INSERT INTO player_updates (PlayerName, ServerName, Team, Score, Wins, Losses, Teamkills, Timestamp) VALUES (@PLAYER, @SERVER, @TEAM, @SCORE, @WINS, @LOSSES, @TKS, @TIMESTAMP)");
@@ -117,7 +117,7 @@ namespace DatabaseStore
                     command.Parameters.Add(new MySqlParameter("SERVER", connector.Host + ":" + connector.Port.ToString()));
                     command.Parameters.Add(new MySqlParameter("TEAM", player.Value.Team.ToString()));
                     command.Parameters.Add(new MySqlParameter("SCORE", player.Value.Wins.ToString() + ":" + player.Value.Losses.ToString() + ":" + player.Value.TKs.ToString()));
-                    command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                    command.Parameters.Add(new MySqlParameter("TIMESTAMP", now));
 
                     command.Parameters.Add(new MySqlParameter("WINS", player.Value.Wins.ToString()));
                     command.Parameters.Add(new MySqlParameter("LOSSES", player.Value.Losses.ToString()));
@@ -140,7 +140,7 @@ namespace DatabaseStore
 
                         command = new MySqlCommand(query, connection);
                         command.Parameters.Add(new MySqlParameter("ID", ID));
-                        command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                        command.Parameters.Add(new MySqlParameter("TIMESTAMP", now));
                         command.ExecuteNonQuery();
                     }
                     else
@@ -150,7 +150,7 @@ namespace DatabaseStore
 
                         command = new MySqlCommand(query, connection);
                         command.Parameters.Add(new MySqlParameter("PLAYER", player.Value.Callsign.Trim().Replace("\0", "")));
-                        command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                        command.Parameters.Add(new MySqlParameter("TIMESTAMP", now));
                         command.ExecuteNonQuery();
                     }
                 }
@@ -179,7 +179,7 @@ namespace DatabaseStore
                 command.Parameters.Add(new MySqlParameter("PLAYERS", server.NonObservers));
                 command.Parameters.Add(new MySqlParameter("SERVER", server.Host + ":" + server.Port.ToString()));
                 command.Parameters.Add(new MySqlParameter("OBSERVERS", server.TotalPlayers - server.NonObservers));
-                command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now.ToUniversalTime()));
                 command.ExecuteNonQuery();
 
                 connection.Close();
@@ -197,7 +197,7 @@ namespace DatabaseStore
             if (connection == null)
                 return;
 
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.Now.ToUniversalTime();
             string serverName = server.Host + ":" + server.Port.ToString();
             string query = string.Empty;
 
@@ -222,7 +222,7 @@ namespace DatabaseStore
                     command.Parameters.Add(new MySqlParameter("GAMETYPE", server.GameInfo.ServerGameType.ToString()));
                     command.Parameters.Add(new MySqlParameter("FLAGS", server.GameInfo.Options.ToString()));
                     command.Parameters.Add(new MySqlParameter("TEAMS", server.GameInfo.GetTeamList()));
-                    command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                    command.Parameters.Add(new MySqlParameter("TIMESTAMP", now));
                     command.ExecuteNonQuery();
                 }
                 else
@@ -236,7 +236,7 @@ namespace DatabaseStore
                     command.Parameters.Add(new MySqlParameter("GAMETYPE", server.GameInfo.ServerGameType.ToString()));
                     command.Parameters.Add(new MySqlParameter("FLAGS", server.GameInfo.Options.ToString()));
                     command.Parameters.Add(new MySqlParameter("TEAMS", server.GameInfo.GetTeamList()));
-                    command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                    command.Parameters.Add(new MySqlParameter("TIMESTAMP", now));
                     command.ExecuteNonQuery();
                 }
             }
@@ -262,7 +262,7 @@ namespace DatabaseStore
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.Add(new MySqlParameter("PLAYERS", players));
                 command.Parameters.Add(new MySqlParameter("SERVERS", servers));
-                command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now));
+                command.Parameters.Add(new MySqlParameter("TIMESTAMP", DateTime.Now.ToUniversalTime()));
                 command.ExecuteNonQuery();
                 connection.Close();
                 connection.Dispose();
