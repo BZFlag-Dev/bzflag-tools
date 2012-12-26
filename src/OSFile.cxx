@@ -99,7 +99,7 @@ void WindowsMakePath(const char* path)
 void nixMakePath(const char* path)
 {
   // scan the folder path and make it
-  char *pos = strchr (path,'/');
+  const char *pos = strchr (path,'/');
 
   if (!pos) { // dono maybe the screwed up
     std::string str = "//";

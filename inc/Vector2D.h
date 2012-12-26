@@ -19,6 +19,7 @@
 #define __VECTOR2D_H__
 
 #include <string>
+#include <stdio.h>
 #include "MathUtils.h"
 
 // I'll maybe think later of adding name spaces
@@ -142,7 +143,7 @@ public:
    */
   std::string toString() const {
     char buffer[80];
-    sprintf( buffer, "[%.4f,%.4f]", float(x), float(y) );
+    snprintf( buffer, 80, "[%.4f,%.4f]", float(x), float(y) );
     return std::string( buffer );
   }
   /**
