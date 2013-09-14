@@ -17,8 +17,10 @@
 # This is a preliminary version that imports only the final 1251
 # commits comprising all of the v2.4.x work in the Subversion repo.
 
-AUTHORS="`dirname $0`/svn_authors"
-AUTHORS="`readlink -f $AUTHORS`"		# use full path
+SOURCE="`dirname $0`"
+SOURCE="`readlink -f $SOURCE`"			# use full path
+MASTER_REPO="file://`cd $SOURCE && git rev-parse --git-dir`"
+AUTHORS="$SOURCE/svn_authors"
 UPSTREAM_REPO=https://svn.code.sf.net/p/bzflag/code
 UPSTREAM_UUID=08b3d480-bf2c-0410-a26f-811ee3361c24
 SVN_REPO=file:///scratch/bzflag/bzflag.svn	# $UPSTREAM_REPO will be much slower
@@ -42,7 +44,7 @@ cd $GIT_REPO_NAME
 
 # Import v2.x svn commits starting from when 2.99.x was replaced with 2.3.0 on trunk.
 # This takes 8 minutes on Bullet Catcher's computer.
-git svn fetch -q -r21396:22828 --authors-file=$AUTHORS
+time git svn fetch -q -r21396:22828 --authors-file=$AUTHORS
 
 # clean up branches
 git branch -d -r v2_99continuing		# not ready for this branch now
@@ -65,15 +67,24 @@ git tag v2.4.0 `git rev-parse :/@22053.08b3d480`	# r22053
 git branch -m master v2_4_x
 
 # change all committer info to match the author
-git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- --all
+git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- --all | tr \\015 \\012
 rm -r .git/refs/original	# discard old commits saved by filter-branch 
 
 # set the master branch to unborn state
 echo ref: refs/heads/master > .git/HEAD
 rm -r *
-git rm -r --cached .
+git rm -q -r --cached .
 
-sleep 1				# let the clock advance
-git gc --prune=now		# old commits be gone!
+git remote add -f m $MASTER_REPO		# import master branch
+git branch --track master remotes/m/master	# disconnected master branch
+git remote remove m				# disconnect from repo
+git reset --hard HEAD				# checkout master branch
 
-# 10.25 minutes elapsed time on Bullet Catcher's computer
+sleep 1						# let the clock advance
+git reflog expire --expire=now --all		# purge reflogs
+git gc --prune=now				# rewritten commits be gone!
+rm .git/COMMIT_EDITMSG .git/FETCH_HEAD		# tidy
+rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
+git status --ignored				# update index and show state
+
+# 10.5 minutes elapsed time on Bullet Catcher's computer
