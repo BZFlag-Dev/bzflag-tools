@@ -63,8 +63,39 @@ git tag v2.4.2 `git rev-parse :/@22528.08b3d480`	# r22528
 git branch -d -r tags/v2_4_0
 git tag v2.4.0 `git rev-parse :/@22053.08b3d480`	# r22053
 
-# give the branch a meaningful name
-git branch -m master v2_4_x
+git branch -m master v2_4_x		# give the branch a meaningful name
+git branch v2_6_x v2_4_x		# create new development branch
+
+# Import post-Subversion changes, rewriting history to make it look like
+# 2.4.x compatible changes were actually committed to the v2_4_x branch.
+git checkout v2_4_x			# be sure to start at the right place
+git remote add -f alpha $HOME/bzflag/bzflag.git
+git cherry-pick 3fedeb3..dcc5ae4	# Update with git info
+git cherry-pick aed50ba			# Add a .gitignore file
+git cherry-pick c9ec8bd			# Don't ignore .dsp and .dsw files
+git cherry-pick b3b2444			# ignore windows temp and bin files
+git cherry-pick 084c020..af6a459	# ingnore more windows temp files
+git checkout v2_6_x
+git cherry-pick 373570a..3fedeb3	# update version
+# JeffM would have done this if he were actually committing to the v2_4_x branch
+GIT_AUTHOR_DATE='1373139800 -0700' GIT_AUTHOR_NAME='Jeffery Myers' GIT_AUTHOR_EMAIL='jeffm2501@gmail.com' git merge "-mMerge branch 'v2_4_x'" v2_4_x
+git cherry-pick 514748b			# Bump the BZFS protocol number ...
+git cherry-pick f37d6ed			# Change the BZFlag version number ...
+git checkout v2_4_x
+git cherry-pick 514748b..d140a69	# No more acceptance, just read on wiki
+git cherry-pick 82cb3e0..4d58043	# Build only a dynamic library ...
+git cherry-pick 68c7a06			# Use "git ls-files" to get the ...
+git cherry-pick 4717a78			# Add 2 more files to the list of ...
+git cherry-pick c970ee6..70418c7	# For observers, do not flash GAME ...
+git checkout v2_6_x
+GIT_AUTHOR_DATE='1376370000 -0700' git merge '-mMerge branch v2_4_x onto branch v2_6_x.' v2_4_x
+git checkout v2_4_x
+git cherry-pick 76263f1..6afb5e0	# Bring the list of changes in ...
+git cherry-pick 68c7a06..fe34967	# remove files that were not ready ...
+git checkout v2_6_x
+GIT_AUTHOR_DATE='1376861008 -0700' git merge '-mMerge recent v2_4_x changes into v2_6_x.' v2_4_x
+git remote remove alpha
+git tag -d `git tag | fgrep -v .`	# expunge alpha tags
 
 # change all committer info to match the author
 git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- --all | tr \\015 \\012
@@ -72,13 +103,13 @@ rm -r .git/refs/original	# discard old commits saved by filter-branch
 
 # set the master branch to unborn state
 echo ref: refs/heads/master > .git/HEAD
-rm -r *
+rm -r .gitignore *
 git rm -q -r --cached .
 
-git remote add -f m $MASTER_REPO		# import master branch
-git branch --track master remotes/m/master	# disconnected master branch
-git remote remove m				# disconnect from repo
-git reset --hard HEAD				# checkout master branch
+git remote add -f blaster $MASTER_REPO			# import master branch
+git branch --track master remotes/blaster/master	# disconnected master branch
+git remote remove blaster				# disconnect from repo
+git reset --hard HEAD					# checkout master branch
 
 sleep 1						# let the clock advance
 git reflog expire --expire=now --all		# purge reflogs
@@ -87,4 +118,4 @@ rm .git/COMMIT_EDITMSG .git/FETCH_HEAD		# tidy
 rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
 git status --ignored				# update index and show state
 
-# 10.5 minutes elapsed time on Bullet Catcher's computer
+# 11 minutes elapsed time on Bullet Catcher's computer
