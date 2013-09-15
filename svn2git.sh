@@ -119,3 +119,10 @@ rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
 git status --ignored				# update index and show state
 
 # 11 minutes elapsed time on Bullet Catcher's computer
+
+exit 0
+# Push this to a new empty repo at GitHub:
+git remote add origin git@github.com:BZFlag-Dev/bzflag-import-2.git
+git push -u origin master
+git push -u origin --all
+git push -u origin --tags
