@@ -1,4 +1,23 @@
+# comma separated columns:
+#  Subversion commit number (or "default")
+#  import method (empty, rebase_tag_inline, merge, rebase_tag_branch, etc.)
+#  Git repo (bzflag, bzedit, web, etc.)
+#  branch or other Git object name for the commit's parent
+#  nothing, or tag for the commit to be preserved
+
+default,bzflag,,,
+5,bzflag,empty,trunk,
+6,bzflag,rebase_tag_branch,trunk,v1_7c_2
+8,bzflag,rebase_tag_branch,trunk,v1_7d_5
+10,bzflag,rebase_tag_inline,trunk,v1_7d_6
+12,bzflag,rebase_tag_inline,trunk,v1_7d_7
+14,bzflag,rebase_tag_inline,trunk,v1_7d_8
+16,bzflag,rebase_tag_inline,trunk,v1_7d_9
+66,bzflag,inline_tag,trunk,v1_7e_0
+134,bzflag,inline_tag,trunk,v1_7e1
+163,bzflag,inline_tag,trunk,v1_7e2
 176,bzedit,auto,,
+177,bzedit,empty,trunk,
 178,bzedit,auto,,
 196,bzedit,auto,,
 197,bzedit,auto,,
@@ -6,11 +25,35 @@
 199,bzedit,auto,,
 200,bzedit,auto,,
 201,bzedit,auto,,
+292,bzflag,inline_tag,trunk,v1_7e4
 309,bzedit,auto,,
 310,bzedit,auto,,
+# r332 could be represented as a merge of branch v1_7 r333 onto trunk if not for their chronological order
+337,bzflag,empty,v1_7,
+338,bzflag,empty,v1_7,
+341,bzflag,empty,v1_7,
+347,bzflag,rebase_tag_branch,v1_7,v20020226
+534,bzflag,empty,v1_7,
+535,bzflag,empty,v1_7,
+536,bzflag,empty,v1_7,
+537,bzflag,empty,v1_7,
+538,bzflag,empty,v1_7,
+566,bzflag,empty,v1_7,
+567,bzflag,empty,v1_7,
+568,bzflag,empty,v1_7,
+569,bzflag,empty,v1_7,
+570,bzflag,empty,v1_7,
+571,bzflag,empty,v1_7,
+572,bzflag,empty,v1_7,
+573,bzflag,empty,v1_7,
+574,bzflag,empty,v1_7,
+575,bzflag,empty,v1_7,
+642,bzflag,empty,v1_7,
+711,bzflag,inline_tag,v1_7,v1_7e6
 808,web,auto,,
 809,web,auto,,
 810,web,auto,,
+811,web,empty,trunk,
 820,web,auto,,
 831,web,auto,,
 832,web,auto,,
@@ -42,6 +85,10 @@
 860,web,auto,,
 861,web,auto,,
 862,web,auto,,
+868,bzflag,empty,v1_7,
+880,bzflag,empty,v1_7,
+# r895 copies v1_7 onto v1_7branch, record it in Git as a merge
+895,bzflag,merge-Xtheirs,v1_7branch,v1_7
 988,web,auto,,
 989,web,auto,,
 990,web,auto,,
@@ -50,14 +97,18 @@
 993,web,auto,,
 994,web,auto,,
 1031,web,auto,,
+1071,bzflag,rebase_tag_inline,v1_8,v1_8abort
 1213,web,auto,,
 1214,web,auto,,
+1556,bzflag,inline_tag,v1_7,v1_7g2
+1586,bzflag,rebase_r1586,,
 1695,bzeditw32,auto,,
 1696,bzeditw32,auto,,
 1697,bzeditw32,auto,,
 1698,bzeditw32,auto,,
 1699,bzeditw32,auto,,
 1789,pybzflag,auto,,
+1790,pybzflag,empty,trunk,
 1792,pybzflag,auto,,
 1793,pybzflag,auto,,
 1805,pybzflag,auto,,
@@ -160,6 +211,7 @@
 2059,pybzflag,auto,,
 2060,pybzflag,auto,,
 2063,pybzflag,auto,,
+2069,bzflag,merge-Xtheirs,trunk,remove_flag_id
 2070,pybzflag,auto,,
 2071,pybzflag,auto,,
 2072,pybzflag,auto,,
@@ -978,11 +1030,18 @@
 3721,bzedit,auto,,
 3722,bzedit,auto,,
 3815,web,auto,,
+3870,bzflag,inline_tag,trunk,v1_9_4_Beta
+4014,bzflag,inline_tag,trunk,v1_9_6_Beta
+4027,bzflag,inline_tag,trunk,v1_9_7_Beta
 4166,web,auto,,
 4167,web,auto,,
+4210,bzflag,inline_tag,trunk,v1_9_8_Beta
 4244,web,auto,,
 4246,web,auto,,
 4248,web,auto,,
+4367,bzflag,inline_tag,trunk,v1_9_9_Beta
+4675,bzflag,inline_tag,trunk,v1_10_0
+4866,bzflag,inline_tag,trunk,v1_10_2
 5528,bzeditw32,auto,,
 5577,bzeditw32,auto,,
 5580,bzeditw32,auto,,
@@ -995,6 +1054,7 @@
 5652,pybzflag,auto,,
 5653,pybzflag,auto,,
 5654,pybzflag,auto,,
+5681,bzflag,rebase_branch,tags/v1_10_4,v1_10branch
 6087,bzeditw32,auto,,
 6089,bzeditw32,auto,,
 6189,bzeditw32,auto,,
@@ -1013,6 +1073,7 @@
 6377,web,auto,,
 6393,bzeditw32,auto,,
 6416,db,auto,,
+6417,db,empty,trunk,
 6418,db,auto,,
 6419,db,auto,,
 6420,db,auto,,
@@ -1044,6 +1105,10 @@
 6665,db,auto,,
 6666,db,auto,,
 6875,db,auto,,
+# More so than others, CVS tag v1_10_6 was applied to not-the-latest
+# revisions for some files.  r6859 is the least different parent.
+6879,bzflag,rebase_tag_branch,:/@6859.08b3d480,v1_10_6
+6881,bzflag,rebase_tag_branch,v1_10branch,V1_10_6
 6882,db,auto,,
 6883,db,auto,,
 6884,db,auto,,
@@ -1081,6 +1146,9 @@
 7544,web,auto,,
 7676,db,auto,,
 7906,db,auto,,
+7968,bzflag,inline_tag,trunk,pre-mesh
+8091,bzflag,inline_tag,trunk,v1_11_12
+8111,bzflag,inline_tag,trunk,v1_11_14
 8126,admin,auto,,
 8133,web,auto,,
 8135,web,auto,,
@@ -1100,6 +1168,9 @@
 8226,admin,auto,,
 8229,admin,auto,,
 8267,web,auto,,
+8428,bzflag,rebase_tag_branch,trunk,v1_11_15
+8472,bzflag,inline_tag,trunk,v1_11_16
+8475,bzflag,rebase_tag_inline,v1_10branch,v1_10_8
 8476,db,auto,,
 8477,db,auto,,
 8479,db,auto,,
@@ -1176,7 +1247,7 @@
 9234,db,auto,,
 9241,db,auto,,
 9266,db,auto,,
-9311,db,auto,,
+9311,db,auto,,	# this revision includes both bzflag and db trees
 9312,web,auto,,
 9313,web,auto,,
 9333,db,auto,,
@@ -1189,6 +1260,7 @@
 9661,db,auto,,
 9754,db,auto,,
 9795,web,auto,,
+9902,bzflag,inline_tag,trunk,v2_0_0
 9916,db,auto,,
 9918,db,auto,,
 9919,db,auto,,
@@ -1205,10 +1277,12 @@
 10217,bzeditw32,auto,,
 10218,bzeditw32,auto,,
 10219,bzeditw32,auto,,
+10220,bzeditw32,inline_tag,trunk,v1_6_4
 10228,bzeditw32,auto,,
 10229,bzeditw32,auto,,
 10230,bzeditw32,auto,,
 10245,admin,auto,,
+10258,bzflag,rebase_tag_inline,trunk,v2_0_2
 10260,admin,auto,,
 10307,pybzflag,auto,,
 10308,admin,auto,,
@@ -1230,25 +1304,49 @@
 10984,bzeditw32,auto,,
 10986,bzeditw32,auto,,
 10987,bzeditw32,auto,,
+10988,bzeditw32,inline_tag,trunk,v1_6_5
 11005,admin,auto,,
 11224,admin,auto,,
 11396,db,auto,,
 11565,db,auto,,
+11578,bzflag,inline_tag,trunk,v2_0_4_rc1
+11617,bzflag,inline_tag,trunk,v2_0_4_rc4
+11653,bzflag,inline_tag,trunk,v2_0_4_rc5
+11720,bzflag,inline_tag,trunk,v2_0_4
 11733,db,auto,,
 11793,db,auto,,
 11794,db,auto,,
 11797,db,auto,,
 11800,db,auto,,
+11814,bzflag,rebase_tag_branch,trunk,v2_0_5_b1
+11963,bzflag,rebase_tag_inline,v2_0branch,merge-2_0-2_1-1
+11968,bzflag,merge,trunk,tags/merge-2_0-2_1-1
 11990,db,auto,,
+12015,bzflag,rebase_tag_inline,v2_0branch,merge-2_0-2_1-2
+12017,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-2
+12038,bzflag,rebase_tag_inline,v2_0branch,merge-2_0-2_1-3
+12039,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-3
+12058,bzflag,rebase_tag_inline,v2_0branch,merge-2_0-2_1-4
+12060,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-4
 12079,db,auto,,
+12108,bzflag,rebase_tag_inline,v2_0branch,merge-2_0-2_1-5
+12109,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-5
+# merge the correct revision instead of tags/merge-2_0-2_1-6
+# which was created after the corresponding merge
+12123,bzflag,merge,trunk,:/@12122.08b3d480
+12126,bzflag,rebase_tag_inline,v2_0branch,merge-2_0-2_1-6
 12132,db,auto,,
+12164,bzflag,rebase_tag_inline,v2_0branch,merge-2_0-2_1-7
+12166,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-7
 12201,db,auto,,
 12206,admin,auto,,
 12230,db,auto,,
 12237,web,auto,,
 12238,web,auto,,
 12239,web,auto,,
+12256,bzflag,inline_tag,v2_0branch,merge-2_0-2_1-8
 12257,admin,auto,,
+12258,bzflag,merge-Xtheirs,trunk,tags/merge-2_0-2_1-8
 12259,admin,auto,,
 12260,admin,auto,,
 12274,admin,auto,,
@@ -1259,6 +1357,7 @@
 12303,admin,auto,,
 12304,admin,auto,,
 12359,admin,auto,,
+12396,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-9
 12415,admin,auto,,
 12416,admin,auto,,
 12418,admin,auto,,
@@ -1268,9 +1367,13 @@
 12438,db,auto,,
 12466,admin,auto,,
 12475,admin,auto,,
+# Git merges the parent of tags/merge-2_0-2_1-10 much more cleanly
+12504,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-10~
 12506,db,auto,,
 12516,admin,auto,,
 12542,admin,auto,,
+# Git merges the parent of tags/merge-2_0-2_1-11 much more cleanly
+12688,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-11~
 12701,web,auto,,
 12702,web,auto,,
 12703,web,auto,,
@@ -1280,6 +1383,8 @@
 12820,db,auto,,
 12821,db,auto,,
 12822,db,auto,,
+# Git merges the parent of tags/merge-2_0-2_1-12 much more cleanly
+12828,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-12~
 12834,admin,auto,,
 12835,admin,auto,,
 12840,admin,auto,,
@@ -1297,6 +1402,7 @@
 12878,db,auto,,
 12884,db,auto,,
 12885,db,auto,,
+12894,bzflag,rebase_tag_branch,v2_0branch,v2_0_8
 12973,admin,auto,,
 13045,db,auto,,
 13102,admin,auto,,
@@ -1329,6 +1435,18 @@
 13854,admin,auto,,
 13873,admin,auto,,
 13938,web,auto,,
+13939,bzflag,empty,tags/V1_10_6,		# delete tag
+13940,bzflag,empty,tags/merge-2_0-2_1-1,	# delete tag
+13941,bzflag,empty,tags/merge-2_0-2_1-2,	# delete tag
+13942,bzflag,empty,tags/merge-2_0-2_1-3,	# delete tag
+13943,bzflag,empty,tags/merge-2_0-2_1-4,	# delete tag
+13944,bzflag,empty,tags/merge-2_0-2_1-5,	# delete tag
+13945,bzflag,empty,tags/merge-2_0-2_1-6,	# delete tag
+13946,bzflag,empty,tags/merge-2_0-2_1-7,	# delete tag
+13947,bzflag,empty,tags/merge-2_0-2_1-8,	# delete tag
+13948,bzflag,empty,tags/merge-2_0-2_1-9,	# delete tag
+13949,bzflag,empty,tags/merge-2_0-2_1-10,	# delete tag
+13950,bzflag,empty,tags/merge-2_0-2_1-11,	# delete tag
 14002,web,auto,,
 14216,db,auto,,
 14245,bzworkbench,auto,,
@@ -1386,6 +1504,9 @@
 14340,db,auto,,
 14341,bzworkbench,auto,,
 14342,db,auto,,
+# TODO: the ftgl branch does not use the bzflag/ subdirectory
+14344,bzflag,cherry_pick_branch_up,trunk~,ftgl
+#base directory mismatch 14347,bzflag,merge,ftgl,trunk
 14366,db,auto,,
 14367,db,auto,,
 14370,db,auto,,
@@ -1426,7 +1547,9 @@
 14509,bzworkbench,auto,,
 14510,bzworkbench,auto,,
 14511,bzworkbench,auto,,
+#base directory mismatch 14514,bzflag,merge,ftgl,trunk
 14515,bzworkbench,auto,,
+14524,bzflag,rebase_branch,trunk,gsoc_irc
 14532,bzworkbench,auto,,
 14533,bzworkbench,auto,,
 14535,bzworkbench,auto,,
@@ -1438,6 +1561,7 @@
 14551,bzworkbench,auto,,
 14555,bzworkbench,auto,,
 14556,bzworkbench,auto,,
+#base directory mismatch 14557,bzflag,merge,ftgl,trunk
 14591,bzworkbench,auto,,
 14598,bzwgen,auto,,
 14599,bzwgen,auto,,
@@ -1456,11 +1580,14 @@
 14643,bzwgen,auto,,
 14664,db,auto,,
 14665,bzworkbench,auto,,
+#base directory mismatch 14666,bzflag,merge,ftgl,trunk
 14669,bzworkbench,auto,,
+#base directory mismatch 14675,bzflag,merge,trunk,ftgl
 14682,bzworkbench,auto,,
 14684,bzworkbench,auto,,
 14687,bzworkbench,auto,,
 14691,bzworkbench,auto,,
+14692,bzflag,empty,ftgl,	# delete branch
 14693,bzworkbench,auto,,
 14696,db,auto,,
 14697,bzworkbench,auto,,
@@ -1742,7 +1869,14 @@
 15213,bzwgen,auto,,
 15214,bzwgen,auto,,
 15215,bzwgen,auto,,
+# TODO: the soc-bzwgen tag does not use the bzwgen/ subdirectory
+15216,bzwgen,cherry_pick_branch_up,trunk,soc-bzwgen
+# TODO: the soc-bzworkbench tag does not use the bzworkbench/ subdirectory
+15217,bzworkbench,cherry_pick_branch_up,trunk,soc-bzworkbench
 15218,bzwgen,auto,,
+# TODO: the soc-bzrobots tag does not use the bzrobots/ subdirectory
+15219,bzrobots,cherry_pick_branch_up,trunk,soc-bzrobots
+15220,bzflag,inline_tag,gsoc_irc,soc-irc
 15221,bzwgen,auto,,
 15222,bzwgen,auto,,
 15223,bzwgen,auto,,
@@ -2157,11 +2291,14 @@
 15765,db,auto,,
 15787,db,auto,,
 15812,db,auto,,
+15875,bzflag,empty,remove_flag_id,	# delete branch
 15877,db,auto,,
 15890,db,auto,,
 15896,bzwgen,auto,,
 15897,web,auto,,
 15900,bzwgen,auto,,
+15902,bzflag,empty,v2_0branch,
+15903,bzflag,rebase_branch_inline,v2_0branch,tags/v2_0_10_RC1
 15940,bzwgen,auto,,
 15941,bzwgen,auto,,
 15942,bzwgen,auto,,
@@ -2170,6 +2307,8 @@
 15945,bzworkbench,auto,,
 15946,bzworkbench,auto,,
 15947,bzworkbench,auto,,
+# TODO: the v2_0_10_RC2 tag does not use the bzflag/ subdirectory
+15960,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_10_RC2
 15969,bzworkbench,auto,,
 15970,bzworkbench,auto,,
 15973,bzworkbench,auto,,
@@ -2182,6 +2321,9 @@
 16001,bzworkbench,auto,,
 16002,bzworkbench,auto,,
 16003,bzworkbench,auto,,
+# TODO: the v2_0_10RC3 tag does not use the bzflag/ subdirectory
+16012,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_10RC3
+16016,bzflag,rebase_tag_branch,tags/v2_0_10RC3,v2_0_10_RC3
 16046,web,auto,,
 16047,web,auto,,
 16049,web,auto,,
@@ -2196,6 +2338,7 @@
 16077,web,auto,,
 16078,web,auto,,
 16156,web,auto,,
+16208,bzflag,rebase_tag_inline,v2_0branch,v2_0_10
 16211,db,auto,,
 16212,db,auto,,
 16213,db,auto,,
@@ -2289,6 +2432,8 @@
 16803,bzwgen,auto,,
 16877,bzworkbench,auto,,
 16917,web,auto,,
+# TODO: v2_99_shot_branch does not use the bzflag/ subdirectory
+16945,bzflag,cherry_pick_branch_up,trunk,v2_99_shot_branch
 16979,bzwgen,auto,,
 16980,bzwgen,auto,,
 16982,bzwgen,auto,,
@@ -2304,12 +2449,17 @@
 17168,web,auto,,
 17169,db,auto,,
 17169,web,auto,,
+17261,bzflag,cherry_pick_branch_up,trunk,v2_99_net_branch
 17284,bzwgen,auto,,
 17285,bzwgen,auto,,
 17286,bzwgen,auto,,
+# TODO: gsoc_server_listing does not use the bzflag/ subdirectory
+17325,bzflag,cherry_pick_branch_up,trunk,gsoc_server_listing
 17328,bzauthd,auto,,
 17329,bzauthd,auto,,
 17330,bzauthd,auto,,
+# TODO: gsoc_08_libbzw does not use the bzflag/ subdirectory
+17331,bzflag,cherry_pick_branch_up,trunk,gsoc_08_libbzw
 17337,bzauthd,auto,,
 17338,bzauthd,auto,,
 17339,bzwgen,auto,,
@@ -2321,6 +2471,8 @@
 17368,bzauthd,auto,,
 17376,bzwgen,auto,,
 17385,bzworkbench,auto,,
+# TODO: gsoc_libbzw does not use the bzflag/ subdirectory
+17409,bzflag,rebase_branch,gsoc_08_libbzw,gsoc_libbzw
 17431,bzauthd,auto,,
 17432,bzauthd,auto,,
 17433,bzauthd,auto,,
@@ -2337,6 +2489,7 @@
 17444,bzauthd,auto,,
 17445,bzauthd,auto,,
 17446,bzauthd,auto,,
+17447,bzauthd,empty,trunk,
 17448,bzauthd,auto,,
 17449,bzauthd,auto,,
 17450,bzauthd,auto,,
@@ -2450,8 +2603,13 @@
 17825,bzwgen,auto,,
 17826,bzwgen,auto,,
 17837,web,auto,,
+# TODO: tag v2_0_12 does not use the bzflag/ subdirectory
+17839,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_12
+17840,bzflag,empty,tags/v2_0_12,	# rename the deleted tag to tags/v2_0_12.deleted
+17841,bzflag,rebase_tag_branch,tags/v2_0_12.deleted,v2_0_12
 17842,bzwgen,auto,,
 17843,web,auto,,
+# TODO 17844,bzflag,cherry_pick_branch_down,tags/v2_0_12,v2_0branch
 17882,bzauthd,auto,,
 17883,bzauthd,auto,,
 17884,bzauthd,auto,,
@@ -2515,6 +2673,8 @@
 18047,bzauthd,auto,,
 18080,bzauthd,auto,,
 18081,bzauthd,auto,,
+# TODO: gsoc_collisions does not use the bzflag/ subdirectory
+18083,bzflag,cherry_pick_branch_up,trunk,gsoc_collisions
 18085,bzauthd,auto,,
 18088,bzauthd,auto,,
 18092,bzauthd,auto,,
@@ -2595,7 +2755,6 @@
 18365,bzwgen,auto,,
 18366,bzwgen,auto,,
 18367,bzwgen,auto,,
-18372,gsoc_libbzw,auto,,
 18374,bzauthd,auto,,
 18375,bzauthd,auto,,
 18383,bzwgen,auto,,
@@ -2619,6 +2778,10 @@
 18421,bzwgen,auto,,
 18422,bzwgen,auto,,
 18423,bzwgen,auto,,
+18426,bzauthd,auto,,
+18428,bzwgen,auto,,
+# TODO: trepan branch does not use the bzflag/ subdirectory
+18431,bzflag,cherry_pick_branch_up,trunk,trepan
 18465,bzwgen,auto,,
 18467,bzwgen,auto,,
 18468,bzwgen,auto,,
@@ -2644,6 +2807,7 @@
 18739,custom_plugins,auto,,
 18762,db,auto,,
 18774,db,auto,,
+18911,bzflag,empty,trepan,	# delete branch
 19095,db,auto,,
 19096,db,auto,,
 19097,web,auto,,
@@ -2941,6 +3105,8 @@
 20746,web,auto,,
 20747,web,auto,,
 20748,web,auto,,
+# TODO: tag v2_0_14 does not use the bzflag/ subdirectory
+20845,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_14
 20848,web,auto,,
 20849,web,auto,,
 20852,bzworkbench,auto,,
@@ -3005,13 +3171,19 @@
 20936,bzworkbench,auto,,
 20937,bzworkbench,auto,,
 20949,bzworkbench,auto,,
+# TODO: tag v2_0_16 does not use the bzflag/ subdirectory
+20982,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_16
 21015,bzworkbench,auto,,
 21016,bzworkbench,auto,,
 21017,bzworkbench,auto,,
 21018,bzworkbench,auto,,
 21019,bzworkbench,auto,,
 21020,db,auto,,
+21077,bzflag,inline_tag,trunk,v3_0_alpha1
+# TODO: fast-forward merge r21079 inline
 21172,bzworkbench,auto,,
+21206,bzflag,inline_tag,trunk,v3_0_alpha2
+# TODO: fast-forward merge r21207 inline
 21214,db,auto,,
 21217,db,auto,,
 21239,bzworkbench,auto,,
@@ -3092,9 +3264,18 @@
 21367,db,auto,,
 21375,db,auto,,
 21383,db,auto,,
+21389,bzflag,empty,bzflag,	# delete branch
+# 21390,bzflag,empty,trunk,	# delete tags/v1_7temp & tags/v1_8abort
+21392,bzflag,empty,v1_7branch,	# delete branch
+21393,bzflag,rebase_tag_branch,trunk,v2_99archive
+# 21395 trunk -> v2_99archive
+# 21396 v2_0branch -> trunk
+# 21401,bzflag,empty,trunk,	# add file branches/BRANCHES.txt
 21427,db,auto,,
 21512,db,auto,,
 21555,db,auto,,
+# 21560 v2_99continuing
+22053,bzflag,cherry_pick_branch_up,trunk,tags/v2_4_0
 22060,db,auto,,
 22061,db,auto,,
 22064,db,auto,,
@@ -3150,7 +3331,9 @@
 22473,web,auto,,
 22474,web,auto,,
 22481,web,auto,,
+22528,bzflag,cherry_pick_branch_up,trunk,tags/v2_4_2
 22561,web,auto,,
 22562,web,auto,,
 22563,web,auto,,
 22568,bzwgen,auto,,
+99999,,,,		# end of file marker
