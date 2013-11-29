@@ -173,7 +173,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git rev-parse HEAD > .git/refs/$new_parent
 					fi
 					;;
-				    cherry_pick_branch_up|cherry_pick_branch_down)	# move to correct parent with sliding top-level directory
+				    cherry_pick_branch_up|cherry_pick_branch_down_inline)	# move to correct parent with sliding top-level directory
 					if [ -z "$tag" ] ; then
 						echo r$rev requires a tag or source branch
 						exit 1
@@ -185,13 +185,34 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					if [ $method = cherry_pick_branch_up ] ; then
 						git rm -q -r $repo
 					else
-						echo $method not implemented
-						exit 1
+						git reset HEAD
+						rm -r $repo
+						mkdir .bzFLAG
+						if [ -f .cvsignore ] ; then
+							mv .cvsignore .bzFLAG
+						fi
+						mv * .bzFLAG
+						mv .bzFLAG $repo
+						git add --all
 					fi
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
-					git commit -q --allow-empty "--date=$DATE" "--author=$AUTHOR" -F .git/MERGE_MSG
+					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print'`"
+					case "$tag" in
+					    trunk|tags/*)
+						LOCATION=$tag
+						;;
+					    *)
+						LOCATION=branches/$tag
+						;;
+					esac
+					git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
+
+git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					git rev-parse HEAD > .git/refs/remotes/$tag
+					if [ $method = cherry_pick_branch_down_inline ] ; then
+						git rev-parse HEAD > .git/refs/remotes/$branch
+					fi
 					;;
 				    rebase_tag_branch|rebase_tag_inline)	# move tag to correct parent
 					case "$branch" in

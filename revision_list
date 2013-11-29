@@ -2307,8 +2307,7 @@ default,bzflag,,,
 15945,bzworkbench,auto,,
 15946,bzworkbench,auto,,
 15947,bzworkbench,auto,,
-# TODO: the v2_0_10_RC2 tag does not use the bzflag/ subdirectory
-15960,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_10_RC2
+15960,bzflag,cherry_pick_branch_down_inline,v2_0branch,tags/v2_0_10_RC2
 15969,bzworkbench,auto,,
 15970,bzworkbench,auto,,
 15973,bzworkbench,auto,,
@@ -2603,13 +2602,11 @@ default,bzflag,,,
 17825,bzwgen,auto,,
 17826,bzwgen,auto,,
 17837,web,auto,,
-# TODO: tag v2_0_12 does not use the bzflag/ subdirectory
-17839,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_12
-17840,bzflag,empty,tags/v2_0_12,	# rename the deleted tag to tags/v2_0_12.deleted
-17841,bzflag,rebase_tag_branch,tags/v2_0_12.deleted,v2_0_12
+17839,bzflag,cherry_pick_branch_down_inline,v2_0branch,tags/v2_0_12
+17840,bzflag,empty,v2_0branch,	# rename the deleted tag to tags/v2_0_12.deleted
+17841,bzflag,cherry_pick_branch_down_inline,v2_0branch,tags/v2_0_12
 17842,bzwgen,auto,,
 17843,web,auto,,
-# TODO 17844,bzflag,cherry_pick_branch_down,tags/v2_0_12,v2_0branch
 17882,bzauthd,auto,,
 17883,bzauthd,auto,,
 17884,bzauthd,auto,,
@@ -3275,7 +3272,7 @@ default,bzflag,,,
 21512,db,auto,,
 21555,db,auto,,
 # 21560 v2_99continuing
-22053,bzflag,cherry_pick_branch_up,trunk,tags/v2_4_0
+22053,bzflag,cherry_pick_branch_down_inline,trunk,tags/v2_4_0
 22060,db,auto,,
 22061,db,auto,,
 22064,db,auto,,
@@ -3331,7 +3328,7 @@ default,bzflag,,,
 22473,web,auto,,
 22474,web,auto,,
 22481,web,auto,,
-22528,bzflag,cherry_pick_branch_up,trunk,tags/v2_4_2
+22528,bzflag,cherry_pick_branch_down_inline,trunk,tags/v2_4_2
 22561,web,auto,,
 22562,web,auto,,
 22563,web,auto,,
