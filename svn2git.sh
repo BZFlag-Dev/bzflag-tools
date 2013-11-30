@@ -22,7 +22,7 @@ UPSTREAM_REPO=https://svn.code.sf.net/p/bzflag/code
 UPSTREAM_UUID=08b3d480-bf2c-0410-a26f-811ee3361c24
 SVN_REPO=file:///scratch/bzflag/bzflag.svn	# $UPSTREAM_REPO will be much slower
 STARTING_REVISION=1	# default
-ENDING_REVISION=22829	# default, takes 3.5 hours on Bullet Catcher's computer
+ENDING_REVISION=22828	# default, takes 3.5 hours on Bullet Catcher's computer
 
 # There are some deficiencies of git-svn that must be overcome to
 # faithfully import the BZFlag Subversion repository into Git.
@@ -420,74 +420,77 @@ set -x
 # "--subdirectory-filter bzflag" removes empty commits and so is unsuitable
 time git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' --tree-filter "if mv $TARGET_REPO bzFLAG ; then mv bzFLAG/.??* bzFLAG/* . || true ; rmdir bzFLAG ; fi" -- --all | tr \\r \\n
 rm -rf .git/refs/original	# discard old commits saved by filter-branch 
-git checkout remotes/trunk	# set HEAD
 
-exit 0
+if [$TARGET_REPO = bzflag -a $NEXT_REVISION -gt $ENDING_REVISION ] ; then
+	# import post-Subversion commits
+	git checkout trunk		# be sure to start at the right place
+	git branch new_v2_6_x		# temporary non-conflicting branch name
+	git remote add -f import2 $HOME/bzflag/bzflag-import-2.git
+	PARENT=`git rev-parse ':/tag as 2\.5\.x devel'`~	# match the remote commit
+	git cherry-pick ${PARENT}..import2/v2_4_x
+	git branch new_v2_4_x		# temporary non-conflicting branch name
+	git checkout new_v2_6_x
+	git cherry-pick ${PARENT}..':/^update version'
+	PARENT=`git rev-parse ":/^Merge branch 'v2_4_x'"`	# do this now to match the remote commit
+	# JeffM would have done this if he were actually committing to the v2_4_x branch
+	GIT_AUTHOR_DATE='1373139800 -0700' GIT_AUTHOR_NAME='Jeffery Myers' GIT_AUTHOR_EMAIL='jeffm2501@gmail.com' git merge -q "-mMerge branch 'v2_4_x'" ':/^ingnore more windows temp files'
+	git cherry-pick ${PARENT}..':/^Change the BZFlag version number from 2\.4\.3'
+	GIT_AUTHOR_DATE='1376370000 -0700' git merge -q '-mMerge branch v2_4_x onto branch v2_6_x.' ':/^For observers,'
+	GIT_AUTHOR_DATE='1376861008 -0700' git merge -q '-mMerge recent v2_4_x changes into v2_6_x.' ':/^remove files that were not ready'
+	git remote remove import2
+	git tag -d `git tag`		# expunge import2 tags
+	git branch -m new_v2_4_x v2_4_x
+	git branch -m new_v2_6_x v2_6_x
 
-# clean up branches
-git branch -d -r v2_99continuing		# not ready for this branch now
-git rebase --keep-empty tags/v2_4_2 master	# bring branched tag inline
-git branch -d -r trunk
-git rebase --keep-empty tags/v2_4_0 master	# bring branched tag inline
-git rebase --keep-empty --onto `git rev-parse 'master^{/@22531.08b3d480}'` \
- remotes/2_4_OSX_Lion_Rebuild_branch~4 \
- remotes/2_4_OSX_Lion_Rebuild_branch
-git branch OSX_Lion_rebuild HEAD		# rebase leaves HEAD at a convenient place
-git branch -d -r 2_4_OSX_Lion_Rebuild_branch
+	# change committer info to match the author's
+	git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- trunk..v2_4_x trunk..v2_6_x | tr \\r \\n
+	rm -r .git/refs/original	# discard old commits saved by filter-branch 
 
-# establish tags
-git branch -d -r tags/v2_4_2
-git tag v2.4.2 `git rev-parse :/@22528.08b3d480`	# r22528
-git branch -d -r tags/v2_4_0
-git tag v2.4.0 `git rev-parse :/@22053.08b3d480`	# r22053
+	git branch -d master					# discard useless old master branch
+	git remote add -f blaster $MASTER_REPO			# import master branch
+	git branch --track master remotes/blaster/master	# disconnected master branch
+	git remote remove blaster				# disconnect from repo
+	git checkout master					# default branch
 
-git branch -m master v2_4_x		# give the branch a meaningful name
-git branch v2_6_x v2_4_x		# create new development branch
-
-# Import post-Subversion changes, rewriting history to make it look like
-# 2.4.x compatible changes were actually committed to the v2_4_x branch.
-git checkout v2_4_x			# be sure to start at the right place
-git remote add -f alpha $HOME/bzflag/bzflag.git
-git cherry-pick 3fedeb3..dcc5ae4	# Update with git info
-git cherry-pick aed50ba			# Add a .gitignore file
-git cherry-pick c9ec8bd			# Don't ignore .dsp and .dsw files
-git cherry-pick b3b2444			# ignore windows temp and bin files
-git cherry-pick 084c020..af6a459	# ingnore more windows temp files
-git checkout v2_6_x
-git cherry-pick 373570a..3fedeb3	# update version
-# JeffM would have done this if he were actually committing to the v2_4_x branch
-GIT_AUTHOR_DATE='1373139800 -0700' GIT_AUTHOR_NAME='Jeffery Myers' GIT_AUTHOR_EMAIL='jeffm2501@gmail.com' git merge "-mMerge branch 'v2_4_x'" v2_4_x
-git cherry-pick 514748b			# Bump the BZFS protocol number ...
-git cherry-pick f37d6ed			# Change the BZFlag version number ...
-git checkout v2_4_x
-git cherry-pick 514748b..d140a69	# No more acceptance, just read on wiki
-git cherry-pick 82cb3e0..4d58043	# Build only a dynamic library ...
-git cherry-pick 68c7a06			# Use "git ls-files" to get the ...
-git cherry-pick 4717a78			# Add 2 more files to the list of ...
-git cherry-pick c970ee6..70418c7	# For observers, do not flash GAME ...
-git checkout v2_6_x
-GIT_AUTHOR_DATE='1376370000 -0700' git merge '-mMerge branch v2_4_x onto branch v2_6_x.' v2_4_x
-git checkout v2_4_x
-git cherry-pick 76263f1..6afb5e0	# Bring the list of changes in ...
-git cherry-pick 68c7a06..fe34967	# remove files that were not ready ...
-git checkout v2_6_x
-GIT_AUTHOR_DATE='1376861008 -0700' git merge '-mMerge recent v2_4_x changes into v2_6_x.' v2_4_x
-git remote remove alpha
-git tag -d `git tag | fgrep -v .`	# expunge alpha tags
-
-# change all committer info to match the author
-git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- --all | tr \\015 \\012
-rm -r .git/refs/original	# discard old commits saved by filter-branch 
-
-# set the master branch to unborn state
-echo ref: refs/heads/master > .git/HEAD
-rm -r .gitignore *
-git rm -q -r --cached .
-
-git remote add -f blaster $MASTER_REPO			# import master branch
-git branch --track master remotes/blaster/master	# disconnected master branch
-git remote remove blaster				# disconnect from repo
-git reset --hard HEAD					# checkout master branch
+	# establish tags
+	git tag v2.4.2 tags/v2_4_2
+	git branch -d -r tags/v2_4_2
+	git tag v2.4.0 tags/v2_4_0
+	git branch -d -r tags/v2_4_0
+	git tag v2.0.16 tags/v2_0_16
+	git branch -d -r tags/v2_0_16
+	git tag v2.0.14 tags/v2_0_14
+	git branch -d -r tags/v2_0_14
+	git tag v2.0.12 tags/v2_0_12
+	git branch -d -r tags/v2_0_12 tags/v2_0_12.deleted
+	git tag v2.0.10 tags/v2_0_10
+	git branch -d -r tags/v2_0_10
+	git tag v2.0.10_RC3 tags/v2_0_10_RC3
+	git branch -d -r tags/v2_0_10_RC3 tags/v2_0_10RC3
+	git tag v2.0.10_RC2 tags/v2_0_10_RC2
+	git branch -d -r tags/v2_0_10_RC2
+	git tag v2.0.10_RC1 tags/v2_0_10_RC1
+	git branch -d -r tags/v2_0_10_RC1
+	git tag v2.0.8 tags/v2_0_8
+	git branch -d -r tags/v2_0_8
+	git tag v2.0.6 tags/v2_0_6
+	git branch -d -r tags/v2_0_6
+	git tag v2.0.5_B1 tags/v2_0_5_b1
+	git branch -d -r tags/v2_0_5_b1
+	git tag v2.0.4 tags/v2_0_4
+	git branch -d -r tags/v2_0_4
+	git tag v2.0.4_RC5 tags/v2_0_4_rc5
+	git branch -d -r tags/v2_0_4_rc5
+	git tag v2.0.4_RC4 tags/v2_0_4_rc4
+	git branch -d -r tags/v2_0_4_rc4
+	git tag v2.0.4_RC1 tags/v2_0_4_rc1
+	git branch -d -r tags/v2_0_4_rc1
+	git tag v2.0.2 tags/v2_0_2
+	git branch -d -r tags/v2_0_2
+	git tag v2.0.0 tags/v2_0_0
+	git branch -d -r tags/v2_0_0
+	# TODO many more
+fi
 
 sleep 1						# let the clock advance
 git reflog expire --expire=now --all		# purge reflogs
@@ -496,11 +499,9 @@ rm .git/COMMIT_EDITMSG .git/FETCH_HEAD		# tidy
 rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
 git status --ignored				# update index and show state
 
-# 11 minutes elapsed time on Bullet Catcher's computer
-
 exit 0
 # Push this to a new empty repo at GitHub:
-git remote add origin git@github.com:BZFlag-Dev/bzflag-import-2.git
+git remote add origin git@github.com:BZFlag-Dev/bzflag-import-3.git
 git push -u origin master
 git push -u origin --all
 git push -u origin --tags
