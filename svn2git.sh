@@ -50,7 +50,7 @@ git_svn_fetch()
 {
 # import only the source code for the BZFlag game itself
 # TODO: support other TARGET_REPO
-git svn fetch -q -r $1 --authors-file=$AUTHORS --ignore-paths='^trunk/([^b]|..[^f])'
+git svn fetch -q -r $1 --authors-file=$AUTHORS --ignore-paths=$IGNORE_PATHS
 }
 
 GIT_REPO_NAME=svn2git
@@ -90,6 +90,45 @@ while read rev repo method branch tag ; do
 		if [ -z "$TARGET_REPO" ] ; then
 			TARGET_REPO=$DEFAULT_REPO
 		fi
+		case $TARGET_REPO in
+		    admin)
+			IGNORE_PATHS='^trunk/[^a]'
+			;;
+		    bzauthd)
+			IGNORE_PATHS='^trunk/([^b]|..[^a])'
+			;;
+		    bzedit)
+			IGNORE_PATHS='^trunk/([^b]|..[^e])'	# TODO fix
+			;;
+		    bzeditw32)
+			IGNORE_PATHS='^trunk/([^b]|..[^e])'	# TODO fix
+			;;
+		    bzflag)
+			IGNORE_PATHS='^trunk/([^b]|..[^f])'
+			;;
+		    bzstats)
+			IGNORE_PATHS='^trunk/([^b]|..[^s])'
+			;;
+		    bzwgen)
+			IGNORE_PATHS='^trunk/([^b]|...[^g])'
+			;;
+		    bzworkbench)
+			IGNORE_PATHS='^trunk/([^b]|...[^o])'
+			;;
+		    db)
+			IGNORE_PATHS='^trunk/[^d]'
+			;;
+		    pybzflag)
+			IGNORE_PATHS='^trunk/[^p]'
+			;;
+		    web)
+			IGNORE_PATHS='^trunk/[^w]'
+			;;
+		    *)
+			echo "No such repo '$TARGET_REPO'"
+			exit 1
+			;;
+		esac
 		NEXT_REVISION=$STARTING_REVISION
 		echo default repo: $DEFAULT_REPO
 		echo starting revision: $NEXT_REVISION
@@ -197,10 +236,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git reset HEAD
 						rm -r $repo
 						mkdir .bzFLAG
-						if [ -f .cvsignore ] ; then
-							mv .cvsignore .bzFLAG
-						fi
-						mv * .bzFLAG
+						mv .[^g]?* * .bzFLAG || true	# don't move the .git directory
 						mv .bzFLAG $repo
 						git add --all
 					fi
@@ -396,11 +432,13 @@ done < $SOURCE/revision_list
 set +x	# hide lots of noise
 ( seq $STARTING_REVISION $ENDING_REVISION
   # these Subversion revisions appear as two Git commits because each changes both trunk and a branch
-  for r in 298 722 4194 4195 4197 4198 5793 5794 5943 5997 5998 6006 6007 6008 6084 6130 6162 6170 6171 6204 6455 6456 6459 6492 6654 6706 6789 6909 7461 7462 7468 7587 7828 8480 11953 11974 12096 12102 12103 12104 12205 12355 12362 12450 12523 12524 12529 12550 12653 12797 12801 12803 12815 13008 13053 13152 13226 13247 13300 13328 13581 13585 13653 13654 13655 13656 13660 13664 13665 13667 13679 13680 13706 13782 13801 13842 13913 13915 ; do
-	if [ $STARTING_REVISION -le $r -a $r -le $ENDING_REVISION ] ; then
-		echo $r
-	fi
-  done
+  if [ $TARGET_REPO = bzflag ] ; then
+	for r in 298 722 4194 4195 4197 4198 5793 5794 5943 5997 5998 6006 6007 6008 6084 6130 6162 6170 6171 6204 6455 6456 6459 6492 6654 6706 6789 6909 7461 7462 7468 7587 7828 8480 11953 11974 12096 12102 12103 12104 12205 12355 12362 12450 12523 12524 12529 12550 12653 12797 12801 12803 12815 13008 13053 13152 13226 13247 13300 13328 13581 13585 13653 13654 13655 13656 13660 13664 13665 13667 13679 13680 13706 13782 13801 13842 13913 13915 ; do
+		if [ $STARTING_REVISION -le $r -a $r -le $ENDING_REVISION ] ; then
+			echo $r
+		fi
+	done
+  fi
 ) | sort -n > /tmp/$GIT_REPO_NAME.expect
 ( git log --all | awk '$1 == "git-svn-id:" && $3 == "08b3d480-bf2c-0410-a26f-811ee3361c24" {print substr($2,index($2,"@")+1)}'
   echo -n "$SKIPPED" | tr ' ' \\n
@@ -421,7 +459,7 @@ set -x
 time git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' --tree-filter "if mv $TARGET_REPO bzFLAG ; then mv bzFLAG/.??* bzFLAG/* . || true ; rmdir bzFLAG ; fi" -- --all | tr \\r \\n
 rm -rf .git/refs/original	# discard old commits saved by filter-branch 
 
-if [$TARGET_REPO = bzflag -a $NEXT_REVISION -gt $ENDING_REVISION ] ; then
+if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt $ENDING_REVISION ] ; then
 	# import post-Subversion commits
 	git checkout trunk		# be sure to start at the right place
 	git branch new_v2_6_x		# temporary non-conflicting branch name
@@ -490,12 +528,17 @@ if [$TARGET_REPO = bzflag -a $NEXT_REVISION -gt $ENDING_REVISION ] ; then
 	git tag v2.0.0 tags/v2_0_0
 	git branch -d -r tags/v2_0_0
 	# TODO many more
+elif [ $TARGET_REPO = bzworkbench ] ; then
+	git checkout master
+	git merge --ff-only trunk
+	git tag GSoC tags/soc-bzworkbench
+	git branch -d -r trunk tags/soc-bzworkbench
 fi
 
 sleep 1						# let the clock advance
 git reflog expire --expire=now --all		# purge reflogs
 git gc --prune=now				# rewritten commits be gone!
-rm .git/COMMIT_EDITMSG .git/FETCH_HEAD		# tidy
+rm -f .git/COMMIT_EDITMSG .git/FETCH_HEAD	# tidy
 rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
 git status --ignored				# update index and show state
 

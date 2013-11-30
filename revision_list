@@ -1871,8 +1871,7 @@ default,bzflag,,,
 15215,bzwgen,auto,,
 # TODO: the soc-bzwgen tag does not use the bzwgen/ subdirectory
 15216,bzwgen,cherry_pick_branch_up,trunk,soc-bzwgen
-# TODO: the soc-bzworkbench tag does not use the bzworkbench/ subdirectory
-15217,bzworkbench,cherry_pick_branch_up,trunk,soc-bzworkbench
+15217,bzworkbench,cherry_pick_branch_down_inline,trunk,tags/soc-bzworkbench
 15218,bzwgen,auto,,
 # TODO: the soc-bzrobots tag does not use the bzrobots/ subdirectory
 15219,bzrobots,cherry_pick_branch_up,trunk,soc-bzrobots
