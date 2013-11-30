@@ -165,7 +165,16 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					fi
 					# extra effort is required to rebase a lone empty commit
 					if ! eval git rebase --keep-empty $onto $source_branch ; then
-						git commit --allow-empty -F .git/COMMIT_EDITMSG
+						if [ $rev -eq 21396 ] ; then
+							git add bzflag/include/PlayerInfo.h
+							if [ -d $repo/src/other ] ; then
+								find $repo/src/other -depth -exec rmdir {} +	# only needed for a partial repo
+							fi
+							sed -i '1,/^git-svn-id:/!d' .git/MERGE_MSG
+							git commit --allow-empty -F .git/MERGE_MSG
+						else
+							git commit --allow-empty -F .git/COMMIT_EDITMSG
+						fi
 						git cherry-pick --continue
 					fi
 					git rev-parse HEAD > .git/refs/$source_branch

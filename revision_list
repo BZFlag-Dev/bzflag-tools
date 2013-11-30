@@ -3266,7 +3266,7 @@ default,bzflag,,,
 21392,bzflag,empty,v1_7branch,	# delete branch
 21393,bzflag,rebase_tag_branch,trunk,v2_99archive
 # 21395 trunk -> v2_99archive
-# 21396 v2_0branch -> trunk
+21396,bzflag,rebase_branch,v2_0branch,trunk
 # 21401,bzflag,empty,trunk,	# add file branches/BRANCHES.txt
 21427,db,auto,,
 21512,db,auto,,
