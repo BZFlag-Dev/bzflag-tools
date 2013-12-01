@@ -478,9 +478,11 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt $ENDING_REVISION ] ; then
 	GIT_AUTHOR_DATE='1376370000 -0700' git merge -q '-mMerge branch v2_4_x onto branch v2_6_x.' ':/^For observers,'
 	GIT_AUTHOR_DATE='1376861008 -0700' git merge -q '-mMerge recent v2_4_x changes into v2_6_x.' ':/^remove files that were not ready'
 	git remote remove import2
-	git tag -d `git tag`		# expunge import2 tags
+	git tag -d `git tag`					# expunge import2 tags
 	git branch -m new_v2_4_x v2_4_x
 	git branch -m new_v2_6_x v2_6_x
+	# remove obsolete Subversion branches and tags that are not branch tips
+	git branch -d -r gsoc_08_libbzw tags/pre-mesh tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_12.deleted v1_10branch v1_8 v2_0branch
 
 	# change committer info to match the author's
 	git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- trunk..v2_4_x trunk..v2_6_x | tr \\r \\n
@@ -491,51 +493,29 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt $ENDING_REVISION ] ; then
 	git branch --track master remotes/blaster/master	# disconnected master branch
 	git remote remove blaster				# disconnect from repo
 	git checkout master					# default branch
-
-	# establish tags
-	git tag v2.4.2 tags/v2_4_2
-	git branch -d -r tags/v2_4_2
-	git tag v2.4.0 tags/v2_4_0
-	git branch -d -r tags/v2_4_0
-	git tag v2.0.16 tags/v2_0_16
-	git branch -d -r tags/v2_0_16
-	git tag v2.0.14 tags/v2_0_14
-	git branch -d -r tags/v2_0_14
-	git tag v2.0.12 tags/v2_0_12
-	git branch -d -r tags/v2_0_12 tags/v2_0_12.deleted
-	git tag v2.0.10 tags/v2_0_10
-	git branch -d -r tags/v2_0_10
-	git tag v2.0.10_RC3 tags/v2_0_10_RC3
-	git branch -d -r tags/v2_0_10_RC3 tags/v2_0_10RC3
-	git tag v2.0.10_RC2 tags/v2_0_10_RC2
-	git branch -d -r tags/v2_0_10_RC2
-	git tag v2.0.10_RC1 tags/v2_0_10_RC1
-	git branch -d -r tags/v2_0_10_RC1
-	git tag v2.0.8 tags/v2_0_8
-	git branch -d -r tags/v2_0_8
-	git tag v2.0.6 tags/v2_0_6
-	git branch -d -r tags/v2_0_6
-	git tag v2.0.5_B1 tags/v2_0_5_b1
-	git branch -d -r tags/v2_0_5_b1
-	git tag v2.0.4 tags/v2_0_4
-	git branch -d -r tags/v2_0_4
-	git tag v2.0.4_RC5 tags/v2_0_4_rc5
-	git branch -d -r tags/v2_0_4_rc5
-	git tag v2.0.4_RC4 tags/v2_0_4_rc4
-	git branch -d -r tags/v2_0_4_rc4
-	git tag v2.0.4_RC1 tags/v2_0_4_rc1
-	git branch -d -r tags/v2_0_4_rc1
-	git tag v2.0.2 tags/v2_0_2
-	git branch -d -r tags/v2_0_2
-	git tag v2.0.0 tags/v2_0_0
-	git branch -d -r tags/v2_0_0
-	# TODO many more
-elif [ $TARGET_REPO = bzworkbench ] ; then
+else
 	git checkout master
 	git merge -q --ff-only trunk
-	git tag GSoC_2007 tags/soc-bzworkbench
-	git branch -d -r trunk tags/soc-bzworkbench
 fi
+
+# change Subversion tag branches into Git tags
+for branch in `git branch -r` ; do
+	case $branch in
+	    tags/soc-bzworkbench)
+		tag=GSoC_2007
+		;;
+	    tags/*)
+		# change underscores to periods appropriately
+		tag=`echo $branch | sed -e 's=^tags/==' -e '/^v/s/_/./' -e '/^v[12]\.[0-9][0-9]*_/s/_/./'`
+		;;
+	    *)
+		continue
+		;;
+	esac
+	git tag $tag $branch
+	git branch -d -r $branch
+done
+git branch -d -r trunk				# "trunk" is a Subversion convention
 
 sleep 1						# let the clock advance
 git reflog expire --expire=now --all		# purge reflogs
