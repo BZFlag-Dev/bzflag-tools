@@ -79,6 +79,7 @@ cd $GIT_REPO_NAME
 sed -i "/rewriteRoot/a\
 \	rewriteUUID = $UPSTREAM_UUID" .git/config
 
+SAVEIFS="$IFS"
 IFS=,
 set -x
 while read rev repo method branch tag ; do
@@ -428,6 +429,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		;;
 	esac
 done < $SOURCE/revision_list
+IFS="$SAVEIFS"
 
 set +x	# hide lots of noise
 ( seq $STARTING_REVISION $ENDING_REVISION
@@ -530,8 +532,8 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt $ENDING_REVISION ] ; then
 	# TODO many more
 elif [ $TARGET_REPO = bzworkbench ] ; then
 	git checkout master
-	git merge --ff-only trunk
-	git tag GSoC tags/soc-bzworkbench
+	git merge -q --ff-only trunk
+	git tag GSoC_2007 tags/soc-bzworkbench
 	git branch -d -r trunk tags/soc-bzworkbench
 fi
 
