@@ -527,7 +527,13 @@ for branch in `git branch -r` ; do
 	git tag $tag $branch
 	git branch -d -r $branch
 done
+
+# change remaining Subversion branches into local Git branches
 git branch -d -r trunk				# "trunk" is a Subversion convention
+for branch in `git branch -a -r` ; do
+	git branch $branch remotes/$branch
+	git branch -d -r $branch
+done
 
 sleep 1						# let the clock advance
 git reflog expire --expire=now --all		# purge reflogs
