@@ -461,13 +461,13 @@ set -x
 time git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' --tree-filter "if mv $TARGET_REPO bzFLAG ; then mv bzFLAG/.??* bzFLAG/* . || true ; rmdir bzFLAG ; fi" -- --all | tr \\r \\n
 rm -rf .git/refs/original	# discard old commits saved by filter-branch 
 
-if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt $ENDING_REVISION ] ; then
+if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	# import post-Subversion commits
 	git checkout trunk		# be sure to start at the right place
 	git branch new_v2_6_x		# temporary non-conflicting branch name
-	git remote add -f import2 $HOME/bzflag/bzflag-import-2.git
+	git remote add -f import3 $HOME/bzflag/bzflag-import-3.git
 	PARENT=`git rev-parse ':/tag as 2\.5\.x devel'`~	# match the remote commit
-	git cherry-pick ${PARENT}..import2/v2_4_x~		# ignore tip commit of r22830 for now
+	git cherry-pick ${PARENT}..import3/v2_4_x
 	git branch new_v2_4_x		# temporary non-conflicting branch name
 	git checkout new_v2_6_x
 	git cherry-pick ${PARENT}..':/^update version'
@@ -477,24 +477,12 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt $ENDING_REVISION ] ; then
 	git cherry-pick ${PARENT}..':/^Change the BZFlag version number from 2\.4\.3'
 	GIT_AUTHOR_DATE='1376370000 -0700' git merge -q '-mMerge branch v2_4_x onto branch v2_6_x.' ':/^For observers,'
 	GIT_AUTHOR_DATE='1376861008 -0700' git merge -q '-mMerge recent v2_4_x changes into v2_6_x.' ':/^remove files that were not ready'
-	git remote remove import2
-	git tag -d `git tag`					# expunge import2 tags
+	git remote remove import3
+	git tag -d `git tag`					# expunge import3 tags
 	git branch -m new_v2_4_x v2_4_x
 	git branch -m new_v2_6_x v2_6_x
 	# remove obsolete Subversion branches and tags that are not branch tips
 	git branch -d -r gsoc_08_libbzw tags/pre-mesh tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_12.deleted v1_10branch v1_8 v2_0branch
-
-	# import late Subversion revision
-	rev=22830
-	git checkout v2_4_x
-	svn diff -c $rev $SVN_REPO | patch -p2
-	DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
-	AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
-	MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print'`"
-	LOCATION=trunk
-	git commit -a --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
-
-git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 
 	# change committer info to match the author's
 	git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- trunk..v2_4_x trunk..v2_6_x | tr \\r \\n
@@ -544,7 +532,9 @@ git status --ignored				# update index and show state
 
 exit 0
 # Push this to a new empty repo at GitHub:
-git remote add origin git@github.com:BZFlag-Dev/bzflag-import-3.git
+git remote add origin git@github.com:BZFlag-Dev/bzflag-import-4.git
 git push -u origin master
 git push -u origin --all
 git push -u origin --tags
+# add the new repo to the GitHub "developers" team (JeffM)
+# add the new repo at http://n.tkte.ch/BZFlag/ (JeffM)
