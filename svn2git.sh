@@ -222,7 +222,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git rev-parse HEAD > .git/refs/$new_parent
 					fi
 					;;
-				    cherry_pick_branch_up|cherry_pick_branch_down_inline)	# move to correct parent with sliding top-level directory
+				    cherry_pick_branch_up|cherry_pick_branch_up_inline|cherry_pick_branch_down_inline)	# move to correct parent with sliding top-level directory
 					if [ -z "$tag" ] ; then
 						echo r$rev requires a tag or source branch
 						exit 1
@@ -256,9 +256,11 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 
 git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					git rev-parse HEAD > .git/refs/remotes/$tag
-					if [ $method = cherry_pick_branch_down_inline ] ; then
+					case $method in
+					    *_inline)
 						git rev-parse HEAD > .git/refs/remotes/$branch
-					fi
+						;;
+					esac
 					;;
 				    rebase_tag_branch|rebase_tag_inline)	# move tag to correct parent
 					case "$branch" in

@@ -1869,12 +1869,11 @@ default,bzflag,,,
 15213,bzwgen,auto,,
 15214,bzwgen,auto,,
 15215,bzwgen,auto,,
-# TODO: the soc-bzwgen tag does not use the bzwgen/ subdirectory
-15216,bzwgen,cherry_pick_branch_up,trunk,soc-bzwgen
+15216,bzwgen,cherry_pick_branch_up_inline,trunk,tags/soc-bzwgen
 15217,bzworkbench,cherry_pick_branch_down_inline,trunk,tags/soc-bzworkbench
 15218,bzwgen,auto,,
 # TODO: the soc-bzrobots tag does not use the bzrobots/ subdirectory
-15219,bzrobots,cherry_pick_branch_up,trunk,soc-bzrobots
+15219,bzrobots,cherry_pick_branch_up,trunk,tags/soc-bzrobots
 15220,bzflag,inline_tag,gsoc_irc,soc-irc
 15221,bzwgen,auto,,
 15222,bzwgen,auto,,
@@ -2775,7 +2774,7 @@ default,bzflag,,,
 18422,bzwgen,auto,,
 18423,bzwgen,auto,,
 18426,bzauthd,auto,,
-18428,bzwgen,auto,,
+18428,bzwgen,rebase_branch,trunk,tags/GSoC2008
 # TODO: trepan branch does not use the bzflag/ subdirectory
 18431,bzflag,cherry_pick_branch_up,trunk,trepan
 18465,bzwgen,auto,,
