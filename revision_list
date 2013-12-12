@@ -1435,18 +1435,18 @@ default,bzflag,,,
 13854,admin,auto,,
 13873,admin,auto,,
 13938,web,auto,,
-13939,bzflag,empty,tags/V1_10_6,		# delete tag
-13940,bzflag,empty,tags/merge-2_0-2_1-1,	# delete tag
-13941,bzflag,empty,tags/merge-2_0-2_1-2,	# delete tag
-13942,bzflag,empty,tags/merge-2_0-2_1-3,	# delete tag
-13943,bzflag,empty,tags/merge-2_0-2_1-4,	# delete tag
-13944,bzflag,empty,tags/merge-2_0-2_1-5,	# delete tag
-13945,bzflag,empty,tags/merge-2_0-2_1-6,	# delete tag
-13946,bzflag,empty,tags/merge-2_0-2_1-7,	# delete tag
-13947,bzflag,empty,tags/merge-2_0-2_1-8,	# delete tag
-13948,bzflag,empty,tags/merge-2_0-2_1-9,	# delete tag
-13949,bzflag,empty,tags/merge-2_0-2_1-10,	# delete tag
-13950,bzflag,empty,tags/merge-2_0-2_1-11,	# delete tag
+13939,tidy,auto,,
+13940,tidy,auto,,
+13941,tidy,auto,,
+13942,tidy,auto,,
+13943,tidy,auto,,
+13944,tidy,auto,,
+13945,tidy,auto,,
+13946,tidy,auto,,
+13947,tidy,auto,,
+13948,tidy,auto,,
+13949,tidy,auto,,
+13950,tidy,auto,,
 14002,web,auto,,
 14216,db,auto,,
 14245,bzworkbench,auto,,
@@ -1506,7 +1506,7 @@ default,bzflag,,,
 14342,db,auto,,
 # TODO: the ftgl branch does not use the bzflag/ subdirectory
 14344,bzflag,cherry_pick_branch_up,trunk~,ftgl
-#base directory mismatch 14347,bzflag,merge,ftgl,trunk
+# TODO: base directory mismatch 14347,bzflag,merge,ftgl,trunk
 14366,db,auto,,
 14367,db,auto,,
 14370,db,auto,,
@@ -2289,7 +2289,7 @@ default,bzflag,,,
 15765,db,auto,,
 15787,db,auto,,
 15812,db,auto,,
-15875,bzflag,empty,remove_flag_id,	# delete branch
+15875,tidy,auto,,
 15877,db,auto,,
 15890,db,auto,,
 15896,bzwgen,auto,,
@@ -2318,9 +2318,8 @@ default,bzflag,,,
 16001,bzworkbench,auto,,
 16002,bzworkbench,auto,,
 16003,bzworkbench,auto,,
-# TODO: the v2_0_10RC3 tag does not use the bzflag/ subdirectory
-16012,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_10RC3
-16016,bzflag,rebase_tag_branch,tags/v2_0_10RC3,v2_0_10_RC3
+16012,bzflag,cherry_pick_branch_up_inline,v2_0branch,tags/v2_0_10RC3
+16016,tidy,auto,,
 16046,web,auto,,
 16047,web,auto,,
 16049,web,auto,,
@@ -2768,6 +2767,7 @@ default,bzflag,,,
 18412,bzauthd,auto,,
 18414,bzauthd,auto,,
 18415,bzauthd,auto,,
+18417,bzflag,rebase_branch,trunk,tags/GSoC2008
 18418,bzwgen,auto,,
 18420,bzwgen,auto,,
 18421,bzwgen,auto,,
@@ -2802,7 +2802,7 @@ default,bzflag,,,
 18739,custom_plugins,auto,,
 18762,db,auto,,
 18774,db,auto,,
-18911,bzflag,empty,trepan,	# delete branch
+18911,tidy,auto,,
 19095,db,auto,,
 19096,db,auto,,
 19097,web,auto,,
@@ -3175,10 +3175,10 @@ default,bzflag,,,
 21019,bzworkbench,auto,,
 21020,db,auto,,
 21077,bzflag,inline_tag,trunk,v3_0_alpha1
-# TODO: fast-forward merge r21079 inline
+21079,tidy,auto,,		# note that v3_0_alpha1 tags multiple repos
 21172,bzworkbench,auto,,
 21206,bzflag,inline_tag,trunk,v3_0_alpha2
-# TODO: fast-forward merge r21207 inline
+21207,tidy,auto,,		# note that v3_0_alpha2 tags multiple repos
 21214,db,auto,,
 21217,db,auto,,
 21239,bzworkbench,auto,,
@@ -3259,17 +3259,24 @@ default,bzflag,,,
 21367,db,auto,,
 21375,db,auto,,
 21383,db,auto,,
-21389,bzflag,empty,bzflag,	# delete branch
-# 21390,bzflag,empty,trunk,	# delete tags/v1_7temp & tags/v1_8abort
-21392,bzflag,empty,v1_7branch,	# delete branch
+21384,tidy,auto,,
+21386,tidy,auto,,
+21388,tidy,auto,,
+21389,tidy,auto,,
+21390,tidy,auto,,
+21391,tidy,auto,,
+21392,tidy,auto,,
 21393,bzflag,rebase_tag_branch,trunk,v2_99archive
+21394,tidy,auto,,
 # 21395 trunk -> v2_99archive
 21396,bzflag,rebase_branch,v2_0branch,trunk
-# 21401,bzflag,empty,trunk,	# add file branches/BRANCHES.txt
+21398,tidy,auto,,
+21399,tidy,auto,,
+21401,tidy,auto,,	# add file branches/BRANCHES.txt
 21427,db,auto,,
 21512,db,auto,,
 21555,db,auto,,
-# 21560 v2_99continuing
+21560,bzflag,rebase_branch,tags/v2_99archive,experimental
 22053,bzflag,cherry_pick_branch_down_inline,trunk,tags/v2_4_0
 22060,db,auto,,
 22061,db,auto,,
@@ -3315,14 +3322,17 @@ default,bzflag,,,
 22379,tools,auto,,
 22427,web,auto,,
 22436,web,auto,,
+22437,web,auto,,	# bzstats
 22440,web,auto,,
 22441,web,auto,,
+22442,web,auto,,	# bzstats
 22445,web,auto,,
 22446,web,auto,,
 22466,tools,auto,,
 22468,web,auto,,
 22469,web,auto,,
 22470,web,auto,,
+22471,web,auto,,	# bzstats
 22473,web,auto,,
 22474,web,auto,,
 22481,web,auto,,
