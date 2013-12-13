@@ -466,28 +466,40 @@ rm -rf .git/refs/original	# discard old commits saved by filter-branch
 if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	# import post-Subversion commits
 	git checkout trunk		# be sure to start at the right place
-	git branch new_v2_6_x		# temporary non-conflicting branch name
+	git branch new_2.5		# temporary non-conflicting branch name
 	git remote add -f import3 $HOME/bzflag/bzflag-import-3.git
 	PARENT=`git rev-parse ':/tag as 2\.5\.x devel'`~	# match the remote commit
 	git cherry-pick ${PARENT}..import3/v2_4_x
-	git branch new_v2_4_x		# temporary non-conflicting branch name
-	git checkout new_v2_6_x
+	git branch new_2.4		# temporary non-conflicting branch name
+	git checkout new_2.5
 	git cherry-pick ${PARENT}..':/^update version'
 	PARENT=`git rev-parse ":/^Merge branch 'v2_4_x'"`	# do this now to match the remote commit
-	# JeffM would have done this if he were actually committing to the v2_4_x branch
-	GIT_AUTHOR_DATE='1373139800 -0700' GIT_AUTHOR_NAME='Jeffery Myers' GIT_AUTHOR_EMAIL='jeffm2501@gmail.com' git merge -q "-mMerge branch 'v2_4_x'" ':/^ingnore more windows temp files'
+	# JeffM would have done this if he were actually committing to the 2.4 branch
+	GIT_AUTHOR_DATE='1373139800 -0700' GIT_AUTHOR_NAME='Jeffery Myers' GIT_AUTHOR_EMAIL='jeffm2501@gmail.com' git merge -q "-mMerge branch '2.4'" ':/^ingnore more windows temp files'
 	git cherry-pick ${PARENT}..':/^Change the BZFlag version number from 2\.4\.3'
-	GIT_AUTHOR_DATE='1376370000 -0700' git merge -q '-mMerge branch v2_4_x onto branch v2_6_x.' ':/^For observers,'
-	GIT_AUTHOR_DATE='1376861008 -0700' git merge -q '-mMerge recent v2_4_x changes into v2_6_x.' ':/^remove files that were not ready'
+	GIT_AUTHOR_DATE='1376370000 -0700' git merge -q '-mMerge branch 2.4 onto branch 2.5.' ':/^For observers,'
+	GIT_AUTHOR_DATE='1376861008 -0700' git merge -q '-mMerge recent 2.4 changes into 2.5.' ':/^remove files that were not ready'
 	git remote remove import3
 	git tag -d `git tag`					# expunge import3 tags
-	git branch -m new_v2_4_x v2_4_x
-	git branch -m new_v2_6_x v2_6_x
+
+	# simplify branch names
+	git branch 2.99 remotes/tags/v2_99archive && git branch -d -r tags/v2_99archive	# TODO include experimental
+	git branch -m new_2.5 2.5
+	git branch -m new_2.4 2.4
+	git branch 2.3 :/@22049.08b3d480
+	git branch 2.1 :/@16236.08b3d480
+	git branch 2.0 remotes/v2_0branch && git branch -d -r v2_0branch
+	git branch 1.11 :/@9899.08b3d480
+	git branch 1.10 remotes/v1_10branch && git branch -d -r v1_10branch
+	git branch 1.9 :/@4667.08b3d480
+	git branch 1.8 remotes/v1_8 && git branch -d -r v1_8
+	git branch 1.7 remotes/v1_7 && git branch -d -r v1_7
+
 	# remove obsolete Subversion branches and tags that are not branch tips
-	git branch -d -r gsoc_08_libbzw tags/pre-mesh tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_12.deleted v1_10branch v1_8 v2_0branch
+	git branch -d -r gsoc_08_libbzw remove_flag_id tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/pre-mesh tags/v1_11_12 tags/v1_11_14 tags/v1_11_16 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v3_0_alpha1 tags/v3_0_alpha2
 
 	# change committer info to match the author's
-	git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- trunk..v2_4_x trunk..v2_6_x | tr \\r \\n
+	git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- trunk..2.4 trunk..2.5 | tr \\r \\n
 	rm -r .git/refs/original	# discard old commits saved by filter-branch 
 
 	git branch -d master					# discard useless old master branch
