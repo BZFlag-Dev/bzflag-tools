@@ -433,29 +433,6 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 done < $SOURCE/revision_list
 IFS="$SAVEIFS"
 
-set +x	# hide lots of noise
-( seq $STARTING_REVISION $ENDING_REVISION
-  # these Subversion revisions appear as two Git commits because each changes both trunk and a branch
-  if [ $TARGET_REPO = bzflag ] ; then
-	for r in 298 722 4194 4195 4197 4198 5793 5794 5943 5997 5998 6006 6007 6008 6084 6130 6162 6170 6171 6204 6455 6456 6459 6492 6654 6706 6789 6909 7461 7462 7468 7587 7828 8480 11953 11974 12096 12102 12103 12104 12205 12355 12362 12450 12523 12524 12529 12550 12653 12797 12801 12803 12815 13008 13053 13152 13226 13247 13300 13328 13581 13585 13653 13654 13655 13656 13660 13664 13665 13667 13679 13680 13706 13782 13801 13842 13913 13915 ; do
-		if [ $STARTING_REVISION -le $r -a $r -le $ENDING_REVISION ] ; then
-			echo $r
-		fi
-	done
-  fi
-) | sort -n > /tmp/$GIT_REPO_NAME.expect
-( git log --all | awk '$1 == "git-svn-id:" && $3 == "08b3d480-bf2c-0410-a26f-811ee3361c24" {print substr($2,index($2,"@")+1)}'
-  echo -n "$SKIPPED" | tr ' ' \\n
-) | sort -n > /tmp/$GIT_REPO_NAME.have
-if cmp -s /tmp/$GIT_REPO_NAME.expect /tmp/$GIT_REPO_NAME.have ; then
-	echo "All revisions accounted for."
-else
-	echo "expected vs. actual subversion commits:"
-	diff /tmp/$GIT_REPO_NAME.expect /tmp/$GIT_REPO_NAME.have || true
-fi
-rm /tmp/$GIT_REPO_NAME.expect /tmp/$GIT_REPO_NAME.have
-set -x
-
 # change all committer info to match the author's
 # move files up out of repo name subdirectory
 # (the file name bzFLAG is known not to conflict with anything)
@@ -543,6 +520,28 @@ git gc --prune=now				# rewritten commits be gone!
 rm -f .git/COMMIT_EDITMSG .git/FETCH_HEAD	# tidy
 rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
 git status --ignored				# update index and show state
+
+set +x	# hide lots of noise
+( seq $STARTING_REVISION $ENDING_REVISION
+  # these Subversion revisions appear as two Git commits because each changes both trunk and a branch
+  if [ $TARGET_REPO = bzflag ] ; then
+	for r in 298 722 4194 4195 4197 4198 5793 5794 5943 5997 5998 6006 6007 6008 6084 6130 6162 6170 6171 6204 6455 6456 6459 6492 6654 6706 6789 6909 7461 7462 7468 7587 7828 8480 11953 11974 12096 12102 12103 12104 12205 12355 12362 12450 12523 12524 12529 12550 12653 12797 12801 12803 12815 13008 13053 13152 13226 13247 13300 13328 13581 13585 13653 13654 13655 13656 13660 13664 13665 13667 13679 13680 13706 13782 13801 13842 13913 13915 ; do
+		if [ $STARTING_REVISION -le $r -a $r -le $ENDING_REVISION ] ; then
+			echo $r
+		fi
+	done
+  fi
+) | sort -n > /tmp/$GIT_REPO_NAME.expect
+( git log --all | awk '$1 == "git-svn-id:" && $3 == "08b3d480-bf2c-0410-a26f-811ee3361c24" {print substr($2,index($2,"@")+1)}'
+  echo -n "$SKIPPED" | tr ' ' \\n
+) | sort -n > /tmp/$GIT_REPO_NAME.have
+if cmp -s /tmp/$GIT_REPO_NAME.expect /tmp/$GIT_REPO_NAME.have ; then
+	echo "All revisions accounted for."
+else
+	echo "expected vs. actual subversion commits:"
+	diff /tmp/$GIT_REPO_NAME.expect /tmp/$GIT_REPO_NAME.have || true
+fi
+rm /tmp/$GIT_REPO_NAME.expect /tmp/$GIT_REPO_NAME.have
 
 exit 0
 # Push this to a new empty repo at GitHub:
