@@ -71,7 +71,11 @@ cd /tmp		# use a tmpfs (ramdisk) file system for maximum speed
 rm -rf $GIT_REPO_NAME
 exec < /dev/null > $GIT_REPO_NAME.log 2>&1
 
-git svn init $SVN_REPO --rewrite-root=$UPSTREAM_REPO --stdlayout $GIT_REPO_NAME
+git svn init $SVN_REPO --rewrite-root=$UPSTREAM_REPO \
+ --stdlayout \
+ --branches=branches/experimental \
+ --branches=branches \
+ $GIT_REPO_NAME
 cd $GIT_REPO_NAME
 # The git-svn documentation claims that --rewrite-root and
 # --rewrite-uuid may be used together, but the code prohibits it.
@@ -460,7 +464,7 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	git tag -d `git tag`					# expunge import3 tags
 
 	# simplify branch names
-	git branch 2.99 remotes/tags/v2_99archive && git branch -d -r tags/v2_99archive	# TODO include experimental
+	git branch 2.99 remotes/v2_99continuing && git branch -d -r v2_99continuing
 	git branch -m new_2.5 2.5
 	git branch -m new_2.4 2.4
 	git branch 2.3 :/@22049.08b3d480
@@ -473,7 +477,7 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	git branch 1.7 remotes/v1_7 && git branch -d -r v1_7
 
 	# remove obsolete Subversion branches and tags that are not branch tips
-	git branch -d -r gsoc_08_libbzw remove_flag_id tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/pre-mesh tags/v1_11_12 tags/v1_11_14 tags/v1_11_16 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v3_0_alpha1 tags/v3_0_alpha2
+	git branch -d -r gsoc_08_libbzw remove_flag_id tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/pre-mesh tags/v1_11_12 tags/v1_11_14 tags/v1_11_16 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2
 
 	# change committer info to match the author's
 	git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- trunk..2.4 trunk..2.5 | tr \\r \\n
@@ -508,9 +512,44 @@ for branch in `git branch -r` ; do
 done
 
 # change remaining Subversion branches into local Git branches
-git branch -d -r trunk				# "trunk" is a Subversion convention
 for branch in `git branch -a -r` ; do
-	git branch $branch remotes/$branch
+	case $branch in
+	    2_4_OSX_Lion_Rebuild_branch)
+		local=Mac_OS_X_Lion_rebuild
+		;;
+	    bzflag)
+		local=1.7_archive2
+		;;
+	    experimental)
+		git branch -D -r $branch		# remove with prejudice
+		continue
+		;;
+	    trepan)
+		local=lua
+		;;
+	    trunk)
+		if [ $NEXT_REVISION -gt 22828 ] ; then
+			git branch -d -r $branch	# "trunk" is a Subversion convention
+		fi
+		continue
+		;;
+	    v1_7branch)
+		local=1.7_archive1
+		;;
+	    v2_0_cs_branch)
+		local=crystal_space
+		;;
+	    v2_99_net_branch)
+		local=network_rewrite
+		;;
+	    v2_99_shot_branch)
+		local=server_side_shots
+		;;
+	    *)
+		local=$branch
+		;;
+	esac
+	git branch $local remotes/$branch
 	git branch -d -r $branch
 done
 
@@ -530,6 +569,9 @@ set +x	# hide lots of noise
 			echo $r
 		fi
 	done
+	if [ $NEXT_REVISION -gt 22828 ] ; then
+		echo 22830	# already mixed into Git commits
+	fi
   fi
 ) | sort -n > /tmp/$GIT_REPO_NAME.expect
 ( git log --all | awk '$1 == "git-svn-id:" && $3 == "08b3d480-bf2c-0410-a26f-811ee3361c24" {print substr($2,index($2,"@")+1)}'
