@@ -460,6 +460,28 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	git cherry-pick ${PARENT}..':/^Change the BZFlag version number from 2\.4\.3'
 	GIT_AUTHOR_DATE='1376370000 -0700' git merge -q '-mMerge branch 2.4 onto branch 2.5.' ':/^For observers,'
 	GIT_AUTHOR_DATE='1376861008 -0700' git merge -q '-mMerge recent 2.4 changes into 2.5.' ':/^remove files that were not ready'
+	git merge -q --no-commit ':/^Revert r22665 and r22666'
+	patch -p0 <<EOF
+--- ChangeLog~	2013-12-23
++++ ChangeLog	2013-12-23
+@@ -1,6 +1,12 @@
+ 			     BZFlag Release Notes
+ 			     ====================
+ 
++BZFlag 2.5.x
++------------
++
++* Apply colorblindness to your own tank and shots - Kyle Mills
++
++
+ BZFlag 2.4.3
+ ------------
+ 
+EOF
+	git add ChangeLog
+	git reset src/bzflag/playing.cxx || true
+	git checkout src/bzflag/playing.cxx
+	git commit --date='1387869736 -0800' '-mMerge branch 2.4 into 2.5, preserving the colorblindness enhancements of r22665 and r22666.'
 	git remote remove import3
 	git tag -d `git tag`					# expunge import3 tags
 
