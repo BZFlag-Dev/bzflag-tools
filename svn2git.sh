@@ -558,6 +558,12 @@ for branch in `git branch -a -r` ; do
 	    v1_7branch)
 		local=1.7_archive1
 		;;
+	    v1_10branch)
+		if [ $TARGET_REPO != bzflag ] ; then
+			git branch -D -r $branch	# sloppy r9311 in db repo
+		fi
+		continue
+		;;
 	    v2_0_cs_branch)
 		local=crystal_space
 		;;
