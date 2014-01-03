@@ -48,8 +48,7 @@ ENDING_REVISION=22828	# default, takes 3.5 hours on Bullet Catcher's computer
 # 1 Subversion revision number
 git_svn_fetch()
 {
-# import only the source code for the BZFlag game itself
-# TODO: support other TARGET_REPO
+# ignore trunk files belonging to other repos
 git svn fetch -q -r $1 --authors-file=$AUTHORS --ignore-paths=$IGNORE_PATHS
 }
 
@@ -103,10 +102,10 @@ while read rev repo method branch tag ; do
 			IGNORE_PATHS='^trunk/([^b]|..[^a])'
 			;;
 		    bzedit)
-			IGNORE_PATHS='^trunk/([^b]|..[^e])'	# TODO fix
+			IGNORE_PATHS='^trunk/([^b]|..[^e]|......[^/])'
 			;;
 		    bzeditw32)
-			IGNORE_PATHS='^trunk/([^b]|..[^e])'	# TODO fix
+			IGNORE_PATHS='^trunk/([^b]|..[^e]|....../)'
 			;;
 		    bzflag)
 			IGNORE_PATHS='^trunk/([^b]|..[^f])'
