@@ -113,17 +113,26 @@ while read rev repo method branch tag ; do
 		    bzstats)
 			IGNORE_PATHS='^trunk/([^b]|..[^s])'
 			;;
+		    bzview)
+			IGNORE_PATHS='^trunk/([^b]|..[^v])'
+			;;
 		    bzwgen)
 			IGNORE_PATHS='^trunk/([^b]|...[^g])'
 			;;
 		    bzworkbench)
 			IGNORE_PATHS='^trunk/([^b]|...[^o])'
 			;;
+		    custom_plugins)
+			IGNORE_PATHS='^trunk/[^c]'
+			;;
 		    db)
 			IGNORE_PATHS='^trunk/[^d]'
 			;;
 		    pybzflag)
 			IGNORE_PATHS='^trunk/[^p]'
+			;;
+		    tools)
+			IGNORE_PATHS='^trunk/[^t]'
 			;;
 		    web)
 			IGNORE_PATHS='^trunk/[^w]'
