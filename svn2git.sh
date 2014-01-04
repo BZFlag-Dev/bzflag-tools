@@ -247,10 +247,14 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git rm -q -r $repo
 					else
 						git reset HEAD
-						rm -r $repo
-						mkdir .bzFLAG
-						mv .[^g]?* * .bzFLAG || true	# don't move the .git directory
-						mv .bzFLAG $repo
+						if [ $rev -eq 15219 ] ; then
+							mv [^b]* b?[^f]* $repo/src/bzrobots
+						else
+							rm -r $repo
+							mkdir .bzFLAG
+							mv .[^g]?* * .bzFLAG || true	# don't move the .git directory
+							mv .bzFLAG $repo
+						fi
 						git add --all
 					fi
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
