@@ -78,6 +78,7 @@ git svn init $SVN_REPO --rewrite-root=$UPSTREAM_REPO \
  --stdlayout \
  --branches=branches/experimental \
  --branches=branches \
+ --prefix='' \
  $GIT_REPO_NAME
 cd $GIT_REPO_NAME
 # The git-svn documentation claims that --rewrite-root and
