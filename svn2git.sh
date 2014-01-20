@@ -43,6 +43,10 @@ ENDING_REVISION=22828	# default, takes 3.5 hours on Bullet Catcher's computer
 # are difficult to deal with when a branch of one is copied back to
 # trunk.  Working from a database of exceptional commits is the way to
 # success.
+#
+# Note that the use of "awk | xargs git rm" in this script assumes Git
+# version 1.8.5 or higher.  With 1.8.4 and lower the $5 awk variable
+# must be used when parsing "git status" output.
 
 # parameters:
 # 1 Subversion revision number
@@ -298,7 +302,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					# extra effort is required to rebase a lone empty commit
 					if ! eval git rebase --keep-empty $onto remotes/tags/$tag ; then
 						if [ $rev -eq 6881 ] ; then
-							git status | awk '/added by us|deleted by them/ {print $5}' | xargs git rm
+							git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
 							git rm -r bzflag/include bzflag/src bzflag/win32/VC71
 							sed '1,/^git-svn-id:/!d' .git/MERGE_MSG > .git/COMMIT_EDITMSG
 						fi
@@ -318,8 +322,8 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						rm ${file}~HEAD
 					done
 					git rm bzflag/data/boxwall.rgb
-					git status | awk '/added by us|deleted by them/ {print $5}' | xargs git rm
-					git status | awk '/deleted by us|added by them/ {print $5}' | xargs git add
+					git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
+					git status | awk '/deleted by us|added by them/ {print $4}' | xargs git add
 					sed -i '1,/^git-svn-id:/!d' .git/MERGE_MSG
 					git commit --allow-empty -F .git/MERGE_MSG
 					git cherry-pick --continue
