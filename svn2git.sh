@@ -22,7 +22,7 @@ UPSTREAM_REPO=https://svn.code.sf.net/p/bzflag/code
 UPSTREAM_UUID=08b3d480-bf2c-0410-a26f-811ee3361c24
 SVN_REPO=file:///scratch/bzflag/bzflag.svn	# $UPSTREAM_REPO will be much slower
 STARTING_REVISION=1	# default
-ENDING_REVISION=22828	# default, takes 3.5 hours on Bullet Catcher's computer
+ENDING_REVISION=22828	# default, takes 3 hours on Bullet Catcher's computer
 
 # There are some deficiencies of git-svn that must be overcome to
 # faithfully import the BZFlag Subversion repository into Git.
@@ -467,14 +467,16 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	git branch new_2.5		# temporary non-conflicting branch name
 	git remote add -f import3 $HOME/bzflag/bzflag-import-3.git
 	PARENT=`git rev-parse ':/tag as 2\.5\.x devel'`~	# match the remote commit
-	git cherry-pick ${PARENT}..import3/v2_4_x
+	git cherry-pick ${PARENT}..9a7c1f0c826158f38061f07273a0366f86611531	# Standard string must be static
+	git cherry-pick d86e5a6fc01e0e6a59401c791026d4cbb8a90f76		# Added bz_eGameResumeEvent
+	git cherry-pick 5ae409e2463570fe6a85a1ab087a657276d86494..import3/v2_4_x # merge is now unnecessary
 	git branch new_2.4		# temporary non-conflicting branch name
 	git checkout new_2.5
 	git cherry-pick ${PARENT}..':/^update version'
-	PARENT=`git rev-parse ":/^Merge branch 'v2_4_x'"`	# do this now to match the remote commit
+	PARENT=`git rev-parse ":/^Bump the BZFS protocol number"`	# do this now to match the remote commit
 	# JeffM would have done this if he were actually committing to the 2.4 branch
 	GIT_AUTHOR_DATE='1373139800 -0700' GIT_AUTHOR_NAME='Jeffery Myers' GIT_AUTHOR_EMAIL='jeffm2501@gmail.com' git merge -q "-mMerge branch '2.4'" ':/^ingnore more windows temp files'
-	git cherry-pick ${PARENT}..':/^Change the BZFlag version number from 2\.4\.3'
+	git cherry-pick ${PARENT}~..':/^Change the BZFlag version number from 2\.4\.3'
 	GIT_AUTHOR_DATE='1376370000 -0700' git merge -q '-mMerge branch 2.4 onto branch 2.5.' ':/^For observers,'
 	GIT_AUTHOR_DATE='1376861008 -0700' git merge -q '-mMerge recent 2.4 changes into 2.5.' ':/^remove files that were not ready'
 	git merge -q --no-commit ':/^Revert r22665 and r22666'
@@ -506,17 +508,17 @@ EOF
 	git branch 2.99 remotes/v2_99continuing && git branch -d -r v2_99continuing
 	git branch -m new_2.5 2.5
 	git branch -m new_2.4 2.4
-	git branch 2.3 :/@22049.08b3d480
-	git branch 2.1 :/@16236.08b3d480
+#	git branch 2.3 :/@22049.08b3d480
+#	git branch 2.1 :/@16236.08b3d480
 	git branch 2.0 remotes/v2_0branch && git branch -d -r v2_0branch
-	git branch 1.11 :/@9899.08b3d480
+#	git branch 1.11 :/@9899.08b3d480
 	git branch 1.10 remotes/v1_10branch && git branch -d -r v1_10branch
-	git branch 1.9 :/@4667.08b3d480
+#	git branch 1.9 :/@4667.08b3d480
 	git branch 1.8 remotes/v1_8 && git branch -d -r v1_8
 	git branch 1.7 remotes/v1_7 && git branch -d -r v1_7
 
 	# remove obsolete Subversion branches and tags that are not branch tips
-	git branch -d -r gsoc_08_libbzw remove_flag_id tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/pre-mesh tags/v1_11_12 tags/v1_11_14 tags/v1_11_16 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2
+	git branch -d -r gsoc_08_libbzw remove_flag_id tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/pre-mesh tags/v1_11_12 tags/v1_11_14 tags/v1_11_16 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
 
 	# change committer info to match the author's
 	git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- trunk..2.4 trunk..2.5 | tr \\r \\n
