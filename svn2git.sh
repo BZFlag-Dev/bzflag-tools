@@ -26,14 +26,14 @@ ENDING_REVISION=22828	# default, takes 3 hours on Bullet Catcher's computer
 
 # There are some deficiencies of git-svn that must be overcome to
 # faithfully import the BZFlag Subversion repository into Git.
-# 
+#
 # The first is that git-svn often chooses the wrong parent commit for
 # new branches and tags, especially when the parent is in a branch
 # rather than on the trunk.  We work around this by stopping the
 # import at empirically-determined revisions to rebase a commit onto
 # the correct parent and then advancing the relevant branch head to
 # include that commit before continuing.
-# 
+#
 # Another is that git-svn does not know how to choose a parent for an
 # empty commit (one that makes no changes to the tree), and simply
 # bypasses it.  For completeness, we synthesize empty Git commits
@@ -459,7 +459,7 @@ IFS="$SAVEIFS"
 # (the file name bzFLAG is known not to conflict with anything)
 # "--subdirectory-filter bzflag" removes empty commits and so is unsuitable
 time git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' --tree-filter "if mv $TARGET_REPO bzFLAG ; then mv bzFLAG/.??* bzFLAG/* . || true ; rmdir bzFLAG ; fi" --msg-filter 'perl -0 -wpe s/CVS:.\*//g\;s/\\n\*\(git-svn-id:\)/\\n\\n\$1/' -- --all | tr \\r \\n
-rm -rf .git/refs/original	# discard old commits saved by filter-branch 
+rm -rf .git/refs/original	# discard old commits saved by filter-branch
 
 if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	# import post-Subversion commits
@@ -501,6 +501,8 @@ EOF
 	git reset src/bzflag/playing.cxx || true
 	git checkout src/bzflag/playing.cxx
 	git commit --date='1387869736 -0800' '-mMerge branch 2.4 into 2.5, preserving the colorblindness enhancements of r22665 and r22666.'
+	GIT_AUTHOR_DATE='1398250503 -0500' GIT_AUTHOR_NAME='Scott Wichser' GIT_AUTHOR_EMAIL='blast007@users.sourceforge.net' git merge -q "-mMerge remote-tracking branch 'origin/2.4' into 2.5" new_2.4
+	git cherry-pick 0c153e15484692415439e9c878131e583561362e..import3/v2_6_x
 	git remote remove import3
 	git tag -d `git tag`					# expunge import3 tags
 
@@ -520,9 +522,20 @@ EOF
 	# remove obsolete Subversion branches and tags that are not branch tips
 	git branch -d -r gsoc_08_libbzw remove_flag_id tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/pre-mesh tags/v1_11_12 tags/v1_11_14 tags/v1_11_16 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
 
+	# fix Josh's e-mail address
 	# change committer info to match the author's
-	git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- trunk..2.4 trunk..2.5 | tr \\r \\n
-	rm -r .git/refs/original	# discard old commits saved by filter-branch 
+	git filter-branch --env-filter 'test $GIT_AUTHOR_EMAIL = josh@savannah.local && export GIT_AUTHOR_EMAIL=josh@joshb.us;export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- trunk..2.4 trunk..2.5 | tr \\r \\n
+	rm -r .git/refs/original	# discard old commits saved by filter-branch
+
+	# multiple passes are required to update commit hashes in commit messages
+	A48FC0F=`git rev-parse ':/^Allow players to join the rabbit' | cut -c1-7`
+	EC8C0E0=`git rev-parse ':/^Disallow rabbit' | cut -c1-7`
+	git filter-branch --msg-filter "sed -e s/a48fc0f/$A48FC0F/ -e s/ec8c0e0/$EC8C0E0/" -- trunk..2.4 trunk..2.5 | tr \\r \\n
+	rm -r .git/refs/original	# discard old commits saved by filter-branch
+
+	seven4876F1FAC45A7B4658F00A2C10F231414DC4E2C=`git rev-parse ':/^Undo most of'`
+	git filter-branch --msg-filter "sed -e s/74876f1fac45a7b4658f00a2c10f231414dc4e2c/$seven4876F1FAC45A7B4658F00A2C10F231414DC4E2C/" -- trunk..2.4 trunk..2.5 | tr \\r \\n
+	rm -r .git/refs/original	# discard old commits saved by filter-branch
 
 	git branch -d master					# discard useless old master branch
 	git remote add -f blaster $MASTER_REPO			# import master branch
