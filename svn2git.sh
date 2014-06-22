@@ -502,7 +502,9 @@ EOF
 	git checkout src/bzflag/playing.cxx
 	git commit --date='1387869736 -0800' '-mMerge branch 2.4 into 2.5, preserving the colorblindness enhancements of r22665 and r22666.'
 	GIT_AUTHOR_DATE='1398250503 -0500' GIT_AUTHOR_NAME='Scott Wichser' GIT_AUTHOR_EMAIL='blast007@users.sourceforge.net' git merge -q "-mMerge remote-tracking branch 'origin/2.4' into 2.5" ':/not the world weapon speed'
-	git cherry-pick 0c153e15484692415439e9c878131e583561362e..import3/v2_6_x
+	git cherry-pick 0c153e15484692415439e9c878131e583561362e..6da0fbab532c26d59941a166b35e2e244091c8ab
+	GIT_AUTHOR_DATE='1403373855 -0500' GIT_AUTHOR_NAME='Scott Wichser' GIT_AUTHOR_EMAIL='blast007@users.sourceforge.net' git merge -q "-mMerge remote-tracking branch 'origin/2.4' into 2.5" ':/missing speed value'
+	git cherry-pick 8b30db441309bd0b3b8e9aa55ef8aeed87a890c5..import3/v2_6_x
 	git remote remove import3
 	git tag -d `git tag`					# expunge import3 tags
 
