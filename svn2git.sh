@@ -470,7 +470,9 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	git cherry-pick ${PARENT}..9a7c1f0c826158f38061f07273a0366f86611531	# Standard string must be static
 	git cherry-pick d86e5a6fc01e0e6a59401c791026d4cbb8a90f76		# Added bz_eGameResumeEvent
 	git cherry-pick 5ae409e2463570fe6a85a1ab087a657276d86494..74a97722a0037f7c2895ae962d0421e79b27cd36
-	git cherry-pick 8a9b04dc3426927de73cad32aee78c16fdc03dd5..import3/v2_4_x # merge is now unnecessary
+	git cherry-pick 8a9b04dc3426927de73cad32aee78c16fdc03dd5..df6db8355c4d3c49fc2f541548d51f98e1f290a7
+	git cherry-pick c6ee83203e59db813ac0bc4386de813a7deabdf8		# kick the player when...
+	git cherry-pick 90aed6511a69b89184bd36fc65a3b1d372afa563..import3/v2_4_x # merge is now unnecessary
 	git branch new_2.4		# temporary non-conflicting branch name
 	git checkout new_2.5
 	git cherry-pick ${PARENT}..':/^update version'
