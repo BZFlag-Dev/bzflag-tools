@@ -482,7 +482,7 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	git cherry-pick ${PARENT}..':/^update version'
 	PARENT=`git rev-parse ":/^Bump the BZFS protocol number"`	# do this now to match the remote commit
 	# JeffM would have done this if he were actually committing to the 2.4 branch
-	GIT_AUTHOR_DATE='1373139800 -0700' GIT_AUTHOR_NAME='Jeffery Myers' GIT_AUTHOR_EMAIL='jeffm2501@gmail.com' git merge -q "-mMerge branch '2.4'" ':/^ingnore more windows temp files'
+	GIT_AUTHOR_DATE='1373139800 -0700' GIT_AUTHOR_NAME='Jeffery Myers' GIT_AUTHOR_EMAIL='JeffM2501@gmail.com' git merge -q "-mMerge branch '2.4'" ':/^ingnore more windows temp files'
 	git cherry-pick ${PARENT}~..':/^Change the BZFlag version number from 2\.4\.3'
 	GIT_AUTHOR_DATE='1376370000 -0700' git merge -q '-mMerge branch 2.4 onto master.' ':/^For observers,'
 	GIT_AUTHOR_DATE='1376861008 -0700' git merge -q '-mMerge recent 2.4 changes into master.' ':/^remove files that were not ready'
@@ -533,9 +533,9 @@ EOF
 	# remove obsolete Subversion branches and tags that are not branch tips
 	git branch -d -r gsoc_08_libbzw remove_flag_id tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/pre-mesh tags/v1_11_12 tags/v1_11_14 tags/v1_11_16 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
 
-	# fix Josh's and Jim's e-mail addresses
+	# fix some e-mail addresses and full names
 	# change committer info to match the author's
-	git filter-branch --env-filter 'test $GIT_AUTHOR_EMAIL = josh@savannah.local && export GIT_AUTHOR_EMAIL=josh@joshb.us;test $GIT_AUTHOR_EMAIL = jwmelto@Goliath.local && export GIT_AUTHOR_EMAIL=jwmelto@users.sourceforge.net;export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- trunk..2.4 trunk..2.5 | tr \\r \\n
+	git filter-branch --env-filter 'test $GIT_AUTHOR_EMAIL = josh@savannah.local && export GIT_AUTHOR_EMAIL=josh@joshb.us;test $GIT_AUTHOR_EMAIL = jwmelto@Goliath.local -o $GIT_AUTHOR_EMAIL = jwmelto@comcast.net && export GIT_AUTHOR_EMAIL=jwmelto@users.sourceforge.net;test $GIT_AUTHOR_EMAIL = jeffm2501@gmail.com && export GIT_AUTHOR_EMAIL=JeffM2501@gmail.com;test $GIT_AUTHOR_EMAIL = kongr45gpen@helit.org && export GIT_AUTHOR_EMAIL=electrovesta@gmail.com;test $GIT_AUTHOR_EMAIL = allejo@users.noreply.github.com && export GIT_AUTHOR_EMAIL=allejo@me.com;test $GIT_AUTHOR_EMAIL = allejo@me.com && export GIT_AUTHOR_NAME=allejo;export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- trunk..2.4 trunk..2.5 | tr \\r \\n
 	rm -r .git/refs/original	# discard old commits saved by filter-branch
 
 	# multiple passes are required to update commit hashes in commit messages
