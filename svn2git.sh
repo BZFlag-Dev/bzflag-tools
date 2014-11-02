@@ -578,7 +578,7 @@ done
 for branch in `git branch -a -r` ; do
 	case $branch in
 	    2_4_OSX_Lion_Rebuild_branch)
-		local=Mac_OS_X_Lion_rebuild
+		local=2.4_Mac_OS_X_Lion_rebuild
 		;;
 	    bzflag)
 		local=1.7_archive2
@@ -588,7 +588,7 @@ for branch in `git branch -a -r` ; do
 		continue
 		;;
 	    trepan)
-		local=lua
+		local=2.99_lua
 		;;
 	    trunk)
 		if [ $NEXT_REVISION -gt 22828 ] ; then
@@ -606,13 +606,19 @@ for branch in `git branch -a -r` ; do
 		continue
 		;;
 	    v2_0_cs_branch)
-		local=crystal_space
+		local=2.0_crystal_space
 		;;
 	    v2_99_net_branch)
-		local=network_rewrite
+		local=2.99_network_rewrite
 		;;
 	    v2_99_shot_branch)
-		local=server_side_shots
+		local=2.99_server_side_shots
+		;;
+	    ftgl|gsoc_irc)
+		local=2.0_$branch
+		;;
+	    gsoc_*)
+		local=2.99_$branch
 		;;
 	    *)
 		local=$branch
