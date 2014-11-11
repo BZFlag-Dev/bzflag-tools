@@ -10,9 +10,15 @@
 # IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
+BASE=/tmp
+
+if [ "x$1" = x-q ] ; then
+	QUICK=yes
+fi
+
 (
 date "+svn_to_git started %c"
-repo=/tmp/svn2git.svn_to_git
+repo=$BASE/svn2git.svn_to_git
 exec > $repo.log 2>&1
 set -xe
 rm -rf $repo
@@ -27,27 +33,27 @@ rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
 git status --ignored				# update index and show state
 )
 
-# if false ; then
-for repo in admin bzauthd bzedit bzeditw32 bzstats bzview bzwgen bzworkbench custom_plugins db pybzflag tools web bzflag ; do
-	date "+$repo started %c"
-	svn2git.sh $repo
-	status=$?
-	if [ $status -ne 0 ] ; then
-		echo $repo: status $status
-	fi
-done
-# fi
+if [ "$QUICK" != yes ] ; then
+	for repo in admin bzauthd bzedit bzeditw32 bzstats bzview bzwgen bzworkbench custom_plugins db pybzflag tools web bzflag ; do
+		date "+$repo started %c"
+		svn2git.sh $repo
+		status=$?
+		if [ $status -ne 0 ] ; then
+			echo $repo: status $status
+		fi
+	done
+fi
 date
 
 combine_repos()
 {
-combined_repo=/tmp/svn2git.$1
+combined_repo=$BASE/svn2git.$1
 shift
 rm -rf $combined_repo
 git init $combined_repo
 cd $combined_repo
 for svn_repo in $* ; do
-	git remote add -f temp /tmp/svn2git.$svn_repo
+	git remote add -f temp $BASE/svn2git.$svn_repo
 	case $svn_repo in
 	    admin)
 		repo=masterban
@@ -69,12 +75,12 @@ for svn_repo in $* ; do
 			;;
 		    remotes/temp/*)
 			local=`echo $branch | sed 's=^remotes/temp/=='`
-			git branch ${repo}_$local $branch
+			git branch $local $branch
 			;;
 		esac
 	done
 	git remote remove temp
-	# rm -rf /tmp/svn2git.$svn_repo
+	# rm -rf $BASE/svn2git.$svn_repo
 done
 git checkout $repo
 git gc --prune=now				# tidy
@@ -88,4 +94,4 @@ set -xe
 combine_repos bzflag-archive pybzflag custom_plugins
 combine_repos bzflag-tools bzedit bzview bzeditw32 bzworkbench tools bzwgen svn_to_git
 combine_repos bzflag-web bzstats bzauthd admin db web
-) > /tmp/svn2git.combine_repos.log 2>&1
+) > $BASE/svn2git.combine_repos.log 2>&1
