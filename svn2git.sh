@@ -461,6 +461,17 @@ IFS="$SAVEIFS"
 time git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' --tree-filter "if mv $TARGET_REPO bzFLAG ; then mv bzFLAG/.??* bzFLAG/* . || true ; rmdir bzFLAG ; fi" --msg-filter 'perl -0 -wpe s/CVS:.\*//g\;s/\\n\*\(git-svn-id:\)/\\n\\n\$1/' -- --all | tr \\r \\n
 rm -rf .git/refs/original	# discard old commits saved by filter-branch
 
+if [ $TARGET_REPO = db -a $NEXT_REVISION -gt 22828 ] ; then
+	if ! git rebase --keep-empty :/@20270.08b3d480 remotes/gsoc_bzauthd_db ; then
+		git commit --allow-empty -F .git/COMMIT_EDITMSG
+		git cherry-pick --continue
+	fi
+	git branch bzauthd_db	# branch is now properly attached
+	git branch -d -r gsoc_bzauthd_db
+	git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- :/@20270.08b3d480..bzauthd_db | tr \\r \\n
+	rm -rf .git/refs/original	# discard old commits saved by filter-branch
+fi
+
 if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	# import post-Subversion commits
 	git checkout trunk		# be sure to start at the right place
