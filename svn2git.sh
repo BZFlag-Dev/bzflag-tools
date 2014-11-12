@@ -456,9 +456,10 @@ IFS="$SAVEIFS"
 
 # change all committer info to match the author's
 # move files up out of repo name subdirectory
+# move files up out of BZStatCollector and irclink subdirectories
 # (the file name bzFLAG is known not to conflict with anything)
 # "--subdirectory-filter bzflag" removes empty commits and so is unsuitable
-time git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' --tree-filter "if mv $TARGET_REPO bzFLAG ; then mv bzFLAG/.??* bzFLAG/* . || true ; rmdir bzFLAG ; fi" --msg-filter 'perl -0 -wpe s/CVS:.\*//g\;s/\\n\*\(git-svn-id:\)/\\n\\n\$1/' -- --all | tr \\r \\n
+time git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' --tree-filter "if mv $TARGET_REPO bzFLAG ; then mv bzFLAG/.??* bzFLAG/* . || true ; rmdir bzFLAG ; if test -d BZStatCollector ; then mv BZStatCollector/* . || true ; rmdir BZStatCollector ; elif test -d irclink ; then mv irclink/* . || true ; rmdir irclink ; fi ; fi" --msg-filter 'perl -0 -wpe s/CVS:.\*//g\;s/\\n\*\(git-svn-id:\)/\\n\\n\$1/' -- --all | tr \\r \\n
 rm -rf .git/refs/original	# discard old commits saved by filter-branch
 
 if [ $TARGET_REPO = db -a $NEXT_REVISION -gt 22828 ] ; then
