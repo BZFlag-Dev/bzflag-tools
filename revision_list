@@ -2767,14 +2767,19 @@ default,bzflag,,,
 18412,bzauthd,auto,,
 18414,bzauthd,auto,,
 18415,bzauthd,auto,,
-18417,bzflag,rebase_branch,trunk,tags/GSoC2008
+18417,bzflag,empty,trunk,
 18418,bzwgen,auto,,
 18420,bzwgen,auto,,
 18421,bzwgen,auto,,
 18422,bzwgen,auto,,
 18423,bzwgen,auto,,
-18426,bzauthd,auto,,
-18428,bzwgen,rebase_branch,trunk,tags/GSoC2008
+18424,bzflag,empty,gsoc_server_listing,
+18425,bzflag,empty,trunk,
+18426,bzauthd,empty,trunk,
+18427,bzflag,empty,gsoc_libbzw,
+18428,bzwgen,empty,trunk,
+18429,bzflag,empty,gsoc_collisions,
+18430,bzflag,empty,v2_99_shot_branch,
 # TODO: trepan branch does not use the bzflag/ subdirectory
 18431,bzflag,cherry_pick_branch_up,trunk,trepan
 18465,bzwgen,auto,,
