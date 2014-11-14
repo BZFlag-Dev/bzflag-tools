@@ -543,7 +543,7 @@ EOF
 	git branch 1.7 remotes/v1_7 && git branch -d -r v1_7
 
 	# remove obsolete Subversion branches and tags that are not branch tips
-	git branch -d -r gsoc_08_libbzw remove_flag_id tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/pre-mesh tags/v1_11_12 tags/v1_11_14 tags/v1_11_16 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
+	git branch -d -r gsoc_08_libbzw remove_flag_id tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/pre-mesh tags/soc-irc tags/v1_11_12 tags/v1_11_14 tags/v1_11_16 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
 
 	# fix some e-mail addresses and full names
 	# change committer info to match the author's
@@ -571,8 +571,14 @@ fi
 # change Subversion tag branches into Git tags
 for branch in `git branch -r` ; do
 	case $branch in
-	    tags/soc-bzworkbench)
-		tag=GSoC_2007
+	    tags/preMeshDrawInfo)
+		tag=2.0_preMeshDrawInfo
+		;;
+	    tags/soc-bz*|tags/v1_6_[45])
+		tag=		# no Git tag
+		;;
+	    tags/v20020226)
+		tag=v1.7e5_20020226
 		;;
 	    tags/*)
 		# change underscores to periods appropriately
@@ -582,7 +588,9 @@ for branch in `git branch -r` ; do
 		continue
 		;;
 	esac
-	git tag $tag $branch
+	if [ "x$tag" != x ] ; then
+		git tag $tag $branch
+	fi
 	git branch -d -r $branch
 done
 
