@@ -359,7 +359,11 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					else
 						LOCATION=branches/$branch
 					fi
-					git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch
+					if ! git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch ; then
+						if [ $rev -ne 18073 ] ; then
+							exit 1	# unexpected
+						fi
+					fi
 					if [ $rev -eq 2069 ] ; then
 						for file in include/Flag.h src/bzflag/playing.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/bzflag/$file@$rev > bzflag/$file
@@ -423,6 +427,31 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 								sed -i -e 's/\$Id: .* \$/$Id$/' -e 's/\$Revision: .* \$/$Revision$/' bzflag/$file
 							fi
 							git add bzflag/$file
+						done
+					elif [ $rev -eq 18073 ] ; then
+						mv -i bzflag/tools/BZFSLauncher tools
+						git rm -r tools/BZWTestLauncher bzflag/tools/BZFSLauncher	# directory has been renamed
+						git add tools/BZFSLauncher
+						for dir in HTTPServer webadmin ; do
+							mv -i bzflag/plugins/$dir plugins
+							git rm -r bzflag/plugins/$dir
+							git add plugins/$dir
+						done
+						(
+						IFS="$SAVEIFS"	# enable newline->space in backtick command
+						for file in `git status | sed -e '\=^.new file:  *bzflag/=!d' -e s///` ; do
+							mv -i bzflag/$file $file
+							git rm bzflag/$file
+							git add $file
+						done
+						)
+						git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
+						git status | awk                '/both deleted/ {print $3}' | xargs git rm
+						git status | awk '/deleted by us|added by them/ {print $4}' | xargs git add
+						rmdir bzflag/tools bzflag
+						for file in MSVC/VC8/bzflag.vcproj package/win32/nsis/DisableCheck.bmp package/win32/nsis/EnableCheck.bmp plugins/HoldTheFlag/HoldTheFlag.vcproj plugins/RogueGenocide/RogueGenocide.vcproj plugins/SAMPLE_PLUGIN/SAMPLE_PLUGIN.vcproj plugins/airspawn/airspawn.vcproj plugins/bzfscron/bzfscron.vc8.sln plugins/bzfscron/bzfscron.vc8.vcproj plugins/chathistory/chathistory.vcproj plugins/chatlog/Makefile.am plugins/chatlog/chatlog.cpp plugins/fastmap/Makefile.am plugins/flagStay/flagStay.vcproj plugins/killall/killall.vcproj plugins/koth/koth.vcproj plugins/logDetail/logDetail.vcproj plugins/mapchange/Makefile.am plugins/nagware/nagware.vcproj plugins/playHistoryTracker/playHistoryTracker.vcproj plugins/plugin_utils/VC8/plugin_utils.vcproj plugins/recordmatch/recordmatch.vcproj plugins/serverControl/serverControl.vcproj plugins/serverSideBotSample/serverSideBotSample.vcproj plugins/shockwaveDeath/shockwaveDeath.vcproj plugins/soundTest/soundTest.vcproj plugins/teamflagreset/teamflagreset.vcproj plugins/thiefControl/thiefControl.vcproj plugins/timedctf/timedctf.vcproj plugins/torBlock/torBlock.sln plugins/torBlock/torBlock.vcproj plugins/unrealCTF/Makefile.am plugins/weaponArena/weaponArena.vcproj plugins/webReport/Makefile.am plugins/webstats/Makefile.am plugins/webstats/README.txt plugins/webstats/templates/stats.tmpl plugins/wwzones/wwzones.vcproj ; do
+							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
+							git add $file
 						done
 					fi
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"

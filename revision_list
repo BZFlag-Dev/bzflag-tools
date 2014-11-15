@@ -2665,6 +2665,7 @@ default,bzflag,,,
 18033,bzview,auto,,
 18046,bzauthd,auto,,
 18047,bzauthd,auto,,
+18073,bzflag,merge-Xtheirs,gsoc_server_listing,:/@18069.08b3d480
 18080,bzauthd,auto,,
 18081,bzauthd,auto,,
 # TODO: gsoc_collisions does not use the bzflag/ subdirectory
