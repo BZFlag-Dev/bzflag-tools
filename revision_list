@@ -2734,6 +2734,7 @@ default,bzflag,,,
 18313,bzauthd,auto,,
 18314,bzwgen,auto,,
 18315,bzwgen,auto,,
+18333,bzflag,merge-Xtheirs,gsoc_server_listing,:/@18330.08b3d480
 18334,bzauthd,auto,,
 18341,bzwgen,auto,,
 18342,bzwgen,auto,,

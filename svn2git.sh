@@ -360,7 +360,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						LOCATION=branches/$branch
 					fi
 					if ! git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch ; then
-						if [ $rev -ne 18073 ] ; then
+						if [ $rev -ne 18073 -a $rev -ne 18333 ] ; then
 							exit 1	# unexpected
 						fi
 					fi
@@ -452,6 +452,27 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						for file in MSVC/VC8/bzflag.vcproj package/win32/nsis/DisableCheck.bmp package/win32/nsis/EnableCheck.bmp plugins/HoldTheFlag/HoldTheFlag.vcproj plugins/RogueGenocide/RogueGenocide.vcproj plugins/SAMPLE_PLUGIN/SAMPLE_PLUGIN.vcproj plugins/airspawn/airspawn.vcproj plugins/bzfscron/bzfscron.vc8.sln plugins/bzfscron/bzfscron.vc8.vcproj plugins/chathistory/chathistory.vcproj plugins/chatlog/Makefile.am plugins/chatlog/chatlog.cpp plugins/fastmap/Makefile.am plugins/flagStay/flagStay.vcproj plugins/killall/killall.vcproj plugins/koth/koth.vcproj plugins/logDetail/logDetail.vcproj plugins/mapchange/Makefile.am plugins/nagware/nagware.vcproj plugins/playHistoryTracker/playHistoryTracker.vcproj plugins/plugin_utils/VC8/plugin_utils.vcproj plugins/recordmatch/recordmatch.vcproj plugins/serverControl/serverControl.vcproj plugins/serverSideBotSample/serverSideBotSample.vcproj plugins/shockwaveDeath/shockwaveDeath.vcproj plugins/soundTest/soundTest.vcproj plugins/teamflagreset/teamflagreset.vcproj plugins/thiefControl/thiefControl.vcproj plugins/timedctf/timedctf.vcproj plugins/torBlock/torBlock.sln plugins/torBlock/torBlock.vcproj plugins/unrealCTF/Makefile.am plugins/weaponArena/weaponArena.vcproj plugins/webReport/Makefile.am plugins/webstats/Makefile.am plugins/webstats/README.txt plugins/webstats/templates/stats.tmpl plugins/wwzones/wwzones.vcproj ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
+						done
+					elif [ $rev -eq 18333 ] ; then
+						(
+						IFS="$SAVEIFS"	# enable newline->space in backtick command
+						for file in `git status | sed -e '\=^.new file:  *bzflag/=!d' -e s///` plugins/torBlock/torBlock.vcproj plugins/bzfscron/bzfscron.vc8.vcproj ; do
+							mv bzflag/$file $file
+							git rm bzflag/$file
+							git add $file
+						done
+						)
+						git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
+						for file in MSVC/VC8/bzflag.vcproj include/ServerItem.h plugins/bzfscron/bzfscron.vc8.vcproj plugins/torBlock/torBlock.vcproj src/game/ServerItem.cxx ; do
+							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
+							git add $file
+						done
+						# svn cat fails with "E135000: Inconsistent line ending style" on these files
+						# correct plugin_HTTP.cpp MD5=3cfec4dd8bbdb6b4753c2720b41a1356
+						# correct plugin_HTTP.h   MD5=be721291b3336256e08d127a35ba1b02
+						for file in plugin_HTTP.cpp plugin_HTTP.h ; do
+							cp $SOURCE/$file plugins/plugin_utils/$file
+							git add plugins/plugin_utils/$file
 						done
 					fi
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
