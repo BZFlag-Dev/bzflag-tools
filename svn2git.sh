@@ -360,7 +360,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						LOCATION=branches/$branch
 					fi
 					if ! git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch ; then
-						if [ $rev -ne 18073 -a $rev -ne 18333 ] ; then
+						if [ $rev -ne 18073 -a $rev -ne 18333 -a $rev -ne 18509 ] ; then
 							exit 1	# unexpected
 						fi
 					fi
@@ -474,6 +474,14 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							cp $SOURCE/$file plugins/plugin_utils/$file
 							git add plugins/plugin_utils/$file
 						done
+					elif [ $rev -eq 18509 ] ; then
+						for file in src/bzflag/CommandsStandard.cxx src/bzflag/CommandsStandard.h tools/BZFSLauncher/Todo.txt ; do
+							mv -i bzflag/$file $file
+							git rm bzflag/$file
+							git add $file
+						done
+						git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
+						git status | awk                '/both deleted/ {print $3}' | xargs git rm
 					fi
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
