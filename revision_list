@@ -2799,6 +2799,7 @@ default,bzflag,,,
 18509,bzflag,merge-Xours,gsoc_server_listing,:/@18508.08b3d480
 18515,admin,auto,,
 18516,admin,auto,,
+18517,bzflag,merge-Xours,trunk,gsoc_server_listing
 18591,db,auto,,
 18655,db,auto,,
 18656,db,auto,,
