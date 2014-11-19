@@ -2497,7 +2497,9 @@ default,bzflag,,,
 17466,bzauthd,auto,,
 17467,bzauthd,auto,,
 17468,bzauthd,auto,,
+17473,bzflag,merge-Xours,v2_99_net_branch,trunk
 17475,bzwgen,auto,,
+17476,bzflag,merge-Xours,v2_99_net_branch,trunk
 17481,bzwgen,auto,,
 17482,bzwgen,auto,,
 17483,bzwgen,auto,,

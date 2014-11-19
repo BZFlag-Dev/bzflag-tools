@@ -360,7 +360,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						LOCATION=branches/$branch
 					fi
 					if ! git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch ; then
-						if [ $rev -ne 18073 -a $rev -ne 18333 -a $rev -ne 18509 ] ; then
+						if [ $rev -ne 17473 -a $rev -ne 18073 -a $rev -ne 18333 -a $rev -ne 18509 ] ; then
 							exit 1	# unexpected
 						fi
 					fi
@@ -427,6 +427,32 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 								sed -i -e 's/\$Id: .* \$/$Id$/' -e 's/\$Revision: .* \$/$Revision$/' bzflag/$file
 							fi
 							git add bzflag/$file
+						done
+					elif [ $rev -eq 17473 ] ; then
+						for dir in plugins/chatlog plugins/webadmin tools/BZFSLauncher ; do
+							test ! -e $dir
+							mv $repo/$dir $dir
+							git rm -r $repo/$dir
+							git add $dir
+						done
+						rmdir $repo/tools
+						rm     $repo/include/NetHandler.h $repo/src/bzflag/ServerLink.h
+						git rm $repo/include/NetHandler.h $repo/src/bzflag/ServerLink.h
+						(
+						IFS="$SAVEIFS"	# enable newline->space in backtick command
+						for file in `git status | sed -e '\=^.new file:  *bzflag/=!d' -e s///` ; do
+							test ! -e $file
+							mv $repo/$file $file
+							git rm $repo/$file
+							git add $file
+						done
+						)
+						git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
+						git status | awk                '/both deleted/ {print $3}' | xargs git rm
+						git status | awk '/deleted by us|added by them/ {print $4}' | xargs git add
+						for file in src/bzflag/ServerLink.h src/bzfs/bzfs.cxx src/common/KeyManager.cxx ; do
+							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
+							git add $file
 						done
 					elif [ $rev -eq 18073 ] ; then
 						mv -i bzflag/tools/BZFSLauncher tools
