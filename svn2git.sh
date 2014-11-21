@@ -359,7 +359,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					else
 						LOCATION=branches/$branch
 					fi
-					if ! git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch ; then
+					if ! eval git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch ; then
 						if [ $rev -ne 17473 -a $rev -ne 18073 -a $rev -ne 18333 -a $rev -ne 18509 ] ; then
 							exit 1	# unexpected
 						fi
@@ -427,6 +427,16 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 								sed -i -e 's/\$Id: .* \$/$Id$/' -e 's/\$Revision: .* \$/$Revision$/' bzflag/$file
 							fi
 							git add bzflag/$file
+						done
+					elif [ $rev -eq 17271 ] ; then
+						for file in MSVC/VC8/bzflag.sln include/bzUnicode.h src/bzflag/HUDuiTypeIn.cxx src/bzflag/playing.cxx src/bzfs/bzfs.cxx src/bzfs/bzfsMessages.h src/common/ShotUpdate.cxx src/game/MsgStrings.cxx src/platform/WinDisplay.cxx src/platform/WinDisplay.h ; do
+							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
+							git add $file
+						done
+					elif [ $rev -eq 17454 ] ; then
+						for file in MSVC/VC8/bzflag.vcproj src/bzflag/HUDRenderer.cxx src/bzflag/Plan.cxx ; do
+							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
+							git add $file
 						done
 					elif [ $rev -eq 17473 ] ; then
 						for dir in plugins/chatlog plugins/webadmin tools/BZFSLauncher ; do

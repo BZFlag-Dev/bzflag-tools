@@ -2446,6 +2446,7 @@ default,bzflag,,,
 17169,db,auto,,
 17169,web,auto,,
 17261,bzflag,cherry_pick_branch_up,trunk,v2_99_net_branch
+17271,bzflag,merge -Xsubtree=bzflag -Xours,v2_99_shot_branch,:/@17268.08b3d480
 17284,bzwgen,auto,,
 17285,bzwgen,auto,,
 17286,bzwgen,auto,,
@@ -2491,6 +2492,7 @@ default,bzflag,,,
 17450,bzauthd,auto,,
 17452,bzauthd,auto,,
 17453,bzauthd,auto,,
+17454,bzflag,merge -Xsubtree=bzflag -Xours,v2_99_shot_branch,trunk
 17455,bzwgen,auto,,
 17461,web,auto,,
 17465,bzauthd,auto,,
@@ -2510,6 +2512,7 @@ default,bzflag,,,
 17500,bzwgen,auto,,
 17501,bzwgen,auto,,
 17502,bzwgen,auto,,
+17521,bzflag,merge -Xsubtree=bzflag -Xtheirs,v2_99_shot_branch,trunk
 17523,bzwgen,auto,,
 17524,bzwgen,auto,,
 17525,bzwgen,auto,,
