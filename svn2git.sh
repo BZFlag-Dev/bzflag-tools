@@ -82,10 +82,10 @@ git svn init $SVN_REPO --rewrite-root=$UPSTREAM_REPO \
  $GIT_REPO_NAME
 cd $GIT_REPO_NAME
 # The git-svn documentation claims that --rewrite-root and
-# --rewrite-uuid may be used together, but the code prohibits it.
-# Edit the config file to work around this.
-sed -i "/rewriteRoot/a\
-\	rewriteUUID = $UPSTREAM_UUID" .git/config
+# --rewrite-uuid may be used together, but the "git svn init" code
+# prohibits it.  Work around this by adding the corresponding option
+# in a separate step.
+git config --local svn-remote.svn.rewriteUUID $UPSTREAM_UUID
 
 SAVEIFS="$IFS"
 IFS=,
