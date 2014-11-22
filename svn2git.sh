@@ -178,6 +178,7 @@ while read rev repo method branch tag ; do
 		fi
 		if [ $NEXT_REVISION -le $ENDING_REVISION -a $NEXT_REVISION -eq "$rev" ] ; then
 			if [ "x$repo" = "x$TARGET_REPO" ] ; then
+				rm -f .git/COMMIT_EDITMSG .git/MERGE_MSG	# ensure that the wrong message isn't used
 				case "$method" in
 				    auto)
 					git_svn_fetch $rev
@@ -264,18 +265,25 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					fi
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
-					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print'`"
-					case "$tag" in
-					    trunk|tags/*)
-						LOCATION=$tag
-						;;
-					    *)
-						LOCATION=branches/$tag
-						;;
-					esac
-					git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
-
-git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
+					MESSAGE=.git/MERGE_MSG
+					if [ ! -f $MESSAGE ] ; then
+						MESSAGE=.git/COMMIT_EDITMSG
+						if [ ! -f $MESSAGE ] ; then
+							# synthesize the commit message
+							svn log --xml -r $rev $SVN_REPO | perl -wle 'undef $/; $_ = <>; s=.*<msg>==s and s=</msg>.*==s and print' > $MESSAGE
+							echo "" >> $MESSAGE
+							case "$tag" in
+							    trunk|tags/*)
+								LOCATION=$tag
+								;;
+							    *)
+								LOCATION=branches/$tag
+								;;
+							esac
+							echo "git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID" >> $MESSAGE
+						fi
+					fi
+					git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" -F $MESSAGE
 					git rev-parse HEAD > .git/refs/remotes/$tag
 					case $method in
 					    *_inline)
