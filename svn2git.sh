@@ -436,6 +436,21 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							fi
 							git add bzflag/$file
 						done
+					elif [ $rev -eq 14514 ] ; then
+						for file in src/other/freetype/builds/unix/ftconfig.in ; do
+							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
+							git add $file
+						done
+					elif [ $rev -eq 14666 ] ; then
+						for file in src/bzflag/HUDRenderer.cxx ; do
+							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
+							git add $file
+						done
+					elif [ $rev -eq 14675 ] ; then
+						for file in src/bzflag/HUDRenderer.cxx src/bzflag/RadarRenderer.cxx src/bzflag/bzflag.cxx src/bzrobots/Makefile.am src/bzrobots/botplaying.cxx src/other/freetype/builds/unix/configure ; do
+							svn cat $SVN_REPO/$LOCATION/$repo/$file@$rev > $repo/$file
+							git add $repo/$file
+						done
 					elif [ $rev -eq 17271 ] ; then
 						for file in MSVC/VC8/bzflag.sln include/bzUnicode.h src/bzflag/HUDuiTypeIn.cxx src/bzflag/playing.cxx src/bzfs/bzfs.cxx src/bzfs/bzfsMessages.h src/common/ShotUpdate.cxx src/game/MsgStrings.cxx src/platform/WinDisplay.cxx src/platform/WinDisplay.h ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
@@ -746,7 +761,11 @@ for branch in `git branch -a -r` ; do
 	    v2_99_shot_branch)
 		local=2.99_server_side_shots
 		;;
-	    ftgl|gsoc_irc)
+	    ftgl)
+		git tag ${branch}_merged $branch
+		local=
+		;;
+	    gsoc_irc)
 		local=2.0_$branch
 		;;
 	    gsoc_*)
@@ -756,7 +775,9 @@ for branch in `git branch -a -r` ; do
 		local=$branch
 		;;
 	esac
-	git branch $local remotes/$branch
+	if [ "x$local" != x ] ; then
+		git branch $local remotes/$branch
+	fi
 	git branch -d -r $branch
 done
 

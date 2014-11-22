@@ -1505,9 +1505,8 @@ default,bzflag,,,
 14340,db,auto,,
 14341,bzworkbench,auto,,
 14342,db,auto,,
-# TODO: the ftgl branch does not use the bzflag/ subdirectory
 14344,bzflag,cherry_pick_branch_up,trunk~,ftgl
-# TODO: base directory mismatch 14347,bzflag,merge,ftgl,trunk
+14347,bzflag,merge -Xsubtree=bzflag,ftgl,trunk
 14366,db,auto,,
 14367,db,auto,,
 14370,db,auto,,
@@ -1548,7 +1547,7 @@ default,bzflag,,,
 14509,bzworkbench,auto,,
 14510,bzworkbench,auto,,
 14511,bzworkbench,auto,,
-#base directory mismatch 14514,bzflag,merge,ftgl,trunk
+14514,bzflag,merge -Xsubtree=bzflag,ftgl,trunk
 14515,bzworkbench,auto,,
 14524,bzflag,rebase_branch,trunk,gsoc_irc
 14532,bzworkbench,auto,,
@@ -1562,7 +1561,7 @@ default,bzflag,,,
 14551,bzworkbench,auto,,
 14555,bzworkbench,auto,,
 14556,bzworkbench,auto,,
-#base directory mismatch 14557,bzflag,merge,ftgl,trunk
+14557,bzflag,merge -Xsubtree=bzflag,ftgl,trunk
 14591,bzworkbench,auto,,
 14598,bzwgen,auto,,
 14599,bzwgen,auto,,
@@ -1581,9 +1580,9 @@ default,bzflag,,,
 14643,bzwgen,auto,,
 14664,db,auto,,
 14665,bzworkbench,auto,,
-#base directory mismatch 14666,bzflag,merge,ftgl,trunk
+14666,bzflag,merge -Xsubtree=bzflag -Xours,ftgl,trunk
 14669,bzworkbench,auto,,
-#base directory mismatch 14675,bzflag,merge,trunk,ftgl
+14675,bzflag,merge -Xsubtree=bzflag -Xtheirs,trunk,ftgl
 14682,bzworkbench,auto,,
 14684,bzworkbench,auto,,
 14687,bzworkbench,auto,,
