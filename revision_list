@@ -2427,7 +2427,6 @@ default,bzflag,,,
 16803,bzwgen,auto,,
 16877,bzworkbench,auto,,
 16917,web,auto,,
-# TODO: v2_99_shot_branch does not use the bzflag/ subdirectory
 16945,bzflag,cherry_pick_branch_up,trunk,v2_99_shot_branch
 16979,bzwgen,auto,,
 16980,bzwgen,auto,,
@@ -2449,12 +2448,10 @@ default,bzflag,,,
 17284,bzwgen,auto,,
 17285,bzwgen,auto,,
 17286,bzwgen,auto,,
-# TODO: gsoc_server_listing does not use the bzflag/ subdirectory
 17325,bzflag,cherry_pick_branch_up,trunk,gsoc_server_listing
 17328,bzauthd,auto,,
 17329,bzauthd,auto,,
 17330,bzauthd,auto,,
-# TODO: gsoc_08_libbzw does not use the bzflag/ subdirectory
 17331,bzflag,cherry_pick_branch_up,trunk,gsoc_08_libbzw
 17337,bzauthd,auto,,
 17338,bzauthd,auto,,
@@ -2467,7 +2464,6 @@ default,bzflag,,,
 17368,bzauthd,auto,,
 17376,bzwgen,auto,,
 17385,bzworkbench,auto,,
-# TODO: gsoc_libbzw does not use the bzflag/ subdirectory
 17409,bzflag,rebase_branch,gsoc_08_libbzw,gsoc_libbzw
 17431,bzauthd,auto,,
 17432,bzauthd,auto,,
@@ -2672,7 +2668,6 @@ default,bzflag,,,
 18073,bzflag,merge-Xtheirs,gsoc_server_listing,:/@18069.08b3d480
 18080,bzauthd,auto,,
 18081,bzauthd,auto,,
-# TODO: gsoc_collisions does not use the bzflag/ subdirectory
 18083,bzflag,cherry_pick_branch_up,trunk,gsoc_collisions
 18085,bzauthd,auto,,
 18088,bzauthd,auto,,
@@ -2786,7 +2781,6 @@ default,bzflag,,,
 18428,bzwgen,empty,trunk,
 18429,bzflag,empty,gsoc_collisions,
 18430,bzflag,empty,v2_99_shot_branch,
-# TODO: trepan branch does not use the bzflag/ subdirectory
 18431,bzflag,cherry_pick_branch_up,trunk,trepan
 18465,bzwgen,auto,,
 18467,bzwgen,auto,,
@@ -3113,7 +3107,6 @@ default,bzflag,,,
 20746,web,auto,,
 20747,web,auto,,
 20748,web,auto,,
-# TODO: tag v2_0_14 does not use the bzflag/ subdirectory
 20845,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_14
 20848,web,auto,,
 20849,web,auto,,
@@ -3179,7 +3172,6 @@ default,bzflag,,,
 20936,bzworkbench,auto,,
 20937,bzworkbench,auto,,
 20949,bzworkbench,auto,,
-# TODO: tag v2_0_16 does not use the bzflag/ subdirectory
 20982,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_16
 21015,bzworkbench,auto,,
 21016,bzworkbench,auto,,
