@@ -367,11 +367,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					else
 						LOCATION=branches/$branch
 					fi
-					if ! eval git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch ; then
-						if [ $rev -ne 17473 -a $rev -ne 18073 -a $rev -ne 18333 -a $rev -ne 18509 ] ; then
-							exit 1	# unexpected
-						fi
-					fi
+					eval git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch
 					if [ $rev -eq 2069 ] ; then
 						for file in include/Flag.h src/bzflag/playing.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
@@ -391,12 +387,12 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							git add $repo/$file
 						done
 					elif [ $rev -eq 12060 ] ; then
-						for file in src/bzadmin/bzadmin.cxx src/bzfs/CmdLineOptions.cxx src/bzfs/GameKeeper.h src/bzfs/bzfs.cxx ; do
+						for file in src/bzfs/CmdLineOptions.cxx src/bzfs/GameKeeper.h src/bzfs/bzfs.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							git add $repo/$file
 						done
 					elif [ $rev -eq 12109 ] ; then
-						for file in src/bzfs/GameKeeper.h src/bzfs/bzfs.cxx src/bzfs/commands.cxx ; do
+						for file in src/bzfs/GameKeeper.h src/bzfs/bzfs.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							git add $repo/$file
 						done
@@ -462,67 +458,17 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							git add $file
 						done
 					elif [ $rev -eq 17473 ] ; then
-						for dir in plugins/chatlog plugins/webadmin tools/BZFSLauncher ; do
-							test ! -e $dir
-							mv $repo/$dir $dir
-							git rm -r $repo/$dir
-							git add $dir
-						done
-						rmdir $repo/tools
-						rm     $repo/include/NetHandler.h $repo/src/bzflag/ServerLink.h
-						git rm $repo/include/NetHandler.h $repo/src/bzflag/ServerLink.h
-						(
-						IFS="$SAVEIFS"	# enable newline->space in backtick command
-						for file in `git status | sed -e '\=^.new file:  *bzflag/=!d' -e s///` ; do
-							test ! -e $file
-							mv $repo/$file $file
-							git rm $repo/$file
-							git add $file
-						done
-						)
-						git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
-						git status | awk                '/both deleted/ {print $3}' | xargs git rm
-						git status | awk '/deleted by us|added by them/ {print $4}' | xargs git add
-						for file in src/bzflag/ServerLink.h src/bzfs/bzfs.cxx src/common/KeyManager.cxx ; do
+						for file in src/bzflag/ServerLink.h src/bzfs/bzfs.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
 					elif [ $rev -eq 18073 ] ; then
-						mv -i $repo/tools/BZFSLauncher tools
-						git rm -r tools/BZWTestLauncher $repo/tools/BZFSLauncher	# directory has been renamed
-						git add tools/BZFSLauncher
-						for dir in HTTPServer webadmin ; do
-							mv -i $repo/plugins/$dir plugins
-							git rm -r $repo/plugins/$dir
-							git add plugins/$dir
-						done
-						(
-						IFS="$SAVEIFS"	# enable newline->space in backtick command
-						for file in `git status | sed -e '\=^.new file:  *bzflag/=!d' -e s///` ; do
-							mv -i $repo/$file $file
-							git rm $repo/$file
-							git add $file
-						done
-						)
-						git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
-						git status | awk                '/both deleted/ {print $3}' | xargs git rm
-						git status | awk '/deleted by us|added by them/ {print $4}' | xargs git add
-						rmdir $repo/tools bzflag
 						for file in MSVC/VC8/bzflag.vcproj package/win32/nsis/DisableCheck.bmp package/win32/nsis/EnableCheck.bmp plugins/HoldTheFlag/HoldTheFlag.vcproj plugins/RogueGenocide/RogueGenocide.vcproj plugins/SAMPLE_PLUGIN/SAMPLE_PLUGIN.vcproj plugins/airspawn/airspawn.vcproj plugins/bzfscron/bzfscron.vc8.sln plugins/bzfscron/bzfscron.vc8.vcproj plugins/chathistory/chathistory.vcproj plugins/chatlog/Makefile.am plugins/chatlog/chatlog.cpp plugins/fastmap/Makefile.am plugins/flagStay/flagStay.vcproj plugins/killall/killall.vcproj plugins/koth/koth.vcproj plugins/logDetail/logDetail.vcproj plugins/mapchange/Makefile.am plugins/nagware/nagware.vcproj plugins/playHistoryTracker/playHistoryTracker.vcproj plugins/plugin_utils/VC8/plugin_utils.vcproj plugins/recordmatch/recordmatch.vcproj plugins/serverControl/serverControl.vcproj plugins/serverSideBotSample/serverSideBotSample.vcproj plugins/shockwaveDeath/shockwaveDeath.vcproj plugins/soundTest/soundTest.vcproj plugins/teamflagreset/teamflagreset.vcproj plugins/thiefControl/thiefControl.vcproj plugins/timedctf/timedctf.vcproj plugins/torBlock/torBlock.sln plugins/torBlock/torBlock.vcproj plugins/unrealCTF/Makefile.am plugins/weaponArena/weaponArena.vcproj plugins/webReport/Makefile.am plugins/webstats/Makefile.am plugins/webstats/README.txt plugins/webstats/templates/stats.tmpl plugins/wwzones/wwzones.vcproj ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
 					elif [ $rev -eq 18333 ] ; then
-						(
-						IFS="$SAVEIFS"	# enable newline->space in backtick command
-						for file in `git status | sed -e '\=^.new file:  *bzflag/=!d' -e s///` plugins/torBlock/torBlock.vcproj plugins/bzfscron/bzfscron.vc8.vcproj ; do
-							mv $repo/$file $file
-							git rm $repo/$file
-							git add $file
-						done
-						)
-						git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
-						for file in MSVC/VC8/bzflag.vcproj include/ServerItem.h plugins/bzfscron/bzfscron.vc8.vcproj plugins/torBlock/torBlock.vcproj src/game/ServerItem.cxx ; do
+						for file in MSVC/VC8/bzflag.vcproj include/ServerItem.h src/game/ServerItem.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
@@ -533,24 +479,6 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							cp $SOURCE/$file plugins/plugin_utils/$file
 							git add plugins/plugin_utils/$file
 						done
-					elif [ $rev -eq 18509 ] ; then
-						for file in src/bzflag/CommandsStandard.cxx src/bzflag/CommandsStandard.h tools/BZFSLauncher/Todo.txt ; do
-							mv -i $repo/$file $file
-							git rm $repo/$file
-							git add $file
-						done
-						git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
-						git status | awk                '/both deleted/ {print $3}' | xargs git rm
-					elif [ $rev -eq 18517 ] ; then
-						# for trunk, all files are in the bzflag subdirectory
-						mkdir .bzFLAG
-						mv * .bzFLAG
-						git rm -q -r \*
-						mv .bzFLAG $repo
-						git add $repo
-						file=src/other/ftgl/msvc/config.h
-						svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
-						git add -f $repo/$file	# restore file that was lost in the merge
 					fi
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"

@@ -2494,7 +2494,7 @@ default,bzflag,,,
 17466,bzauthd,auto,,
 17467,bzauthd,auto,,
 17468,bzauthd,auto,,
-17473,bzflag,merge-Xours,v2_99_net_branch,trunk
+17473,bzflag,merge -Xsubtree=bzflag -Xours,v2_99_net_branch,trunk
 17475,bzwgen,auto,,
 17476,bzflag,merge-Xours,v2_99_net_branch,trunk
 17481,bzwgen,auto,,
@@ -2665,7 +2665,7 @@ default,bzflag,,,
 18033,bzview,auto,,
 18046,bzauthd,auto,,
 18047,bzauthd,auto,,
-18073,bzflag,merge-Xtheirs,gsoc_server_listing,:/@18069.08b3d480
+18073,bzflag,merge -Xsubtree=bzflag -Xtheirs,gsoc_server_listing,:/@18069.08b3d480
 18080,bzauthd,auto,,
 18081,bzauthd,auto,,
 18083,bzflag,cherry_pick_branch_up,trunk,gsoc_collisions
@@ -2733,7 +2733,7 @@ default,bzflag,,,
 18313,bzauthd,auto,,
 18314,bzwgen,auto,,
 18315,bzwgen,auto,,
-18333,bzflag,merge-Xtheirs,gsoc_server_listing,:/@18330.08b3d480
+18333,bzflag,merge -Xsubtree=bzflag -Xtheirs,gsoc_server_listing,:/@18330.08b3d480
 18334,bzauthd,auto,,
 18341,bzwgen,auto,,
 18342,bzwgen,auto,,
@@ -2794,10 +2794,10 @@ default,bzflag,,,
 18475,bzwgen,auto,,
 18476,bzwgen,auto,,
 18493,db,auto,,
-18509,bzflag,merge-Xours,gsoc_server_listing,:/@18508.08b3d480
+18509,bzflag,merge -Xsubtree=bzflag -Xtheirs,gsoc_server_listing,:/@18508.08b3d480
 18515,admin,auto,,
 18516,admin,auto,,
-18517,bzflag,merge-Xours,trunk,gsoc_server_listing
+18517,bzflag,merge -Xsubtree=bzflag -Xours,trunk,gsoc_server_listing
 18591,db,auto,,
 18655,db,auto,,
 18656,db,auto,,
