@@ -679,7 +679,8 @@ for branch in `git branch -a -r` ; do
 		local=2.4_Mac_OS_X_Lion_rebuild
 		;;
 	    bzflag)
-		local=1.7_archive2
+		git tag 1.7_archive_2 $branch
+		local=
 		;;
 	    experimental)
 		git branch -D -r $branch		# remove with prejudice
@@ -695,7 +696,8 @@ for branch in `git branch -a -r` ; do
 		continue
 		;;
 	    v1_7branch)
-		local=1.7_archive1
+		git tag 1.7_archive_1 $branch
+		local=
 		;;
 	    v1_10branch)
 		if [ $TARGET_REPO != bzflag ] ; then
@@ -710,13 +712,16 @@ for branch in `git branch -a -r` ; do
 		local=2.99_network_rewrite
 		;;
 	    v2_99_shot_branch)
-		local=2.99_server_side_shots
+		local=2.99_server_shot_control
+		;;
+	    gsoc_collisions)
+		local=2.99_server_collisions
 		;;
 	    gsoc_irc)
-		local=2.0_$branch
+		local=2.0_irc
 		;;
 	    gsoc_*)
-		local=2.99_$branch
+		local=`echo $branch | sed 's/^gsoc/2.99/'`
 		;;
 	    *)
 		local=$branch
