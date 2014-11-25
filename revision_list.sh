@@ -17,5 +17,5 @@
 (
 cd /scratch/bzflag/bzflag.svn/db/revs
 grep -a '^cpath: /trunk/[^/]*$' */* | sed -e '/\/bzflag$/d' -e 's=:cpath: /trunk/=,=' -e 's=.*/==' -e 's=$=,auto,,='
-grep -a '^cpath: /branches/gsoc_bzauthd[^/]*$' */* | sed -e 's=:cpath: /branches/gsoc_bzauthd.*=,bzauthd,auto,,=' -e 's=.*/=='
+grep -a '^cpath: /branches/gsoc_bzauthd_db$' */* | sed -e 's=:cpath: /branches/gsoc_bzauthd_db=,db,auto,,=' -e 's=.*/=='
 ) | sort -n

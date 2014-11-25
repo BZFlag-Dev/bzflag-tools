@@ -479,6 +479,18 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							cp $SOURCE/$file plugins/plugin_utils/$file
 							git add plugins/plugin_utils/$file
 						done
+					elif [ $rev -eq 19840 ] ; then
+						for file in MSVC/build/bzflag.sln MSVC/build/bzflag.vcproj MSVC/build/bzfs.sln include/ServerList.h plugins/configure.ac src/bzflag/bzflag.cxx src/bzfs/ListServerConnection.cxx src/bzfs/bzfs.cxx src/common/global.cxx src/game/ServerList.cxx src/other/curl/buildconf.bat ; do
+							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
+							git add $file
+						done
+						git rm -q -r MSVC/VC8
+						git rm -q -f src/ogl/OpenGLContext.cxx src/other/freetype/builds/win32/visualc/freetype_vc8.vcproj src/other/freetype/include/freetype/ftcid.h src/other/freetype/include/freetype/internal/services/svcid.h src/other/freetype/include/freetype/internal/services/svttglyf.h
+					elif [ $rev -eq 19841 ] ; then
+						for file in src/bzfs/bzfs.cxx ; do
+							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
+							git add $file
+						done
 					fi
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
