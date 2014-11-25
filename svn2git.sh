@@ -432,6 +432,11 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							fi
 							git add $repo/$file
 						done
+					elif [ $rev -eq 14329 ] ; then
+						# undo all source changes, keeping it as a merged branch
+						git checkout $source_branch
+						git merge -q --no-ff --no-commit $branch
+						git checkout HEAD -- $repo
 					elif [ $rev -eq 14514 ] ; then
 						for file in src/other/freetype/builds/unix/ftconfig.in ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
