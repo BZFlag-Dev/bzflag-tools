@@ -1587,7 +1587,7 @@ default,bzflag,,,
 14684,bzworkbench,auto,,
 14687,bzworkbench,auto,,
 14691,bzworkbench,auto,,
-14692,bzflag,empty,ftgl,	# delete branch
+14692,tidy,auto,,	# removes all files from ftgl branch
 14693,bzworkbench,auto,,
 14696,db,auto,,
 14697,bzworkbench,auto,,
