@@ -539,11 +539,17 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	git cherry-pick 5ae409e2463570fe6a85a1ab087a657276d86494..74a97722a0037f7c2895ae962d0421e79b27cd36
 	git cherry-pick 8a9b04dc3426927de73cad32aee78c16fdc03dd5..df6db8355c4d3c49fc2f541548d51f98e1f290a7
 	git cherry-pick c6ee83203e59db813ac0bc4386de813a7deabdf8		# kick the player when...
-	git cherry-pick 90aed6511a69b89184bd36fc65a3b1d372afa563..ff9936ef5830941b1339aafe80a7c907a4296eaa
+	git cherry-pick 90aed6511a69b89184bd36fc65a3b1d372afa563..d5e0974158a2c82892ae0e55293abeed9b9da071	# through pull/4/head
+	git cherry-pick b58ea230ff8386daa1a0973eebcad190928bb91d..ff9936ef5830941b1339aafe80a7c907a4296eaa	# resume from main branch
 	git cherry-pick 6eeb7955dd1484990e887160ad725d67ed7e123e		# filter messages before enter
 	git cherry-pick fc578ad7360a5e78a9bf971fd6b1229d09b52404..a528f0f86c803796b70995df40b981837af4758b
 	git cherry-pick a819a592e6d4d9bab04a4301d4a98f3f18b5341c..beb7a3f7636e61b3e3bd3c144cee3161c4408c26
-	git cherry-pick 39cea10e31fb2fceeb3611116ed8e3ef2b100426..import3/v2_4_x # merge is now unnecessary
+	git cherry-pick 39cea10e31fb2fceeb3611116ed8e3ef2b100426..96ef0546a65d0675ccf9325e9718f100ba004557
+	git cherry-pick 21102839a13d04764b30bb8b13a79bdde7f0c99a~..73429627edfa029cc232ff0a7e2a9c49eaaaf2ee
+	git cherry-pick 499265f08104ed31317e5bdcaf69814532cfc997	# add increment functions for score for convenience
+	git cherry-pick eb3446a782f0d0d8c63871accb42875d241373c6..68900dfc2ebc454bd5ae6e082b15d5ddeb979e7c
+	git cherry-pick 6a808d4f281a6bacf83221554ec567e80447cbda
+	git cherry-pick a7bf2b5d0a038c0e040827422f66ca0b46eed98c..import3/v2_4_x # merge is now unnecessary
 	git branch new_2.4		# temporary non-conflicting branch name
 	git checkout new_2.5
 	git cherry-pick ${PARENT}..':/^update version'
