@@ -2711,6 +2711,7 @@ default,bzflag,,,
 18276,db,auto,,
 18277,db,auto,,
 18278,db,auto,,
+18282,bzflag,merge -Xsubtree=bzflag -Xtheirs,gsoc_collisions,trunk
 18284,db,auto,,
 18285,db,auto,,
 18291,bzwgen,auto,,

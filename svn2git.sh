@@ -472,6 +472,11 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
+					elif [ $rev -eq 18282 ] ; then
+						for file in include/MotionUtils.h include/SegmentedShotStrategy.h include/ShotPath.h include/ShotStrategy.h src/bzflag/AutoPilot.h src/bzflag/World.h src/game/MotionUtils.cxx src/game/SegmentedShotStrategy.cxx src/game/ShotPath.cxx src/game/ShotStrategy.cxx ; do
+							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
+							git add $file
+						done
 					elif [ $rev -eq 18333 ] ; then
 						for file in MSVC/VC8/bzflag.vcproj include/ServerItem.h src/game/ServerItem.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
