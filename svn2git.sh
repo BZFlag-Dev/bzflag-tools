@@ -463,7 +463,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							git add $file
 						done
 					elif [ $rev -eq 17473 ] ; then
-						for file in src/bzflag/ServerLink.h src/bzfs/bzfs.cxx ; do
+						for file in src/bzflag/ServerLink.h src/bzfs/bzfs.cxx src/common/KeyManager.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
