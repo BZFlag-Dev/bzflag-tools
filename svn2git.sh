@@ -571,7 +571,9 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
 	git cherry-pick 499265f08104ed31317e5bdcaf69814532cfc997	# add increment functions for score for convenience
 	git cherry-pick eb3446a782f0d0d8c63871accb42875d241373c6..68900dfc2ebc454bd5ae6e082b15d5ddeb979e7c
 	git cherry-pick 6a808d4f281a6bacf83221554ec567e80447cbda
-	git cherry-pick a7bf2b5d0a038c0e040827422f66ca0b46eed98c..import3/v2_4_x # merge is now unnecessary
+	git cherry-pick a7bf2b5d0a038c0e040827422f66ca0b46eed98c..471bc4ca197b3c11776c8c404c4223c93154e26a
+	git cherry-pick 0a610186a030ea8d1b07ffa1a62df2faf4b70426
+	git cherry-pick b98fcdebc2b1f772ce2ac5967ac77b65bd43b4e7..import3/v2_4_x # merge is now unnecessary
 	git branch new_2.4		# temporary non-conflicting branch name
 	git checkout new_2.5
 	git cherry-pick ${PARENT}..':/^update version'
