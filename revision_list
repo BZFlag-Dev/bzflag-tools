@@ -3250,17 +3250,17 @@ default,bzflag,,,
 22379,tools,auto,,
 22427,web,auto,,
 22436,web,auto,,
-22437,web,auto,,	# bzstats
+22437,web,cherry_pick_branch_up,trunk,gamestats_live
 22440,web,auto,,
 22441,web,auto,,
-22442,web,auto,,	# bzstats
+22442,web,merge -Xsubtree=gamestats,gamestats_live,trunk
 22445,web,auto,,
 22446,web,auto,,
 22466,tools,auto,,
 22468,web,auto,,
 22469,web,auto,,
 22470,web,auto,,
-22471,web,auto,,	# bzstats
+22471,web,merge -Xsubtree=gamestats,gamestats_live,trunk
 22473,web,auto,,
 22474,web,auto,,
 22481,web,auto,,

@@ -367,7 +367,11 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					else
 						LOCATION=branches/$branch
 					fi
-					eval git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch
+					if ! eval git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch ; then
+						if [ $rev -ne 22471 ] ; then
+							exit 1
+						fi
+					fi
 					if [ $rev -eq 2069 ] ; then
 						for file in include/Flag.h src/bzflag/playing.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
@@ -501,6 +505,21 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
+					elif [ $rev -eq 22442 ] ; then
+						git mv web/gamestats/libraries/Qore/tests libraries/Qore
+						for file in config/config.php ; do
+							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
+							git add $file
+						done
+					elif [ $rev -eq 22471 ] ; then
+						git rm -q -r views/Qore
+						mv web/gamestats/views/qore views
+						git add views/qore
+						mkdir packs/bzstats/views/qore
+						git mv web/gamestats/packs/bzstats/views/qore/error packs/bzstats/views/qore
+						git mv web/gamestats/libraries/Qore/qexception.php libraries/Qore
+						git mv web/gamestats/packs/bzstats/views/default.html.twig packs/bzstats/views
+						git rm -q -r web
 					fi
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
