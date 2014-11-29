@@ -22,7 +22,7 @@ UPSTREAM_REPO=https://svn.code.sf.net/p/bzflag/code
 UPSTREAM_UUID=08b3d480-bf2c-0410-a26f-811ee3361c24
 SVN_REPO=file:///scratch/bzflag/bzflag.svn	# $UPSTREAM_REPO will be much slower
 STARTING_REVISION=1	# default
-ENDING_REVISION=22828	# default, takes 3 hours on Bullet Catcher's computer
+ENDING_REVISION=22835	# default, takes 3 hours on Bullet Catcher's computer
 
 # There are some deficiencies of git-svn that must be overcome to
 # faithfully import the BZFlag Subversion repository into Git.
@@ -558,7 +558,7 @@ IFS="$SAVEIFS"
 time git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' --tree-filter "if mv $TARGET_REPO bzFLAG ; then mv bzFLAG/.??* bzFLAG/* . || true ; rmdir bzFLAG ; if test -d BZStatCollector ; then mv BZStatCollector/* . || true ; rmdir BZStatCollector ; elif test -d irclink ; then mv irclink/* . || true ; rmdir irclink ; fi ; fi" --msg-filter 'perl -0 -wpe s/CVS:.\*//g\;s/\\n\*\(git-svn-id:\)/\\n\\n\$1/' -- --all | tr \\r \\n
 rm -rf .git/refs/original	# discard old commits saved by filter-branch
 
-if [ $TARGET_REPO = db -a $NEXT_REVISION -gt 22828 ] ; then
+if [ $TARGET_REPO = db -a $NEXT_REVISION -gt 22835 ] ; then
 	if ! git rebase --keep-empty :/@20270.08b3d480 remotes/gsoc_bzauthd_db ; then
 		git commit --allow-empty -F .git/COMMIT_EDITMSG
 		git cherry-pick --continue
@@ -569,7 +569,7 @@ if [ $TARGET_REPO = db -a $NEXT_REVISION -gt 22828 ] ; then
 	rm -rf .git/refs/original	# discard old commits saved by filter-branch
 fi
 
-if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22828 ] ; then
+if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22835 ] ; then
 	# import post-Subversion commits
 	git checkout trunk		# be sure to start at the right place
 	git branch new_2.5		# temporary non-conflicting branch name
@@ -716,7 +716,7 @@ for branch in `git branch -a -r` ; do
 		local=2.99_lua
 		;;
 	    trunk)
-		if [ $NEXT_REVISION -gt 22828 ] ; then
+		if [ $NEXT_REVISION -gt 22835 ] ; then
 			git branch -d -r $branch	# "trunk" is a Subversion convention
 		fi
 		continue
@@ -775,9 +775,6 @@ set +x	# hide lots of noise
 			echo $r
 		fi
 	done
-	if [ $NEXT_REVISION -gt 22828 ] ; then
-		echo 22830	# already mixed into Git commits
-	fi
   fi
 ) | sort -n > /tmp/$GIT_REPO_NAME.expect
 ( git log --all | awk '$1 == "git-svn-id:" && $3 == "08b3d480-bf2c-0410-a26f-811ee3361c24" {print substr($2,index($2,"@")+1)}'

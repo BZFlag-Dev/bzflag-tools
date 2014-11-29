@@ -3270,4 +3270,11 @@ default,bzflag,,,
 22562,web,auto,,
 22563,web,auto,,
 22568,bzwgen,auto,,
+22829,tidy,auto,,	# duplicate of an original Git commit
+22830,tidy,auto,,	# already mixed into Git commits
+22831,web,auto,,
+22832,web,auto,,
+22833,web,auto,,
+22834,web,auto,,
+22835,web,auto,,
 99999,,,,		# end of file marker
