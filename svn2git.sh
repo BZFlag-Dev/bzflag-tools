@@ -372,12 +372,14 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							exit 1
 						fi
 					fi
-					if [ $rev -eq 2069 ] ; then
+					case $rev in
+					    2069)
 						for file in include/Flag.h src/bzflag/playing.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							git add $repo/$file
 						done
-					elif [ $rev -eq 12017 ] ; then
+						;;
+					    12017)
 						for file in include/PlayerInfo.h include/bzfsAPI.h include/global.h misc/bzfs.conf src/bzflag/Player.h src/bzflag/ScoreboardRenderer.cxx src/bzfs/bzfs.cxx src/game/PlayerInfo.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							if [ $file = src/bzflag/ScoreboardRenderer.cxx ] ; then
@@ -385,42 +387,50 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							fi
 							git add $repo/$file
 						done
-					elif [ $rev -eq 12039 ] ; then
+						;;
+					    12039)
 						for file in src/bzflag/LocalPlayer.cxx src/bzfs/bzfs.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							git add $repo/$file
 						done
-					elif [ $rev -eq 12060 ] ; then
+						;;
+					    12060)
 						for file in src/bzfs/CmdLineOptions.cxx src/bzfs/GameKeeper.h src/bzfs/bzfs.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							git add $repo/$file
 						done
-					elif [ $rev -eq 12109 ] ; then
+						;;
+					    12109)
 						for file in src/bzfs/GameKeeper.h src/bzfs/bzfs.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							git add $repo/$file
 						done
-					elif [ $rev -eq 12166 ] ; then
+						;;
+					    12166)
 						for file in include/bzfsAPI.h plugins/doc/events.html src/bzadmin/CursesMenu.cxx src/bzfs/bzfs.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							git add $repo/$file
 						done
-					elif [ $rev -eq 12258 ] ; then
+						;;
+					    12258)
 						for file in ChangeLog src/bzadmin/bzadmin.cxx src/bzflag/BackgroundRenderer.cxx src/bzflag/BackgroundRenderer.h src/bzflag/HUDRenderer.cxx src/bzflag/SceneRenderer.cxx src/bzflag/ScoreboardRenderer.cxx src/bzflag/SegmentedShotStrategy.cxx src/bzflag/ShockWaveStrategy.cxx src/bzflag/playing.cxx src/bzfs/CmdLineOptions.cxx src/bzfs/GameKeeper.h src/bzfs/bzfs.cxx src/bzfs/commands.cxx src/common/AutoCompleter.cxx src/game/PlayerInfo.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							git add $repo/$file
 						done
-					elif [ $rev -eq 12396 ] ; then
+						;;
+					    12396)
 						for file in ChangeLog src/bzfs/bzfs.cxx src/bzfs/bzfsAPI.cxx src/bzfs/commands.cxx src/common/TimeBomb.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							git add $repo/$file
 						done
-					elif [ $rev -eq 12504 ] ; then
+						;;
+					    12504)
 						for file in ChangeLog plugins/logDetail/logDetail.cpp src/bzflag/KeyboardMapMenu.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							git add $repo/$file
 						done
-					elif [ $rev -eq 12688 ] ; then
+						;;
+					    12688)
 						for file in ChangeLog README.MacOSX README.WIN32 configure.ac data/title.png include/bzfsAPI.h package/win32/nsis/Makefile.am plugins/HoldTheFlag/HoldTheFlag.cpp src/bzflag/GUIOptionsMenu.cxx src/bzflag/ScoreboardRenderer.cxx src/bzflag/ScoreboardRenderer.h src/bzflag/clientCommands.cxx src/bzflag/defaultBZDB.cxx src/bzfs/CmdLineOptions.h src/bzfs/SpawnPosition.cxx src/bzfs/bzfs.cxx src/bzfs/bzfsAPI.cxx src/bzfs/commands.cxx src/common/TextChunkManager.cxx win32/Makefile.am win32/VC71/bzadmin.vcproj win32/VC71/bzfs.vcproj ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							if [ $file = configure.ac -o $file = plugins/HoldTheFlag/HoldTheFlag.cpp -o $file = src/bzflag/ScoreboardRenderer.cxx ] ; then
@@ -428,7 +438,8 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							fi
 							git add $repo/$file
 						done
-					elif [ $rev -eq 12828 ] ; then
+						;;
+					    12828)
 						for file in Dev-C++/bzfs.dev README.DEVC++ README.WIN32 configure.ac include/TextUtils.h include/bzfsAPI.h include/common.h package/win32/README.win32.html package/win32/nsis/BZFlag.nsi package/win32/nsis/Makefile.am plugins/nagware/CHANGELOG.txt plugins/nagware/NAGSAMPLE.cfg plugins/nagware/nagware.cpp src/bzflag/CommandsImplementation.cxx src/bzflag/World.cxx src/bzflag/effectsRenderer.cxx src/bzflag/effectsRenderer.h src/bzflag/playing.cxx src/bzfs/bzfs.cxx src/bzfs/bzfsAPI.cxx src/bzfs/commands.cxx src/geometry/BillboardSceneNode.cxx src/geometry/BoltSceneNode.cxx src/mediafile/MediaFile.cxx win32/VC71/bzadmin.vcproj win32/VC71/common.vcproj ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							if [ $file = configure.ac -o $file = plugins/nagware/nagware.cpp ] ; then
@@ -436,52 +447,62 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							fi
 							git add $repo/$file
 						done
-					elif [ $rev -eq 14329 ] ; then
+						;;
+					    14329)
 						# undo all source changes, keeping it as a merged branch
 						git checkout $source_branch
 						git merge -q --no-ff --no-commit $branch
 						git checkout HEAD -- $repo
-					elif [ $rev -eq 14514 ] ; then
+						;;
+					    14514)
 						for file in src/other/freetype/builds/unix/ftconfig.in ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
-					elif [ $rev -eq 14666 ] ; then
+						;;
+					    14666)
 						for file in src/bzflag/HUDRenderer.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
-					elif [ $rev -eq 14675 ] ; then
+						;;
+					    14675)
 						for file in src/bzflag/HUDRenderer.cxx src/bzflag/RadarRenderer.cxx src/bzflag/bzflag.cxx src/bzrobots/Makefile.am src/bzrobots/botplaying.cxx src/other/freetype/builds/unix/configure ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $repo/$file
 							git add $repo/$file
 						done
-					elif [ $rev -eq 17271 ] ; then
+						;;
+					    17271)
 						for file in MSVC/VC8/bzflag.sln include/bzUnicode.h src/bzflag/HUDuiTypeIn.cxx src/bzflag/playing.cxx src/bzfs/bzfs.cxx src/bzfs/bzfsMessages.h src/common/ShotUpdate.cxx src/game/MsgStrings.cxx src/platform/WinDisplay.cxx src/platform/WinDisplay.h ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
-					elif [ $rev -eq 17454 ] ; then
+						;;
+					    17454)
 						for file in MSVC/VC8/bzflag.vcproj src/bzflag/HUDRenderer.cxx src/bzflag/Plan.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
-					elif [ $rev -eq 17473 ] ; then
+						;;
+					    17473)
 						for file in src/bzflag/ServerLink.h src/bzfs/bzfs.cxx src/common/KeyManager.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
-					elif [ $rev -eq 18073 ] ; then
+						;;
+					    18073)
 						for file in MSVC/VC8/bzflag.vcproj package/win32/nsis/DisableCheck.bmp package/win32/nsis/EnableCheck.bmp plugins/HoldTheFlag/HoldTheFlag.vcproj plugins/RogueGenocide/RogueGenocide.vcproj plugins/SAMPLE_PLUGIN/SAMPLE_PLUGIN.vcproj plugins/airspawn/airspawn.vcproj plugins/bzfscron/bzfscron.vc8.sln plugins/bzfscron/bzfscron.vc8.vcproj plugins/chathistory/chathistory.vcproj plugins/chatlog/Makefile.am plugins/chatlog/chatlog.cpp plugins/fastmap/Makefile.am plugins/flagStay/flagStay.vcproj plugins/killall/killall.vcproj plugins/koth/koth.vcproj plugins/logDetail/logDetail.vcproj plugins/mapchange/Makefile.am plugins/nagware/nagware.vcproj plugins/playHistoryTracker/playHistoryTracker.vcproj plugins/plugin_utils/VC8/plugin_utils.vcproj plugins/recordmatch/recordmatch.vcproj plugins/serverControl/serverControl.vcproj plugins/serverSideBotSample/serverSideBotSample.vcproj plugins/shockwaveDeath/shockwaveDeath.vcproj plugins/soundTest/soundTest.vcproj plugins/teamflagreset/teamflagreset.vcproj plugins/thiefControl/thiefControl.vcproj plugins/timedctf/timedctf.vcproj plugins/torBlock/torBlock.sln plugins/torBlock/torBlock.vcproj plugins/unrealCTF/Makefile.am plugins/weaponArena/weaponArena.vcproj plugins/webReport/Makefile.am plugins/webstats/Makefile.am plugins/webstats/README.txt plugins/webstats/templates/stats.tmpl plugins/wwzones/wwzones.vcproj ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
-					elif [ $rev -eq 18282 ] ; then
+						;;
+					    18282)
 						for file in include/MotionUtils.h include/SegmentedShotStrategy.h include/ShotPath.h include/ShotStrategy.h src/bzflag/AutoPilot.h src/bzflag/World.h src/game/MotionUtils.cxx src/game/SegmentedShotStrategy.cxx src/game/ShotPath.cxx src/game/ShotStrategy.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
-					elif [ $rev -eq 18333 ] ; then
+						;;
+					    18333)
 						for file in MSVC/VC8/bzflag.vcproj include/ServerItem.h src/game/ServerItem.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
@@ -493,25 +514,29 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							cp $SOURCE/$file plugins/plugin_utils/$file
 							git add plugins/plugin_utils/$file
 						done
-					elif [ $rev -eq 19840 ] ; then
+						;;
+					    19840)
 						for file in MSVC/build/bzflag.sln MSVC/build/bzflag.vcproj MSVC/build/bzfs.sln include/ServerList.h plugins/configure.ac src/bzflag/bzflag.cxx src/bzfs/ListServerConnection.cxx src/bzfs/bzfs.cxx src/common/global.cxx src/game/ServerList.cxx src/other/curl/buildconf.bat ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
 						git rm -q -r MSVC/VC8
 						git rm -q -f src/ogl/OpenGLContext.cxx src/other/freetype/builds/win32/visualc/freetype_vc8.vcproj src/other/freetype/include/freetype/ftcid.h src/other/freetype/include/freetype/internal/services/svcid.h src/other/freetype/include/freetype/internal/services/svttglyf.h
-					elif [ $rev -eq 19841 ] ; then
+						;;
+					    19841)
 						for file in src/bzfs/bzfs.cxx ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
-					elif [ $rev -eq 22442 ] ; then
+						;;
+					    22442)
 						git mv web/gamestats/libraries/Qore/tests libraries/Qore
 						for file in config/config.php ; do
 							svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 							git add $file
 						done
-					elif [ $rev -eq 22471 ] ; then
+						;;
+					    22471)
 						git rm -q -r views/Qore
 						mv web/gamestats/views/qore views
 						git add views/qore
@@ -520,7 +545,8 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git mv web/gamestats/libraries/Qore/qexception.php libraries/Qore
 						git mv web/gamestats/packs/bzstats/views/default.html.twig packs/bzstats/views
 						git rm -q -r web
-					fi
+						;;
+					esac
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
 					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print'`"
