@@ -83,7 +83,26 @@ for svn_repo_name in $* ; do
 		esac
 	done
 	git remote remove temp
-	if [ $svn_repo_name = web ] ; then		# db repo is already done
+	if [ $svn_repo_name = web ] ; then		# admin and db repos are already done
+		# conjoin the admin and web branches
+		git checkout :/@8126.08b3d480
+		git merge --no-commit -Xours :/@8149.08b3d480
+		git rm -q -f -r .cvsignore [^m]* master_ban.txt
+		rev=8157
+		for file in master-bans.txt ; do
+			svn cat $SVN_REPO/trunk/admin/$file@$rev > $file
+			git add $file
+		done
+		DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
+		AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
+		MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print'`"
+		git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
+
+git-svn-id: $UPSTREAM_REPO/trunk/admin@$rev $UPSTREAM_UUID"
+		git branch new_masterban	# an easy way to mark the current location
+		git rebase new_masterban masterban | tr \\r \\n
+		git branch -d new_masterban
+
 		# merge the db branch into the web branch
 		git checkout :/@22223.08b3d480
 		git merge --no-commit :/@22064.08b3d480
