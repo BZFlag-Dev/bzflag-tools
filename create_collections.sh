@@ -15,6 +15,12 @@ UPSTREAM_REPO=https://svn.code.sf.net/p/bzflag/code
 UPSTREAM_UUID=08b3d480-bf2c-0410-a26f-811ee3361c24
 SVN_REPO=file:///scratch/bzflag/bzflag.svn	# $UPSTREAM_REPO will be much slower
 
+# change all committer info to match the author's
+COMMITTER_IS_AUTHOR='
+export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"'
+
 if [ "x$1" = x-q ] ; then
 	QUICK=yes
 fi
@@ -72,10 +78,14 @@ for svn_repo_name in $* ; do
 		;;
 	esac
 	for branch in `git branch -a` ; do
-		# preserve master branch name in bzflag repo here
 		case $branch in
 		    remotes/temp/master)
-			git branch $repo $branch
+			# preserve master branch name in bzflag repo
+			if [ $repo = bzflag ] ; then
+				git branch master $branch
+			else
+				git branch $repo $branch
+			fi
 			;;
 		    remotes/temp/*)
 			local=`echo $branch | sed 's=^remotes/temp/=='`
@@ -99,7 +109,7 @@ for svn_repo_name in $* ; do
 		git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
 
 git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
-		git cherry-pick --allow-empty :/@18218.$UPSTREAM_UUID..:/@18415.$UPSTREAM_UUID
+		git cherry-pick --allow-empty :/@18218.$UPSTREAM_UUID..:/@18426.$UPSTREAM_UUID
 
 		# synthesize r19840
 		git merge --no-commit -Xtheirs :/@19834.$UPSTREAM_UUID
@@ -146,7 +156,9 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		git branch new_bzauthd	# an easy way to mark the current location
 		git rebase --keep-empty --preserve-merges -Xours new_bzauthd 2.99_bzauthd | tr \\r \\n
 		git branch -d new_bzauthd
-		git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- --all | tr \\r \\n
+		git tag 2.99_bzauthd_trunk bzauthd	# change branch to tag
+		git branch -D bzauthd
+		time git filter-branch --env-filter "$COMMITTER_IS_AUTHOR" -- --all | tr \\r \\n
 		rm -rf .git/refs/original	# discard old commits saved by filter-branch
 	elif [ $svn_repo_name = web ] ; then		# admin and db repos are already done
 		# conjoin the admin and web branches
@@ -224,14 +236,16 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 
 git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		git branch -D db old_gamestats_live
-		git filter-branch --env-filter 'export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME";export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL";export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"' -- --all | tr \\r \\n
+		git filter-branch --env-filter "$COMMITTER_IS_AUTHOR" -- --all | tr \\r \\n
 		rm -rf .git/refs/original	# discard old commits saved by filter-branch
 	fi
 	# rm -rf $BASE/svn2git.$svn_repo_name
 done
-git checkout $repo
+git checkout $repo || git checkout master
+sleep 1						# let the clock advance
+git reflog expire --expire=now --all		# purge reflogs
 git gc --prune=now				# tidy
-rm -f .git/FETCH_HEAD				# tidy
+rm -f .git/COMMIT_EDITMSG .git/FETCH_HEAD	# tidy
 rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
 git status --ignored				# update index and show state
 }
