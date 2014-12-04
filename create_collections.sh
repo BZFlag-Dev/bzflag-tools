@@ -80,8 +80,8 @@ for svn_repo_name in $* ; do
 	for branch in `git branch -a` ; do
 		case $branch in
 		    remotes/temp/master)
-			# preserve master branch name in bzflag repo
-			if [ $repo = bzflag ] ; then
+			# preserve "master" branch name in bzflag and web repos
+			if [ $svn_repo_name = bzflag -o $svn_repo_name = web ] ; then
 				git branch master $branch
 			else
 				git branch $repo $branch
@@ -161,7 +161,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		time git filter-branch --env-filter "$COMMITTER_IS_AUTHOR" -- --all | tr \\r \\n
 		rm -rf .git/refs/original	# discard old commits saved by filter-branch
 	elif [ $svn_repo_name = web ] ; then		# admin and db repos are already done
-		# conjoin the admin and web branches
+		# conjoin the admin and master branches
 		git checkout :/@8126.$UPSTREAM_UUID
 		git merge --no-commit -Xours :/@8149.$UPSTREAM_UUID
 		git rm -q -f -r .cvsignore [^m]* master_ban.txt
@@ -180,7 +180,7 @@ git-svn-id: $UPSTREAM_REPO/trunk/admin@$rev $UPSTREAM_UUID"
 		git rebase new_masterban masterban | tr \\r \\n
 		git branch -d new_masterban
 
-		# merge the db branch into the web branch
+		# merge the db branch into the master branch
 		git checkout :/@22223.$UPSTREAM_UUID
 		git merge --no-commit :/@22064.$UPSTREAM_UUID
 		mkdir bzfls bzfls/css bzfls/images oldstats
@@ -201,12 +201,12 @@ git-svn-id: $UPSTREAM_REPO/trunk/admin@$rev $UPSTREAM_UUID"
 		git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
 
 git-svn-id: $UPSTREAM_REPO/trunk/db@$rev $UPSTREAM_UUID"
-		git branch new_web	# an easy way to mark the current location
-		git rebase --keep-empty -Xours new_web :/@22369.$UPSTREAM_UUID | tr \\r \\n
+		git branch new_master	# an easy way to mark the current location
+		git rebase --keep-empty -Xours new_master :/@22369.$UPSTREAM_UUID | tr \\r \\n
 		git cherry-pick --allow-empty :/@22427.$UPSTREAM_UUID	# merge fails to keep it
-		git rev-parse HEAD > .git/refs/heads/new_web
-		git rebase --keep-empty -Xours new_web web | tr \\r \\n	# merge the remaining web branch
-		git branch -d new_web
+		git rev-parse HEAD > .git/refs/heads/new_master
+		git rebase --keep-empty -Xours new_master master | tr \\r \\n	# merge the remaining master branch
+		git branch -d new_master
 		git branch -m gamestats_live old_gamestats_live
 		git checkout -b gamestats_live :/@22436.$UPSTREAM_UUID
 		if ! git cherry-pick :/@22437.$UPSTREAM_UUID ; then
