@@ -103,6 +103,7 @@ default,bzflag,,,
 1556,bzflag,inline_tag,v1_7,v1_7g2
 1585,bzflag,inline_tag,v1_7,v1_7temp
 1586,bzflag,rebase_r1586,,
+1587,bzflag,merge --no-ff,:/@1585.08b3d480,trunk
 1695,bzeditw32,auto,,
 1696,bzeditw32,auto,,
 1697,bzeditw32,auto,,
@@ -1054,7 +1055,7 @@ default,bzflag,,,
 5651,pybzflag,auto,,
 5652,pybzflag,auto,,
 5653,pybzflag,auto,,
-5654,pybzflag,auto,,
+5654,pybzflag,merge --no-ff,:/@3224.08b3d480,trunk
 5681,bzflag,rebase_branch,tags/v1_10_4,v1_10branch
 6087,bzeditw32,auto,,
 6089,bzeditw32,auto,,
@@ -1127,6 +1128,7 @@ default,bzflag,,,
 6904,db,auto,,
 6905,db,auto,,
 6908,db,auto,,
+6909,bzflag,merge --no-ff,v1_10branch,tags/V1_10_6
 6939,web,auto,,
 6940,web,auto,,
 6943,web,auto,,
@@ -1507,6 +1509,7 @@ default,bzflag,,,
 14341,bzworkbench,auto,,
 14342,db,auto,,
 14344,bzflag,cherry_pick_branch_up,trunk~,ftgl
+14345,bzflag,merge --no-ff,:/@14320.08b3d480,trunk
 14347,bzflag,merge -Xsubtree=bzflag,ftgl,trunk
 14366,db,auto,,
 14367,db,auto,,

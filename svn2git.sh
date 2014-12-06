@@ -361,7 +361,21 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git rev-parse --verify $source_branch
 						;;
 					esac
-					git checkout remotes/$branch
+					if [ $rev -eq 6909 ] ; then	# multi-branch commit in Subversion
+						git_svn_fetch $rev	# use "auto" on trunk
+					fi
+					case "$branch" in
+					    :*)
+						git checkout $branch
+						branch=$tag		# very fragile, but gets the job done
+						;;
+					    *)
+						git checkout remotes/$branch
+						;;
+					esac
+					if [ $rev -eq 6909 ] ; then
+						git reset --hard HEAD~	# synthesize a merge on v1_10branch
+					fi
 					if [ "x$branch" = xtrunk ] ; then
 						LOCATION=$branch/$repo
 					else
@@ -376,8 +390,23 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					SUBDIR=$repo/	# the most common case
 					# separate list items here with commas to match IFS setting
 					case $rev in
+					    1587)
+						git status | awk '/new file:/ {print $3}' | xargs git rm -f
+						EXCEPTIONS=DEVINFO,data/boxwall.rgb,package/win32/runmakedb.dsp
+						;;
 					    2069)
 						EXCEPTIONS=include/Flag.h,src/bzflag/playing.cxx
+						;;
+					    5654)
+						git rm -f $repo/A*
+						;;
+					    6909)
+						svn export -q --force $SVN_REPO/$LOCATION/$repo@$rev $repo				# the nuclear option
+						git add $repo
+						for file in `git status | awk 'BEGIN{ORS=","} $1 == "modified:" {print $2}'` ; do	# ORS matches IFS
+							sed -i -e 's/\$Id: .* \$/$Id$/' -e 's/\$Revision: .* \$/$Revision$/' $file	# unexpand keywords
+							git add $file
+						done
 						;;
 					    12017)
 						EXCEPTIONS=include/PlayerInfo.h,include/bzfsAPI.h,include/global.h,misc/bzfs.conf,src/bzflag/Player.h,src/bzflag/ScoreboardRenderer.cxx,src/bzfs/bzfs.cxx,src/game/PlayerInfo.cxx
@@ -414,6 +443,9 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git checkout $source_branch
 						git merge -q --no-ff --no-commit $branch
 						git checkout HEAD -- $repo
+						;;
+					    14345)
+						git rm -f $repo/src/bzrobots/daxxar-was-here
 						;;
 					    14514)
 						EXCEPTIONS=src/other/freetype/builds/unix/ftconfig.in
@@ -644,7 +676,7 @@ EOF
 	git branch 1.7 remotes/v1_7 && git branch -d -r v1_7
 
 	# remove obsolete Subversion branches and tags that are not branch tips
-	git branch -d -r ftgl gsoc_08_libbzw gsoc_server_listing remove_flag_id tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/pre-mesh tags/soc-irc tags/v1_11_12 tags/v1_11_14 tags/v1_11_16 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
+	git branch -d -r ftgl gsoc_08_libbzw gsoc_server_listing remove_flag_id tags/V1_10_6 tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/pre-mesh tags/soc-irc tags/v1_11_12 tags/v1_11_14 tags/v1_11_16 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
 
 	# fix some e-mail addresses and full names
 	CANONICAL_AUTHORS='
