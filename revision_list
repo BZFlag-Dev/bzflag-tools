@@ -101,6 +101,7 @@ default,bzflag,,,
 1213,web,auto,,
 1214,web,auto,,
 1556,bzflag,inline_tag,v1_7,v1_7g2
+1585,bzflag,inline_tag,v1_7,v1_7temp
 1586,bzflag,rebase_r1586,,
 1695,bzeditw32,auto,,
 1696,bzeditw32,auto,,
