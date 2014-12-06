@@ -580,7 +580,16 @@ fi"
 # remove bogus CVS: text
 MSG_FILTER='perl -0 -wpe s/CVS:.\*//g\;s/\\n\*\(git-svn-id:\)/\\n\\n\$1/'
 # show the full Subversion trunk path
-MSG_FILTER="$MSG_FILTER\\;s=/trunk\@=/trunk/$TARGET_REPO\@="
+TRUNK_SUBDIR=$TARGET_REPO
+if [ $TARGET_REPO = tools ] ; then
+	TRUNK_SUBDIR=$TRUNK_SUBDIR/BZStatCollector	# not r22327, see below
+elif [ $TARGET_REPO = custom_plugins ] ; then
+	TRUNK_SUBDIR=$TRUNK_SUBDIR/irclink
+fi
+MSG_FILTER="$MSG_FILTER\\;s=/trunk\\\@=/trunk/$TRUNK_SUBDIR\\\@="
+if [ $TARGET_REPO = tools ] ; then
+	MSG_FILTER="$MSG_FILTER\\;s=/BZStatCollector\\\@22327=\\\@22327="
+fi
 
 time git filter-branch --env-filter "$COMMITTER_IS_AUTHOR" --tree-filter "$TREE_FILTER" --msg-filter "$MSG_FILTER" -- --all | tr \\r \\n
 rm -rf .git/refs/original	# discard old commits saved by filter-branch
