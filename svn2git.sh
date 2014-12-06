@@ -224,7 +224,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					# extra effort is required to rebase a lone empty commit
 					if ! eval git rebase --keep-empty $onto $source_branch ; then
 						if [ $rev -eq 21396 ] ; then
-							git add bzflag/include/PlayerInfo.h
+							git add $repo/include/PlayerInfo.h
 							if [ -d $repo/src/other ] ; then
 								find $repo/src/other -depth -exec rmdir {} +	# only needed for a partial repo
 							fi
@@ -312,7 +312,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					if ! eval git rebase --keep-empty $onto remotes/tags/$tag ; then
 						if [ $rev -eq 6881 ] ; then
 							git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
-							git rm -r bzflag/include bzflag/src bzflag/win32/VC71
+							git rm -r $repo/include $repo/src $repo/win32/VC71
 							sed '1,/^git-svn-id:/!d' .git/MERGE_MSG > .git/COMMIT_EDITMSG
 						fi
 						git commit --allow-empty -F .git/COMMIT_EDITMSG
@@ -326,11 +326,11 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 				    rebase_r1586)	# r1586 mostly copies the v1_7 branch onto trunk (r1587 finishes the job)
 					git_svn_fetch $rev
 					git rebase --keep-empty --onto remotes/tags/v1_7temp remotes/trunk~ remotes/trunk || true
-					for file in bzflag/src/platform/MacBZFlag-prefix.h bzflag/src/platform/MacOSX/MacBZFlag-prefix.h ; do
+					for file in $repo/src/platform/MacBZFlag-prefix.h $repo/src/platform/MacOSX/MacBZFlag-prefix.h ; do
 						mv -i ${file}~[0-9a-f]* $file
 						rm ${file}~HEAD
 					done
-					git rm bzflag/data/boxwall.rgb
+					git rm $repo/data/boxwall.rgb
 					git status | awk '/added by us|deleted by them/ {print $4}' | xargs git rm
 					git status | awk '/deleted by us|added by them/ {print $4}' | xargs git add
 					sed -i '1,/^git-svn-id:/!d' .git/MERGE_MSG
@@ -500,19 +500,19 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						SUBDIR=
 						;;
 					    22442)
-						git mv web/gamestats/libraries/Qore/tests libraries/Qore
+						git mv $repo/gamestats/libraries/Qore/tests libraries/Qore
 						EXCEPTIONS=config/config.php
 						SUBDIR=
 						;;
 					    22471)
 						git rm -q -r views/Qore
-						mv web/gamestats/views/qore views
+						mv $repo/gamestats/views/qore views
 						git add views/qore
 						mkdir packs/bzstats/views/qore
-						git mv web/gamestats/packs/bzstats/views/qore/error packs/bzstats/views/qore
-						git mv web/gamestats/libraries/Qore/qexception.php libraries/Qore
-						git mv web/gamestats/packs/bzstats/views/default.html.twig packs/bzstats/views
-						git rm -q -r web
+						git mv $repo/gamestats/packs/bzstats/views/qore/error packs/bzstats/views/qore
+						git mv $repo/gamestats/libraries/Qore/qexception.php libraries/Qore
+						git mv $repo/gamestats/packs/bzstats/views/default.html.twig packs/bzstats/views
+						git rm -q -r $repo
 						;;
 					esac
 					for file in $EXCEPTIONS ; do
