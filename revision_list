@@ -8,11 +8,14 @@
 default,bzflag,,,
 5,bzflag,empty,trunk,
 6,bzflag,rebase_tag_branch,trunk,v1_7c_2
+7,bzflag,merge --no-ff,trunk,tags/v1_7c_2
 8,bzflag,rebase_tag_branch,trunk,v1_7d_5
+9,bzflag,merge --no-ff,trunk,tags/v1_7d_5
 10,bzflag,rebase_tag_inline,trunk,v1_7d_6
 12,bzflag,rebase_tag_inline,trunk,v1_7d_7
 14,bzflag,rebase_tag_inline,trunk,v1_7d_8
 16,bzflag,rebase_tag_inline,trunk,v1_7d_9
+22,bzflag,merge -Xours,v1_7branch,trunk
 66,bzflag,inline_tag,trunk,v1_7e_0
 134,bzflag,inline_tag,trunk,v1_7e1
 163,bzflag,inline_tag,trunk,v1_7e2
@@ -26,13 +29,16 @@ default,bzflag,,,
 200,bzedit,auto,,
 201,bzedit,auto,,
 292,bzflag,inline_tag,trunk,v1_7e4
+297,bzflag,merge -Xours,bzflag,trunk
+301,bzflag,merge --no-ff,:/@295.08b3d480,trunk
 309,bzedit,auto,,
 310,bzedit,auto,,
-# r332 could be represented as a merge of branch v1_7 r333 onto trunk if not for their chronological order
+332,bzflag,merge,trunk,v1_7
 337,bzflag,empty,v1_7,
 338,bzflag,empty,v1_7,
 341,bzflag,empty,v1_7,
 347,bzflag,rebase_tag_branch,v1_7,v20020226
+507,bzflag,merge --no-ff,v1_7,tags/v20020226
 534,bzflag,empty,v1_7,
 535,bzflag,empty,v1_7,
 536,bzflag,empty,v1_7,
@@ -1033,6 +1039,7 @@ default,bzflag,,,
 3722,bzedit,auto,,
 3815,web,auto,,
 3870,bzflag,inline_tag,trunk,v1_9_4_Beta
+3873,bzflag,merge --no-ff,trunk,tags/v1_7_4_Beta
 4014,bzflag,inline_tag,trunk,v1_9_6_Beta
 4027,bzflag,inline_tag,trunk,v1_9_7_Beta
 4166,web,auto,,
@@ -1057,6 +1064,7 @@ default,bzflag,,,
 5653,pybzflag,auto,,
 5654,pybzflag,merge --no-ff,:/@3224.08b3d480,trunk
 5681,bzflag,rebase_branch,tags/v1_10_4,v1_10branch
+5733,bzflag,merge -Xours,trunk,v1_10branch
 6087,bzeditw32,auto,,
 6089,bzeditw32,auto,,
 6189,bzeditw32,auto,,
@@ -1172,6 +1180,7 @@ default,bzflag,,,
 8229,admin,auto,,
 8267,web,auto,,
 8428,bzflag,rebase_tag_branch,trunk,v1_11_15
+8429,bzflag,merge --no-ff,trunk,tags/v1_11_15
 8472,bzflag,inline_tag,trunk,v1_11_16
 8475,bzflag,rebase_tag_inline,v1_10branch,v1_10_8
 8476,db,auto,,
@@ -1323,6 +1332,7 @@ default,bzflag,,,
 11797,db,auto,,
 11800,db,auto,,
 11814,bzflag,rebase_tag_branch,trunk,v2_0_5_b1
+11815,bzflag,merge --no-ff,trunk,tags/v2_0_5_b1
 11963,bzflag,rebase_tag_inline,v2_0branch,merge-2_0-2_1-1
 11968,bzflag,merge,trunk,tags/merge-2_0-2_1-1
 11990,db,auto,,
