@@ -768,8 +768,7 @@ for branch in `git branch -a -r` ; do
 		local=2.4_Mac_OS_X_Lion_rebuild
 		;;
 	    bzflag)
-		git tag 1.7_archive_2 $branch
-		local=
+		local=1.7_archive_2
 		;;
 	    experimental)
 		git branch -D -r $branch		# remove with prejudice
@@ -785,8 +784,7 @@ for branch in `git branch -a -r` ; do
 		continue
 		;;
 	    v1_7branch)
-		git tag 1.7_archive_1 $branch
-		local=
+		local=1.7_archive_1
 		;;
 	    v1_10branch)
 		if [ $TARGET_REPO != bzflag ] ; then
@@ -816,9 +814,16 @@ for branch in `git branch -a -r` ; do
 		local=$branch
 		;;
 	esac
-	if [ "x$local" != x ] ; then
+	case "$local" in
+	    '')
+		exit 1				# should not happen
+		;;
+	    [0-9]*_*)
+		git tag $local remotes/$branch	# use tags for abandoned branches
+		;;
+	    *)
 		git branch $local remotes/$branch
-	fi
+	esac
 	git branch -d -r $branch
 done
 
