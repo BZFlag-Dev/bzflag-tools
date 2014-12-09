@@ -153,13 +153,15 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
 
 git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
-		git branch new_bzauthd	# an easy way to mark the current location
+		git branch new_bzauthd			# an easy way to mark the current location
+		git branch 2.99_bzauthd 2.99_bzauthd	# change 2.99_bzauthd back from
+		git tag -d 2.99_bzauthd			# a tag to a branch for correct rebase operation
 		git rebase --keep-empty --preserve-merges -Xours new_bzauthd 2.99_bzauthd | tr \\r \\n
 		git branch -d new_bzauthd
 		git tag 2.99_bzauthd_trunk bzauthd	# change branch to tag
 		git branch -D bzauthd
 		time git filter-branch --env-filter "$COMMITTER_IS_AUTHOR" -- --all | tr \\r \\n
-		rm -rf .git/refs/original	# discard old commits saved by filter-branch
+		rm -rf .git/refs/original		# discard old commits saved by filter-branch
 	elif [ $svn_repo_name = web ] ; then		# admin and db repos are already done
 		# conjoin the admin and master branches
 		git checkout :/@8126.$UPSTREAM_UUID
