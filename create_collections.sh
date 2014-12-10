@@ -160,6 +160,9 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		git branch -d new_bzauthd
 		git tag 2.99_bzauthd_trunk bzauthd	# change branch to tag
 		git branch -D bzauthd
+		git checkout master			# be somewhere else
+		git tag 2.99_bzauthd 2.99_bzauthd	# change branch to tag
+		git branch -D 2.99_bzauthd
 		time git filter-branch --env-filter "$COMMITTER_IS_AUTHOR" -- --all | tr \\r \\n
 		rm -rf .git/refs/original		# discard old commits saved by filter-branch
 	elif [ $svn_repo_name = web ] ; then		# admin and db repos are already done
