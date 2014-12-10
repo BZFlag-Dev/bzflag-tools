@@ -188,7 +188,7 @@ while read rev repo method branch tag ; do
 					# Assumes the author has at least one previous commit.
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
-					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print'`"
+					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'use HTML::Entities; undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print decode_entities(\$_)'`"
 					case "$branch" in
 					    trunk|tags/*)
 						LOCATION=$branch
@@ -270,7 +270,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						MESSAGE=.git/COMMIT_EDITMSG
 						if [ ! -f $MESSAGE ] ; then
 							# synthesize the commit message
-							svn log --xml -r $rev $SVN_REPO | perl -wle 'undef $/; $_ = <>; s=.*<msg>==s and s=</msg>.*==s and print' > $MESSAGE
+							svn log --xml -r $rev $SVN_REPO | perl -wle 'use HTML::Entities; undef $/; $_ = <>; s=.*<msg>==s and s=</msg>.*==s and print decode_entities($_)' > $MESSAGE
 							echo "" >> $MESSAGE
 							case "$tag" in
 							    trunk|tags/*)
@@ -547,7 +547,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					done
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
-					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print'`"
+					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'use HTML::Entities; undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print decode_entities(\$_)'`"
 					git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
 
 git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
