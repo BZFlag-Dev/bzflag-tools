@@ -23,7 +23,7 @@ default,bzflag,,,
 177,bzedit,empty,trunk,
 178,bzedit,auto,,
 196,bzedit,auto,,
-197,bzedit,auto,,
+197,bzedit,merge --no-ff,:/@178.08b3d480,trunk
 198,bzedit,auto,,
 199,bzedit,auto,,
 200,bzedit,auto,,
@@ -110,6 +110,7 @@ default,bzflag,,,
 1585,bzflag,inline_tag,v1_7,v1_7temp
 1586,bzflag,rebase_r1586,,
 1587,bzflag,merge --no-ff,:/@1585.08b3d480,trunk
+1612,bzflag,merge --no-ff,:/@1610.08b3d480,trunk
 1695,bzeditw32,auto,,
 1696,bzeditw32,auto,,
 1697,bzeditw32,auto,,
@@ -664,9 +665,9 @@ default,bzflag,,,
 2681,pybzflag,auto,,
 2682,pybzflag,auto,,
 2683,pybzflag,auto,,
-2684,pybzflag,auto,,
+2684,pybzflag,merge --no-ff,:/@2682.08b3d480,trunk
 2685,pybzflag,auto,,
-2686,pybzflag,auto,,
+2686,pybzflag,merge --no-ff,:/@2684.08b3d480,trunk
 2688,pybzflag,auto,,
 2693,pybzflag,auto,,
 2694,pybzflag,auto,,
@@ -943,7 +944,7 @@ default,bzflag,,,
 3042,pybzflag,auto,,
 3043,pybzflag,auto,,
 3044,pybzflag,auto,,
-3045,pybzflag,auto,,
+3045,pybzflag,merge --no-ff,:/@3043.08b3d480,trunk
 3046,pybzflag,auto,,
 3047,pybzflag,auto,,
 3048,pybzflag,auto,,
@@ -1389,7 +1390,7 @@ default,bzflag,,,
 # Git merges the parent of tags/merge-2_0-2_1-11 much more cleanly
 12688,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-11~
 12701,web,auto,,
-12702,web,auto,,
+12702,web,merge --no-ff,:/@12239.08b3d480,trunk
 12703,web,auto,,
 12704,web,auto,,
 12706,web,auto,,
