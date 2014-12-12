@@ -102,6 +102,7 @@ default,bzflag,,,
 992,web,auto,,
 993,web,auto,,
 994,web,auto,,
+995,bzflag,merge --no-ff,v1_7,tags/v1_7g0
 1031,web,auto,,
 1071,bzflag,rebase_tag_inline,v1_8,v1_8abort
 1213,web,auto,,
@@ -1393,7 +1394,7 @@ default,bzflag,,,
 12702,web,merge --no-ff,:/@12239.08b3d480,trunk
 12703,web,auto,,
 12704,web,auto,,
-12706,web,auto,,
+12706,web,merge --no-ff,:/@12703.08b3d480,trunk
 12730,admin,auto,,
 12820,db,auto,,
 12821,db,auto,,
@@ -3220,6 +3221,7 @@ default,bzflag,,,
 21512,db,auto,,
 21555,db,auto,,
 21560,bzflag,rebase_branch,tags/v2_99archive,experimental
+21891,bzflag,merge --no-ff,:/@21887.08b3d480,trunk
 22053,bzflag,cherry_pick_branch_down_inline,trunk,tags/v2_4_0
 22060,db,auto,,
 22061,db,auto,,

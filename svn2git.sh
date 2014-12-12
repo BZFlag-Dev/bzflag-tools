@@ -390,13 +390,16 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					SUBDIR=$repo/	# the most common case
 					# separate list items here with commas to match IFS setting
 					case $rev in
-					    7|9|197|301|1587|2684|2686|3045|3873|8429|11815|12702)
+					    7|9|197|301|1587|2684|2686|3045|3873|8429|11815|12702|12706|21891)
 						svn export -q --force $SVN_REPO/$LOCATION@$rev $repo					# the nuclear option
 						git add $repo
 						for file in `git status | awk 'BEGIN{ORS=","} $1 == "modified:" {print $2}'` ; do	# ORS matches IFS
 							sed -i -e 's/\$Id: .* \$/$Id$/' -e 's/\$Revision: .* \$/$Revision$/' $file	# unexpand keywords
 							git add $file
 						done
+						if [ $rev -eq 21891 ] ; then
+							git status | awk '/new file:/ {print $3}' | xargs git rm -q -f
+						fi
 						;;
 					    22)
 						svn export -q --force $SVN_REPO/$LOCATION/$repo@$rev $repo				# the nuclear option from a subdirectory
@@ -407,7 +410,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git status | awk '/deleted by us/ {print $4}' | xargs git rm -q -f
 						(cd $repo && git rm -q -f -r .cvsignore AUTHORS COPYING ChangeLog bzflag.lsm configs data/*.wav debian include man misc package src)
 						;;
-					    507|6909)
+					    507|995|6909)
 						svn export -q --force $SVN_REPO/$LOCATION/$repo@$rev $repo				# the nuclear option from a subdirectory
 						git add $repo
 						for file in `git status | awk 'BEGIN{ORS=","} $1 == "modified:" {print $2}'` ; do	# ORS matches IFS
