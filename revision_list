@@ -1325,6 +1325,7 @@ default,bzflag,,,
 11396,db,auto,,
 11565,db,auto,,
 11578,bzflag,inline_tag,trunk,v2_0_4_rc1
+11616,bzflag,merge --no-ff,trunk,tags/preMeshDrawInfo
 11617,bzflag,inline_tag,trunk,v2_0_4_rc4
 11653,bzflag,inline_tag,trunk,v2_0_4_rc5
 11720,bzflag,inline_tag,trunk,v2_0_4
