@@ -197,7 +197,14 @@ while read rev repo method branch tag ; do
 						LOCATION=branches/$branch
 						;;
 					esac
-					git checkout remotes/$branch
+					if [ -z "$tag" ] ; then
+						git checkout remotes/$branch
+					else
+						# create a new branch with this empty commit
+						git checkout -b remotes/$branch remotes/$tag
+						git mv $repo/* .
+						rmdir $repo
+					fi
 					git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
 
 git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
@@ -363,6 +370,9 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					esac
 					if [ $rev -eq 6909 ] ; then	# multi-branch commit in Subversion
 						git_svn_fetch $rev	# use "auto" on trunk
+					elif [ $rev -eq 17271 ] ; then
+						# remove ambiguity created by the way we implemented r16945 (part 1)
+						git branch -m remotes/v2_99_shot_branch local_v2_99_shot_branch
 					fi
 					case "$branch" in
 					    :*)
@@ -482,6 +492,8 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						EXCEPTIONS=src/bzflag/HUDRenderer.cxx,src/bzflag/RadarRenderer.cxx,src/bzflag/bzflag.cxx,src/bzrobots/Makefile.am,src/bzrobots/botplaying.cxx,src/other/freetype/builds/unix/configure
 						;;
 					    17271)
+						# remove ambiguity created by the way we implemented r16945 (part 2)
+						git branch -d local_v2_99_shot_branch
 						EXCEPTIONS=MSVC/VC8/bzflag.sln,include/bzUnicode.h,src/bzflag/HUDuiTypeIn.cxx,src/bzflag/playing.cxx,src/bzfs/bzfs.cxx,src/bzfs/bzfsMessages.h,src/common/ShotUpdate.cxx,src/game/MsgStrings.cxx,src/platform/WinDisplay.cxx,src/platform/WinDisplay.h
 						SUBDIR=
 						;;

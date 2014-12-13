@@ -2444,7 +2444,7 @@ default,bzflag,,,
 16803,bzwgen,auto,,
 16877,bzworkbench,auto,,
 16917,web,auto,,
-16945,bzflag,cherry_pick_branch_up,trunk,v2_99_shot_branch
+16945,bzflag,empty,v2_99_shot_branch,trunk
 16979,bzwgen,auto,,
 16980,bzwgen,auto,,
 16982,bzwgen,auto,,
@@ -2617,7 +2617,7 @@ default,bzflag,,,
 17826,bzwgen,auto,,
 17837,web,auto,,
 17839,bzflag,cherry_pick_branch_down_inline,v2_0branch,tags/v2_0_12
-17840,bzflag,empty,v2_0branch,	# rename the deleted tag to tags/v2_0_12.deleted
+17840,bzflag,empty,v2_0branch,
 17841,bzflag,cherry_pick_branch_down_inline,v2_0branch,tags/v2_0_12
 17842,bzwgen,auto,,
 17843,web,auto,,
