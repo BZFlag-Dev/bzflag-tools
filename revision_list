@@ -1387,8 +1387,10 @@ default,bzflag,,,
 # Git merges the parent of tags/merge-2_0-2_1-10 much more cleanly
 12504,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-10~
 12506,db,auto,,
+12515,bzflag,merge --no-ff,v2_0branch,tags/merge-2_0-2_1-10
 12516,admin,auto,,
 12542,admin,auto,,
+12685,bzflag,merge --no-ff,v2_0branch,tags/merge-2_0-2_1-11
 # Git merges the parent of tags/merge-2_0-2_1-11 much more cleanly
 12688,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-11~
 12701,web,auto,,
@@ -1404,6 +1406,7 @@ default,bzflag,,,
 12828,bzflag,merge-Xours,trunk,tags/merge-2_0-2_1-12~
 12834,admin,auto,,
 12835,admin,auto,,
+12836,bzflag,merge --no-ff,v2_0branch,tags/merge-2_0-2_1-12
 12840,admin,auto,,
 12853,db,auto,,
 12854,db,auto,,
