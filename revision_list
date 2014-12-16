@@ -1120,6 +1120,7 @@ default,bzflag,,,
 # More so than others, CVS tag v1_10_6 was applied to not-the-latest
 # revisions for some files.  r6859 is the least different parent.
 6879,bzflag,rebase_tag_branch,:/@6859.08b3d480,v1_10_6
+6880,bzflag,merge -Xours,v1_10branch,tags/v1_10_6
 6881,bzflag,rebase_tag_branch,v1_10branch,V1_10_6
 6882,db,auto,,
 6883,db,auto,,
@@ -1399,6 +1400,7 @@ default,bzflag,,,
 12704,web,auto,,
 12706,web,merge --no-ff,:/@12703.08b3d480,trunk
 12730,admin,auto,,
+12759,bzflag,merge --no-ff,v2_0branch,tags/v2_0_6
 12820,db,auto,,
 12821,db,auto,,
 12822,db,auto,,
@@ -1423,6 +1425,7 @@ default,bzflag,,,
 12884,db,auto,,
 12885,db,auto,,
 12894,bzflag,rebase_tag_branch,v2_0branch,v2_0_8
+12895,bzflag,merge --no-ff,v2_0branch,tags/v2_0_8
 12973,admin,auto,,
 13045,db,auto,,
 13102,admin,auto,,
@@ -2798,6 +2801,7 @@ default,bzflag,,,
 18515,admin,auto,,
 18516,admin,auto,,
 18517,bzflag,merge -Xsubtree=bzflag -Xours,trunk,gsoc_server_listing
+18558,bzflag,merge --no-ff,:/@18554.08b3d480,trunk
 18591,db,auto,,
 18655,db,auto,,
 18656,db,auto,,
