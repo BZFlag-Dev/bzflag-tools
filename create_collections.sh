@@ -23,6 +23,11 @@ export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"'
 
 if [ "x$1" = x-q ] ; then
 	QUICK=yes
+elif [ "x$1" = x-12 ] ; then
+	FORMULA=`date '+\( 12 - %-I \) \* 3600 - %-M \* 60 + 61'`
+	DELTA=`eval expr $FORMULA`
+	date -d "+$DELTA seconds" '+conversion process will begin at %T'
+	sleep $DELTA
 fi
 
 (
