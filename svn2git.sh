@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 # bzflag
 # Copyright (c) 1993-2014 Tim Riker
 #
@@ -177,7 +177,7 @@ while read rev repo method branch tag ; do
 			fi
 		fi
 		if [ $NEXT_REVISION -le $ENDING_REVISION -a $NEXT_REVISION -eq "$rev" ] ; then
-			if [ "x$repo" = "x$TARGET_REPO" ] ; then
+			if [[ $TARGET_REPO =~ ^($repo)$ ]] ; then
 				rm -f .git/COMMIT_EDITMSG .git/MERGE_MSG	# ensure that the wrong message isn't used
 				case "$method" in
 				    auto)
@@ -590,9 +590,9 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 				set -x
 			fi
 			NEXT_REVISION=`expr $NEXT_REVISION + 1`
-#		else
-#			echo "r$rev is out of sequence"
-#			exit 1
+		else
+			echo "r$rev is out of sequence"
+			exit 1
 		fi
 		;;
 	esac
