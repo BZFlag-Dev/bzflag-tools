@@ -2362,6 +2362,7 @@ default,bzflag,,,
 16213,db,auto,,
 16214,db,auto,,
 16215,db,auto,,
+16223,bzflag,merge --no-ff,v2_0branch,tags/v2_0_10
 16234,db,auto,,
 16237,web,auto,,
 16238,web,auto,,
@@ -3057,6 +3058,7 @@ default,bzflag,,,
 20845,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_14
 20848,web,auto,,
 20849,web,auto,,
+20851,bzflag,merge -Xsubtree=bzflag,v2_0branch,tags/v2_0_14
 20852,bzworkbench,auto,,
 20853,bzworkbench,auto,,
 20854,bzworkbench,auto,,
@@ -3120,6 +3122,7 @@ default,bzflag,,,
 20937,bzworkbench,auto,,
 20949,bzworkbench,auto,,
 20982,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_16
+20988,bzflag,merge -Xsubtree=bzflag,v2_0branch,tags/v2_0_16
 21015,bzworkbench,auto,,
 21016,bzworkbench,auto,,
 21017,bzworkbench,auto,,
