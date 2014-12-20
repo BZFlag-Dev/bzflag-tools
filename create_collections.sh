@@ -175,9 +175,10 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		git checkout :/@8126.$UPSTREAM_UUID
 		git merge --no-commit -Xours :/@8149.$UPSTREAM_UUID
 		git rm -q -f -r .cvsignore [^m]* master_ban.txt
+		LOCATION=trunk/admin
 		rev=8157
 		for file in master-bans.txt ; do
-			svn cat $SVN_REPO/trunk/admin/$file@$rev > $file
+			svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 			git add $file
 		done
 		DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
@@ -185,7 +186,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print'`"
 		git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
 
-git-svn-id: $UPSTREAM_REPO/trunk/admin@$rev $UPSTREAM_UUID"
+git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		git branch new_masterban	# an easy way to mark the current location
 		git rebase new_masterban masterban | tr \\r \\n
 		git branch -d new_masterban
@@ -200,17 +201,18 @@ git-svn-id: $UPSTREAM_REPO/trunk/admin@$rev $UPSTREAM_UUID"
 		git mv css i18n images includes support templates templates_c *.* oldstats
 		cp bzfls/serversettings.php.tmpl oldstats
 		git add oldstats/serversettings.php.tmpl 
+		LOCATION=trunk/$svn_repo_name
+		rev=22224
 		for file in oldstats/config.php.tmpl ; do
-			svn cat $SVN_REPO/trunk/$svn_repo_name/$file@22228 > $file
+			svn cat $SVN_REPO/$LOCATION/$file@22228 > $file
 			git add $file
 		done
-		rev=22224
 		DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 		AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
 		MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print'`"
 		git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
 
-git-svn-id: $UPSTREAM_REPO/trunk/db@$rev $UPSTREAM_UUID"
+git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		git branch new_master	# an easy way to mark the current location
 		git rebase --keep-empty -Xours new_master :/@22369.$UPSTREAM_UUID | tr \\r \\n
 		git cherry-pick --allow-empty :/@22427.$UPSTREAM_UUID	# merge fails to keep it
@@ -224,9 +226,9 @@ git-svn-id: $UPSTREAM_REPO/trunk/db@$rev $UPSTREAM_UUID"
 			sed -i '1,/^git-svn-id:/!d' .git/MERGE_MSG
 			git commit --allow-empty -F .git/MERGE_MSG	# instead of "git cherry-pick --continue"
 		fi
+		git merge -q --no-commit -Xsubtree=gamestats :/@22441.$UPSTREAM_UUID
 		LOCATION=branches/gamestats_live
 		rev=22442
-		git merge -q --no-commit -Xsubtree=gamestats :/@22441.$UPSTREAM_UUID
 		for file in config/config.php ; do
 			svn cat $SVN_REPO/$LOCATION/$file@$rev > $file
 			git add $file
