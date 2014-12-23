@@ -435,7 +435,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git status | awk '/deleted by us/ {print $4}' | xargs git rm -q -f
 						(cd $repo && git rm -q -f -r .cvsignore AUTHORS COPYING ChangeLog bzflag.lsm configs data/*.wav debian include man misc package src)
 						;;
-					    507|995|6880|6909|12515|12685|12759|12836|12895|16223|20851|20988)
+					    507|995|6880|6909|12515|12685|12759|12836|12895|16223|20867|20988)
 						svn export -q --force $SVN_REPO/$LOCATION/$repo@$rev $repo				# the nuclear option from a subdirectory
 						git add $repo
 						for file in `git status | awk 'BEGIN{ORS=","} $1 == "modified:" {print $2}'` ; do	# ORS matches IFS

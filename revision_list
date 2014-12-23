@@ -3053,7 +3053,6 @@ default,bzflag,,,
 20845,bzflag,cherry_pick_branch_up,v2_0branch,tags/v2_0_14
 20848,web,auto,,
 20849,web,auto,,
-20851,bzflag,merge -Xsubtree=bzflag,v2_0branch,tags/v2_0_14
 20852,bzworkbench,auto,,
 20853,bzworkbench,auto,,
 20854,bzworkbench,auto,,
@@ -3063,6 +3062,7 @@ default,bzflag,,,
 20859,bzworkbench,auto,,
 20860,bzworkbench,auto,,
 20861,bzworkbench,auto,,
+20867,bzflag,merge -Xsubtree=bzflag,v2_0branch,tags/v2_0_14
 20872,bzworkbench,auto,,
 20873,bzworkbench,auto,,
 20874,bzworkbench,auto,,
