@@ -194,7 +194,20 @@ while read rev repo method branch tag ; do
 						LOCATION=$branch
 						;;
 					    *)
-						LOCATION=branches/$branch
+						case $rev in
+						    16016)
+							LOCATION=tags/v2_0_10_RC3
+							;;
+						    21390)
+							LOCATION=tags/v1_8abort
+							;;
+						    21391)
+							LOCATION=tags/$branch
+							;;
+						    *)
+							LOCATION=branches/$branch
+							;;
+						esac
 						;;
 					esac
 					if [ -z "$tag" ] ; then
