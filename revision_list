@@ -3124,11 +3124,11 @@ default,bzflag,,,
 21018,bzworkbench,auto,,
 21019,bzworkbench,auto,,
 21020,db,auto,,
-21077,bzflag,inline_tag,trunk,v3_0_alpha1
-21079,tidy,auto,,		# note that v3_0_alpha1 tags multiple repos
+# ignore the fact that v3_0_alpha1 tags all of the trunk repos
+21080,bzflag,merge --no-ff,trunk,tags/v3_0_alpha1
 21172,bzworkbench,auto,,
-21206,bzflag,inline_tag,trunk,v3_0_alpha2
-21207,tidy,auto,,		# note that v3_0_alpha2 tags multiple repos
+# ignore the fact that v3_0_alpha2 tags all of the trunk repos
+21209,bzflag,merge --no-ff,trunk,tags/v3_0_alpha2
 21214,db,auto,,
 21217,db,auto,,
 21239,bzworkbench,auto,,
