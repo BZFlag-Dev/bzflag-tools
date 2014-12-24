@@ -730,7 +730,7 @@ EOF
 	git tag -d `git tag`					# expunge import3 tags
 
 	# simplify branch names
-	git branch 2.99 remotes/v2_99continuing && git branch -d -r v2_99continuing
+#	git branch 2.99 remotes/v2_99continuing && git branch -d -r v2_99continuing
 	git branch -m new_2.5 2.5
 	git branch -m new_2.4 2.4
 #	git branch 2.3 :/@22049.08b3d480
@@ -739,7 +739,7 @@ EOF
 #	git branch 1.11 :/@9899.08b3d480
 	git branch 1.10 remotes/v1_10branch && git branch -d -r v1_10branch
 #	git branch 1.9 :/@4667.08b3d480
-	git branch 1.8 remotes/v1_8 && git branch -d -r v1_8
+#	git branch 1.8 remotes/v1_8 && git branch -d -r v1_8
 	git branch 1.7 remotes/v1_7 && git branch -d -r v1_7
 
 	# remove obsolete Subversion branches and tags that are not branch tips
@@ -796,7 +796,7 @@ for branch in `git branch -r` ; do
 	git branch -d -r $branch
 done
 
-# change remaining Subversion branches into local Git branches
+# change remaining Subversion branches into local Git branches or tags
 for branch in `git branch -a -r` ; do
 	case $branch in
 	    2_4_OSX_Lion_Rebuild_branch)
@@ -821,6 +821,9 @@ for branch in `git branch -a -r` ; do
 	    v1_7branch)
 		local=1.7_archive_1
 		;;
+	    v1_8)
+		local=1.8
+		;;
 	    v1_10branch)
 		if [ $TARGET_REPO != bzflag ] ; then
 			git branch -D -r $branch	# sloppy r9311 in db repo
@@ -829,6 +832,9 @@ for branch in `git branch -a -r` ; do
 		;;
 	    v2_0_cs_branch)
 		local=2.0_crystal_space
+		;;
+	    v2_99continuing)
+		local=2.99
 		;;
 	    v2_99_net_branch)
 		local=2.99_network_rewrite
@@ -853,7 +859,7 @@ for branch in `git branch -a -r` ; do
 	    '')
 		exit 1				# should not happen
 		;;
-	    [0-9]*_*)
+	    1.8|2.99|[0-9]*_*)
 		git tag $local remotes/$branch	# use tags for abandoned branches
 		;;
 	    *)
