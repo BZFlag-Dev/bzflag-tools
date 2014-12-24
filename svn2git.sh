@@ -608,9 +608,9 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 				set -x
 			fi
 			NEXT_REVISION=`expr $NEXT_REVISION + 1`
-		else
-			echo "r$rev is out of sequence"
-			exit 1
+#		else
+#			echo "r$rev is out of sequence"
+#			exit 1
 		fi
 		;;
 	esac
