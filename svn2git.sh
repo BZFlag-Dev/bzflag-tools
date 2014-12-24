@@ -182,6 +182,11 @@ while read rev repo method branch tag ; do
 				case "$method" in
 				    auto)
 					git_svn_fetch $rev
+					if [ $TARGET_REPO = bzflag -a $rev -eq 9311 ] ; then
+						# r9311 does not really change trunk/bzflag
+						REVERT=`git rev-parse remotes/trunk~`	# step 1 doesn't overwrite ref file
+						echo $REVERT > .git/refs/remotes/trunk	# step 2 uses value from step 1
+					fi
 					;;
 				    empty)
 					# Synthesize an empty Git commit from Subversion.
