@@ -209,6 +209,9 @@ while read rev repo method branch tag ; do
 						    21391)
 							LOCATION=tags/$branch
 							;;
+						    21394)
+							LOCATION=branches/v1_10
+							;;
 						    *)
 							LOCATION=branches/$branch
 							;;

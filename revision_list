@@ -3219,7 +3219,7 @@ default,bzflag,,,
 21391,bzflag,empty,v1_8,
 21392,bzflag,empty,v1_7branch,
 21393,bzflag,rebase_tag_branch,trunk,v2_99archive
-21394,tidy,auto,,
+21394,bzflag,empty,v1_10branch,
 # 21395 trunk -> v2_99archive
 21396,bzflag,rebase_branch,v2_0branch,trunk
 21398,tidy,auto,,
