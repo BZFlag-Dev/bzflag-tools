@@ -1457,18 +1457,18 @@ default,bzflag,,,
 13854,admin,auto,,
 13873,admin,auto,,
 13938,web,auto,,
-13939,tidy,auto,,
-13940,tidy,auto,,
-13941,tidy,auto,,
-13942,tidy,auto,,
-13943,tidy,auto,,
-13944,tidy,auto,,
-13945,tidy,auto,,
-13946,tidy,auto,,
-13947,tidy,auto,,
-13948,tidy,auto,,
-13949,tidy,auto,,
-13950,tidy,auto,,
+13939,tidy,auto,,	# remove tags/V1_10_6
+13940,tidy,auto,,	# remove tags/merge-2_0-2_1-1
+13941,tidy,auto,,	# remove tags/merge-2_0-2_1-2
+13942,tidy,auto,,	# remove tags/merge-2_0-2_1-3
+13943,tidy,auto,,	# remove tags/merge-2_0-2_1-4
+13944,tidy,auto,,	# remove tags/merge-2_0-2_1-5
+13945,tidy,auto,,	# remove tags/merge-2_0-2_1-6
+13946,tidy,auto,,	# remove tags/merge-2_0-2_1-7
+13947,tidy,auto,,	# remove tags/merge-2_0-2_1-8
+13948,tidy,auto,,	# remove tags/merge-2_0-2_1-9
+13949,tidy,auto,,	# remove tags/merge-2_0-2_1-10
+13950,tidy,auto,,	# remove tags/merge-2_0-2_1-11
 14002,web,auto,,
 14216,db,auto,,
 14245,bzworkbench,auto,,
@@ -1609,7 +1609,7 @@ default,bzflag,,,
 14684,bzworkbench,auto,,
 14687,bzworkbench,auto,,
 14691,bzworkbench,auto,,
-14692,tidy,auto,,	# removes all files from ftgl branch
+14692,tidy,auto,,	# remove branches/ftgl
 14693,bzworkbench,auto,,
 14696,db,auto,,
 14697,bzworkbench,auto,,
@@ -2310,7 +2310,7 @@ default,bzflag,,,
 15765,db,auto,,
 15787,db,auto,,
 15812,db,auto,,
-15875,tidy,auto,,
+15875,tidy,auto,,	# remove branches/remove_flag_id
 15877,db,auto,,
 15890,db,auto,,
 15896,bzwgen,auto,,
@@ -3211,9 +3211,9 @@ default,bzflag,,,
 21367,db,auto,,
 21375,db,auto,,
 21383,db,auto,,
-21384,tidy,auto,,
-21386,tidy,auto,,
-21388,tidy,auto,,
+21384,tidy,auto,,	# mv v2_0_cs_branch v2_99_net_branch v2_99_shot_branch branches/experimental/
+21386,tidy,auto,,	# mkdir branches/release_maint branches/summer_of_code
+21388,tidy,auto,,	# mv branches/gsoc_* branches/summer_of_code
 21389,bzflag,empty,bzflag,
 21390,bzflag,empty,v1_8,
 21391,bzflag,empty,v1_8,
@@ -3222,8 +3222,8 @@ default,bzflag,,,
 21394,bzflag,empty,v1_10branch,
 # 21395 trunk -> v2_99archive
 21396,bzflag,rebase_branch,v2_0branch,trunk
-21398,tidy,auto,,
-21399,tidy,auto,,
+21398,tidy,auto,,	# mv branches/v2_0branch branches/v2_0
+21399,tidy,auto,,	# mv v1_7 v1_10 v2_0 branches/release_maint/
 21401,tidy,auto,,	# add file branches/BRANCHES.txt
 21427,db,auto,,
 21512,db,auto,,
