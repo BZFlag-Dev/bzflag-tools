@@ -2811,6 +2811,7 @@ default,bzflag,,,
 18762,db,auto,,
 18774,db,auto,,
 18911,bzflag,empty,trepan,,
+18918,bzflag,merge -Xsubtree=bzflag -Xours,trunk,trepan
 19095,db,auto,,
 19096,db,auto,,
 19097,web,auto,,
