@@ -3289,6 +3289,7 @@ default,bzflag,,,
 22481,web,auto,,
 22528,bzflag,cherry_pick_branch_down_inline,trunk,tags/v2_4_2
 22532,bzflag,cherry_pick_branch_up,trunk,2_4_OSX_Lion_Rebuild_branch
+22545,bzflag,merge -Xsubtree=bzflag,trunk,2_4_OSX_Lion_Rebuild_branch
 22561,web,auto,,
 22562,web,auto,,
 22563,web,auto,,

@@ -421,7 +421,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					SUBDIR=$repo/	# the most common case
 					# separate list items here with commas to match IFS setting
 					case $rev in
-					    7|9|197|301|2684|2686|3045|3873|8429|11616|11815|12702|12706|18558|18918|21080|21209|21891)
+					    7|9|197|301|2684|2686|3045|3873|8429|11616|11815|12702|12706|18558|18918|21080|21209|21891|22545)
 						svn export -q --force $SVN_REPO/$LOCATION@$rev $repo					# the nuclear option
 						git add $repo
 						for file in `git status | awk 'BEGIN{ORS=","} $1 == "modified:" {print $2}'` ; do	# ORS matches IFS
@@ -429,7 +429,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							git add $file
 						done
 						case $rev in
-						    301|18918|21891)
+						    301|18918|21891|22545)
 							git status | awk '/new file:/ {print $3}' | xargs git rm -q -f
 							;;
 						esac
@@ -753,7 +753,7 @@ EOF
 	git branch 1.7 remotes/v1_7 && git branch -d -r v1_7
 
 	# remove obsolete Subversion branches and tags that are not branch tips
-	git branch -d -r ftgl gsoc_08_libbzw gsoc_server_listing remove_flag_id trepan tags/V1_10_6 tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/merge-2_0-2_1-10 tags/merge-2_0-2_1-11 tags/merge-2_0-2_1-12 tags/pre-mesh tags/preMeshDrawInfo tags/soc-irc tags/v1_11_12 tags/v1_11_14 tags/v1_11_15 tags/v1_11_16 tags/v1_7c_2 tags/v1_7d_5 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_7_4_Beta tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v20020226 tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_0_5_b1 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
+	git branch -d -r 2_4_OSX_Lion_Rebuild_branch ftgl gsoc_08_libbzw gsoc_server_listing remove_flag_id trepan tags/V1_10_6 tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/merge-2_0-2_1-10 tags/merge-2_0-2_1-11 tags/merge-2_0-2_1-12 tags/pre-mesh tags/preMeshDrawInfo tags/soc-irc tags/v1_11_12 tags/v1_11_14 tags/v1_11_15 tags/v1_11_16 tags/v1_7c_2 tags/v1_7d_5 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_7_4_Beta tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v20020226 tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_0_5_b1 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
 
 	# fix some e-mail addresses and full names
 	CANONICAL_AUTHORS='
@@ -809,9 +809,6 @@ done
 # change remaining Subversion branches into local Git branches or tags
 for branch in `git branch -a -r` ; do
 	case $branch in
-	    2_4_OSX_Lion_Rebuild_branch)
-		local=2.4_Mac_OS_X_Lion_rebuild
-		;;
 	    bzflag)
 		local=1.7_archive_2
 		;;
