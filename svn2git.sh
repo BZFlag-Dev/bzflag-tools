@@ -601,6 +601,20 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					git rev-parse HEAD > .git/refs/remotes/$branch
 					;;
+				    move_14716)	# move relaybot/src/relaybot.cpp to bzflag/src/other/libirc/examples/
+					git checkout remotes/$branch
+					mkdir -p $repo/src/other/libirc/examples
+					LOCATION=branches/$branch
+					svn cat $SVN_REPO/$LOCATION/relaybot/src/relaybot.cpp@$rev > $repo/src/other/libirc/examples/relaybot.cpp
+					git add $repo/src/other/libirc
+					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
+					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
+					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'use HTML::Entities; undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print decode_entities(\$_)'`"
+					git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
+
+git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
+					git rev-parse HEAD > .git/refs/remotes/$branch
+					;;
 				    *)
 					echo "<$rev> <$repo> <$method> (not implemented) <$branch> <$tag>"
 					exit 1
