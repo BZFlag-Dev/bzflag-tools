@@ -2442,7 +2442,7 @@ default,bzflag,,,
 16729,web,auto,,
 16730,bzworkbench,auto,,
 16739,bzworkbench,auto,,
-16740,bzworkbench,auto,,
+16740,bzworkbench,merge --no-ff,:/@16730.08b3d480,trunk
 16741,bzworkbench,auto,,
 16801,bzwgen,auto,,
 16802,bzwgen,auto,,
