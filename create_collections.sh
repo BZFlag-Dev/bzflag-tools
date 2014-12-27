@@ -269,3 +269,24 @@ combine_repos bzflag-tools bzedit bzview bzeditw32 bzstats bzworkbench tools bzw
 combine_repos bzflag-web admin db web
 combine_repos bzflag-bzflag bzauthd bzflag
 ) > $BASE/svn2git.combine_repos.log 2>&1
+status=$?
+if [ $status -ne 0 ] ; then
+	echo collection status $status
+fi
+
+# report any missing/extra Subversion commits
+EXPECTED=$BASE/svn2git.expected.$$
+HAVE=$BASE/svn2git.have.$$
+(
+seq 1 22835
+echo 298 722 4194 4195 4197 4198 5793 5794 5943 5997 5998 6006 6007 6008 6084 6130 6162 6170 6171 6204 6455 6456 6459 6492 6654 6706 6789 6909 7461 7462 7468 7587 7828 8480 9311 11953 11974 12096 12102 12103 12104 12205 12355 12362 12450 12523 12524 12529 12550 12653 12797 12801 12803 12815 13008 13053 13152 13226 13247 13300 13328 13581 13585 13653 13654 13655 13656 13660 13664 13665 13667 13679 13680 13706 13782 13801 13842 13913 13915 17165 17165 17169 19100 22830 | tr ' ' \\n	# known duplicates
+) | sort -n > $EXPECTED
+
+awk -F, '$2 == "tidy" {print $1}' `dirname $0`/revision_list > $HAVE
+for repo in bzflag-bzflag bzflag-archive bzflag-tools bzflag-web ; do
+	cd $BASE/svn2git.$repo
+	git log --all | awk '$1 == "git-svn-id:" && $3 == "08b3d480-bf2c-0410-a26f-811ee3361c24" {print substr($2,index($2,"@")+1)}'
+done >> $HAVE
+
+sort -n $HAVE | diff $EXPECTED -
+rm $EXPECTED $HAVE
