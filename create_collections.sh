@@ -265,7 +265,7 @@ git status --ignored				# update index and show state
 (
 set -xe
 combine_repos bzflag-archive pybzflag custom_plugins
-combine_repos bzflag-tools bzedit bzview bzeditw32 bzstats bzworkbench tools bzwgen svn_to_git
+combine_repos bzflag-tools bzedit bzview bzeditw32 bzstats tools bzwgen svn_to_git
 combine_repos bzflag-web admin db web
 combine_repos bzflag-bzflag bzauthd bzflag
 ) > $BASE/svn2git.combine_repos.log 2>&1
@@ -283,7 +283,7 @@ echo 298 722 4194 4195 4197 4198 5793 5794 5943 5997 5998 6006 6007 6008 6084 61
 ) | sort -n > $EXPECTED
 
 awk -F, '$2 == "tidy" {print $1}' `dirname $0`/revision_list > $HAVE
-for repo in bzflag-bzflag bzflag-archive bzflag-tools bzflag-web ; do
+for repo in bzflag-bzflag bzflag-archive bzflag-tools bzflag-web bzworkbench ; do
 	cd $BASE/svn2git.$repo
 	git log --all | awk '$1 == "git-svn-id:" && $3 == "08b3d480-bf2c-0410-a26f-811ee3361c24" {print substr($2,index($2,"@")+1)}'
 done >> $HAVE
