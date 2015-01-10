@@ -41,8 +41,12 @@ cd $repo
 git remote remove origin
 git filter-branch --subdirectory-filter svn_to_git master | tr \\r \\n
 rm -rf .git/refs/original	# discard old commits saved by filter-branch
+git checkout $repo || git checkout master
+sleep 1						# let the clock advance
+git clean -d -x -f				# tidy the working tree
+git reflog expire --expire=now --all		# purge reflogs
 git gc --prune=now				# tidy
-rm -f .git/FETCH_HEAD				# tidy
+rm -f .git/COMMIT_EDITMSG .git/FETCH_HEAD .git/ORIG_HEAD	# tidy
 rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
 git status --ignored				# update index and show state
 )
@@ -255,9 +259,10 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 done
 git checkout $repo || git checkout master
 sleep 1						# let the clock advance
+git clean -d -x -f				# tidy the working tree
 git reflog expire --expire=now --all		# purge reflogs
 git gc --prune=now				# tidy
-rm -f .git/COMMIT_EDITMSG .git/FETCH_HEAD	# tidy
+rm -f .git/COMMIT_EDITMSG .git/FETCH_HEAD .git/ORIG_HEAD	# tidy
 rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
 git status --ignored				# update index and show state
 }

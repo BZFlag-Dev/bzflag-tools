@@ -887,9 +887,10 @@ for branch in `git branch -a -r` ; do
 done
 
 sleep 1						# let the clock advance
+git clean -d -x -f				# tidy the working tree
 git reflog expire --expire=now --all		# purge reflogs
 git gc --prune=now				# rewritten commits be gone!
-rm -f .git/COMMIT_EDITMSG .git/FETCH_HEAD	# tidy
+rm -f .git/COMMIT_EDITMSG .git/FETCH_HEAD .git/ORIG_HEAD	# tidy
 rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
 git status --ignored				# update index and show state
 
