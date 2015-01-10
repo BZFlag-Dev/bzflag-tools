@@ -1515,7 +1515,7 @@ default,bzflag,,,
 14330,bzworkbench,auto,,
 14331,bzworkbench,auto,,
 14332,bzworkbench,auto,,
-14333,bzworkbench,auto,,
+14333,bzworkbench,merge --no-ff,:/@14331.08b3d480,trunk
 14334,admin,auto,,
 14335,bzworkbench,auto,,
 14336,bzworkbench,auto,,

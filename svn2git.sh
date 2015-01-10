@@ -421,7 +421,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					SUBDIR=$repo/	# the most common case
 					# separate list items here with commas to match IFS setting
 					case $rev in
-					    7|9|197|301|2684|2686|3045|3873|8429|11616|11815|12702|12706|16740|18558|18918|21080|21209|21891|22545)
+					    7|9|197|301|2684|2686|3045|3873|8429|11616|11815|12702|12706|14333|16740|18558|18918|21080|21209|21891|22545)
 						svn export -q --force $SVN_REPO/$LOCATION@$rev $repo					# the nuclear option
 						git add $repo
 						for file in `git status | awk 'BEGIN{ORS=","} $1 == "modified:" {print $2}'` ; do	# ORS matches IFS
