@@ -104,7 +104,7 @@ for svn_repo_name in $* ; do
 	done
 	git remote remove temp
 	if [ $svn_repo_name = bzflag ] ; then		# bzauthd repo is already done
-		# conjoin the 2.99_bzauthd and bzauthd branches
+		# conjoin the gsoc_bzauthd and bzauthd branches
 		git checkout :/@18217.$UPSTREAM_UUID
 		git merge --no-commit -Xours :/@18154.$UPSTREAM_UUID
 		git mv bzauthd ldap libgcrypt libgpg-error tcp-net src
@@ -163,17 +163,20 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 
 git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		git branch new_bzauthd			# an easy way to mark the current location
-		git branch 2.99_bzauthd 2.99_bzauthd	# change 2.99_bzauthd back from
-		git tag -d 2.99_bzauthd			# a tag to a branch for correct rebase operation
-		git rebase --keep-empty --preserve-merges -Xours new_bzauthd 2.99_bzauthd | tr \\r \\n
+		git branch gsoc_bzauthd gsoc_bzauthd	# change gsoc_bzauthd back from
+		git tag -d gsoc_bzauthd			# a tag to a branch for correct rebase operation
+		git rebase --keep-empty --preserve-merges -Xours new_bzauthd gsoc_bzauthd | tr \\r \\n
 		git branch -d new_bzauthd
-		git tag 2.99_bzauthd_trunk bzauthd	# change branch to tag
-		git branch -D bzauthd
-		git checkout master			# be somewhere else
-		git tag 2.99_bzauthd 2.99_bzauthd	# change branch to tag
-		git branch -D 2.99_bzauthd
+		git branch -m bzauthd gsoc_bzauthd_trunk
+
 		time git filter-branch --env-filter "$COMMITTER_IS_AUTHOR" -- --all | tr \\r \\n
 		rm -rf .git/refs/original		# discard old commits saved by filter-branch
+
+		# rebase late commit r19307 to elimiate a pointless single-commit branch
+		GIT_COMMITTER_DATE='1417595400 -0800' GIT_COMMITTER_NAME='Jeff Makey' GIT_COMMITTER_EMAIL='jeff@makey.net' git rebase gsoc_bzauthd gsoc_bzauthd_trunk
+		git checkout master			# be somewhere else
+		git tag gsoc_bzauthd gsoc_bzauthd_trunk	# change branch to tag
+		git branch -D gsoc_bzauthd gsoc_bzauthd_trunk
 	elif [ $svn_repo_name = web ] ; then		# admin and db repos are already done
 		# conjoin the admin and master branches
 		git checkout :/@8126.$UPSTREAM_UUID

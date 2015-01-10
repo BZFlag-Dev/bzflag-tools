@@ -681,9 +681,9 @@ if [ $TARGET_REPO = db -a $NEXT_REVISION -gt 22835 ] ; then
 		git commit --allow-empty -F .git/COMMIT_EDITMSG
 		git cherry-pick --continue
 	fi
-	git branch bzauthd_db	# branch is now properly attached
+	git branch gsoc_bzauthd		# branch is now properly attached
 	git branch -d -r gsoc_bzauthd_db
-	git filter-branch --env-filter "$COMMITTER_IS_AUTHOR" -- :/@20270.08b3d480..bzauthd_db | tr \\r \\n
+	git filter-branch --env-filter "$COMMITTER_IS_AUTHOR" -- :/@20270.08b3d480..gsoc_bzauthd | tr \\r \\n
 	rm -rf .git/refs/original	# discard old commits saved by filter-branch
 fi
 
@@ -767,7 +767,7 @@ EOF
 	git branch 1.7 remotes/v1_7 && git branch -d -r v1_7
 
 	# remove obsolete Subversion branches and tags that are not branch tips
-	git branch -d -r 2_4_OSX_Lion_Rebuild_branch ftgl gsoc_08_libbzw gsoc_server_listing remove_flag_id trepan tags/V1_10_6 tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/merge-2_0-2_1-10 tags/merge-2_0-2_1-11 tags/merge-2_0-2_1-12 tags/pre-mesh tags/preMeshDrawInfo tags/soc-irc tags/v1_11_12 tags/v1_11_14 tags/v1_11_15 tags/v1_11_16 tags/v1_7c_2 tags/v1_7d_5 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_7_4_Beta tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v20020226 tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_0_5_b1 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
+	git branch -d -r 2_4_OSX_Lion_Rebuild_branch ftgl gsoc_08_libbzw remove_flag_id trepan tags/V1_10_6 tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/merge-2_0-2_1-10 tags/merge-2_0-2_1-11 tags/merge-2_0-2_1-12 tags/pre-mesh tags/preMeshDrawInfo tags/soc-irc tags/v1_11_12 tags/v1_11_14 tags/v1_11_15 tags/v1_11_16 tags/v1_7c_2 tags/v1_7d_5 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_7_4_Beta tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v20020226 tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_0_5_b1 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
 
 	# fix some e-mail addresses and full names
 	CANONICAL_AUTHORS='
@@ -858,16 +858,10 @@ for branch in `git branch -a -r` ; do
 		local=2.99_network_rewrite
 		;;
 	    v2_99_shot_branch)
-		local=2.99_server_shot_control
+		local=gsoc_server_shot_control
 		;;
 	    gsoc_collisions)
-		local=2.99_server_collisions
-		;;
-	    gsoc_irc)
-		local=2.0_irc
-		;;
-	    gsoc_*)
-		local=`echo $branch | sed 's/^gsoc/2.99/'`
+		local=gsoc_server_collisions
 		;;
 	    *)
 		local=$branch
@@ -877,7 +871,7 @@ for branch in `git branch -a -r` ; do
 	    '')
 		exit 1				# should not happen
 		;;
-	    1.8|2.99|[0-9]*_*)
+	    1.8|2.99|[0-9]*_*|gsoc_*)
 		git tag $local remotes/$branch	# use tags for abandoned branches
 		;;
 	    *)
