@@ -273,7 +273,7 @@ git status --ignored				# update index and show state
 (
 set -xe
 combine_repos bzflag-archive pybzflag custom_plugins
-combine_repos bzflag-tools bzedit bzview bzeditw32 bzstats tools bzwgen svn_to_git
+combine_repos bzflag-tools bzedit bzview bzeditw32 bzstats tools svn_to_git bzwgen
 combine_repos bzflag-web admin db web
 combine_repos bzflag-bzflag bzauthd bzflag
 ) > $BASE/svn2git.combine_repos.log 2>&1
