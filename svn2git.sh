@@ -412,7 +412,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					else
 						LOCATION=branches/$branch
 					fi
-					if ! eval git merge -q `echo $method | sed 's/^merge//'` --no-commit $source_branch ; then
+					if ! eval git merge -q --no-ff `echo $method | sed 's/^merge//'` --no-commit $source_branch ; then
 						if [ $rev -ne 297 -a $rev -ne 22471 ] ; then
 							exit 1
 						fi
@@ -718,11 +718,11 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22835 ] ; then
 	git cherry-pick ${PARENT}..':/^update version'
 	PARENT=`git rev-parse ":/^Bump the BZFS protocol number"`	# do this now to match the remote commit
 	# JeffM would have done this if he were actually committing to the 2.4 branch
-	GIT_AUTHOR_DATE='1373139800 -0700' GIT_AUTHOR_NAME='Jeffery Myers' GIT_AUTHOR_EMAIL='JeffM2501@gmail.com' git merge -q "-mMerge branch '2.4'" ':/^ingnore more windows temp files'
+	GIT_AUTHOR_DATE='1373139800 -0700' GIT_AUTHOR_NAME='Jeffery Myers' GIT_AUTHOR_EMAIL='JeffM2501@gmail.com' git merge -q --no-ff "-mMerge branch '2.4'" ':/^ingnore more windows temp files'
 	git cherry-pick ${PARENT}~..':/^Change the BZFlag version number from 2\.4\.3'
-	GIT_AUTHOR_DATE='1376370000 -0700' git merge -q '-mMerge branch 2.4 onto master.' ':/^For observers,'
-	GIT_AUTHOR_DATE='1376861008 -0700' git merge -q '-mMerge recent 2.4 changes into master.' ':/^remove files that were not ready'
-	git merge -q --no-commit ':/^Revert r22665 and r22666'
+	GIT_AUTHOR_DATE='1376370000 -0700' git merge -q --no-ff '-mMerge branch 2.4 onto master.' ':/^For observers,'
+	GIT_AUTHOR_DATE='1376861008 -0700' git merge -q --no-ff '-mMerge recent 2.4 changes into master.' ':/^remove files that were not ready'
+	git merge -q --no-ff --no-commit ':/^Revert r22665 and r22666'
 	patch -p0 <<EOF
 --- ChangeLog~	2013-12-23
 +++ ChangeLog	2013-12-23
@@ -744,11 +744,11 @@ EOF
 	git reset src/bzflag/playing.cxx || true
 	git checkout src/bzflag/playing.cxx
 	git commit --date='1387869736 -0800' '-mMerge branch 2.4 into master, preserving the colorblindness enhancements of r22665 and r22666.'
-	GIT_AUTHOR_DATE='1398250503 -0500' GIT_AUTHOR_NAME='Scott Wichser' GIT_AUTHOR_EMAIL='blast007@users.sourceforge.net' git merge -q "-mMerge remote-tracking branch 'origin/2.4' into master" ':/not the world weapon speed'
+	GIT_AUTHOR_DATE='1398250503 -0500' GIT_AUTHOR_NAME='Scott Wichser' GIT_AUTHOR_EMAIL='blast007@users.sourceforge.net' git merge -q --no-ff "-mMerge remote-tracking branch 'origin/2.4' into master" ':/not the world weapon speed'
 	git cherry-pick 0c153e15484692415439e9c878131e583561362e..6da0fbab532c26d59941a166b35e2e244091c8ab
-	GIT_AUTHOR_DATE='1403373855 -0500' GIT_AUTHOR_NAME='Scott Wichser' GIT_AUTHOR_EMAIL='blast007@users.sourceforge.net' git merge -q "-mMerge remote-tracking branch 'origin/2.4' into master" ':/missing speed value'
+	GIT_AUTHOR_DATE='1403373855 -0500' GIT_AUTHOR_NAME='Scott Wichser' GIT_AUTHOR_EMAIL='blast007@users.sourceforge.net' git merge -q --no-ff "-mMerge remote-tracking branch 'origin/2.4' into master" ':/missing speed value'
 	git cherry-pick 8b30db441309bd0b3b8e9aa55ef8aeed87a890c5..0b7e0e4a3c21ae777d91d0c7829770623f369902
-	GIT_AUTHOR_DATE='1403605741 -0500' GIT_AUTHOR_NAME='Scott Wichser' GIT_AUTHOR_EMAIL='blast007@users.sourceforge.net' git merge -q "-mMerge remote-tracking branch 'origin/2.4' into master" ':/^Using nullptr requires gcc'
+	GIT_AUTHOR_DATE='1403605741 -0500' GIT_AUTHOR_NAME='Scott Wichser' GIT_AUTHOR_EMAIL='blast007@users.sourceforge.net' git merge -q --no-ff "-mMerge remote-tracking branch 'origin/2.4' into master" ':/^Using nullptr requires gcc'
 	git cherry-pick 1a4b3bc6acd77690d3f0d7e2d7cacef87ca89475..import3/v2_6_x
 	git remote remove import3
 	git tag -d `git tag`					# expunge import3 tags
