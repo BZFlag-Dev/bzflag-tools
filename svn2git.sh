@@ -103,6 +103,10 @@ while read rev repo method branch tag ; do
 		    admin)
 			IGNORE_PATHS='^trunk/[^a]'
 			;;
+		    branch_note)
+			git config --local svn-remote.svn.fetch branches:refs/remotes/trunk
+			IGNORE_PATHS='^branches/[a-z]'
+			;;
 		    bzauthd)
 			IGNORE_PATHS='^trunk/([^b]|..[^a])'
 			;;

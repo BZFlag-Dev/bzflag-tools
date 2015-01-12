@@ -52,7 +52,7 @@ git status --ignored				# update index and show state
 )
 
 if [ "$QUICK" != yes ] ; then
-	for repo in admin bzauthd bzedit bzeditw32 bzstats bzview bzwgen bzworkbench custom_plugins db pybzflag tools web bzflag ; do
+	for repo in admin bzauthd branch_note bzedit bzeditw32 bzstats bzview bzwgen bzworkbench custom_plugins db pybzflag tools web bzflag ; do
 		date "+$repo started %c"
 		svn2git.sh $repo
 		status=$?
@@ -272,7 +272,7 @@ git status --ignored				# update index and show state
 
 (
 set -xe
-combine_repos bzflag-archive pybzflag custom_plugins
+combine_repos bzflag-archive pybzflag branch_note custom_plugins
 combine_repos bzflag-tools bzedit bzview bzeditw32 bzstats tools svn_to_git bzwgen
 combine_repos bzflag-web admin db web
 combine_repos bzflag-bzflag bzauthd bzflag
