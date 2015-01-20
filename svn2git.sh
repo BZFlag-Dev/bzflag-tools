@@ -913,12 +913,3 @@ else
 	diff /tmp/$GIT_REPO_NAME.expect /tmp/$GIT_REPO_NAME.have || true
 fi
 rm /tmp/$GIT_REPO_NAME.expect /tmp/$GIT_REPO_NAME.have
-
-exit 0
-# Push this to a new empty repo at GitHub:
-git remote add origin git@github.com:BZFlag-Dev/bzflag-import-4.git
-git push -u origin master
-git push -u origin --all
-git push -u origin --tags
-# add the new repo to the GitHub "developers" team (JeffM)
-# add the new repo at http://n.tkte.ch/BZFlag/ (JeffM)

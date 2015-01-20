@@ -65,11 +65,12 @@ date
 
 combine_repos()
 {
-combined_repo=$BASE/svn2git.$1
+combined_repo=$1
+combined_repo_dir=$BASE/svn2git.$combined_repo
 shift
-rm -rf $combined_repo
-git init $combined_repo
-cd $combined_repo
+rm -rf $combined_repo_dir
+git init $combined_repo_dir
+cd $combined_repo_dir
 for svn_repo_name in $* ; do
 	git remote add --tags -f temp $BASE/svn2git.$svn_repo_name
 	case $svn_repo_name in
@@ -268,6 +269,32 @@ git gc --prune=now				# tidy
 rm -f .git/COMMIT_EDITMSG .git/FETCH_HEAD .git/ORIG_HEAD	# tidy
 rm -r .git/logs/refs/remotes .git/refs/remotes	# tidy
 git status --ignored				# update index and show state
+case $combined_repo in
+    bzflag-archive)
+	origin=${combined_repo}-rc1
+	;;
+    bzflag-bzflag)
+	origin=bzflag-import-6
+	;;
+    bzflag-tools)
+	origin=${combined_repo}-rc2
+	;;
+    bzflag-web)
+	origin=${combined_repo}-rc1
+	;;
+esac
+git remote add origin git@github.com:BZFlag-Dev/$origin.git
+if git fetch --all ; then
+	for branch in `git branch | tr -d \*` ; do
+		git branch -u origin/$branch $branch
+	done
+#else	# don't do this automatically!
+#	git push -u origin --all
+#	git push -u origin --tags
+	# add the new repo to the GitHub "developers" team (JeffM)
+	# add the new repo at http://n.tkte.ch/BZFlag/ (JeffM)
+fi
+git branch -vv
 }
 
 (
@@ -276,6 +303,12 @@ combine_repos bzflag-archive pybzflag branch_note custom_plugins
 combine_repos bzflag-tools bzedit bzview bzeditw32 bzstats tools svn_to_git bzwgen
 combine_repos bzflag-web admin db web
 combine_repos bzflag-bzflag bzauthd bzflag
+cd $BASE/svn2git.bzworkbench
+if git remote add origin git@github.com:BZFlag-Dev/bzworkbench-rc2.git ; then
+	git fetch --all
+	git branch -u origin/master master
+fi
+git branch -vv
 ) > $BASE/svn2git.combine_repos.log 2>&1
 status=$?
 if [ $status -ne 0 ] ; then
