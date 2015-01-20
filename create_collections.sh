@@ -274,7 +274,7 @@ case $combined_repo in
 	origin=${combined_repo}-rc1
 	;;
     bzflag-bzflag)
-	origin=bzflag-import-6
+	origin=bzflag-import-7
 	;;
     bzflag-tools)
 	origin=${combined_repo}-rc2

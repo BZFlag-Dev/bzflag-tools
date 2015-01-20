@@ -350,6 +350,14 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git commit --allow-empty -F .git/COMMIT_EDITMSG
 						git cherry-pick --continue
 					fi
+					if [ $rev -eq 347 ] ; then
+						# bzwtransform deletion was lost when git-svn mis-attached the commit
+						git reset --soft HEAD~
+						git rm -q -r $repo/bzwtransform
+						DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
+						AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
+						git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" -F .git/COMMIT_EDITMSG
+					fi
 					git rev-parse HEAD > .git/refs/remotes/tags/$tag
 					if [ $method = rebase_tag_inline ] ; then
 						git rev-parse HEAD > .git/refs/remotes/$branch
@@ -588,7 +596,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						# copy the desired file version directly from the Subversion repository
 						svn cat $SVN_REPO/$LOCATION/$file@$rev > $SUBDIR$file
 						case $file in
-						    configure.ac|plugins/HoldTheFlag/HoldTheFlag.cpp|plugins/nagware/nagware.cpp|src/bzflag/ScoreboardRenderer.cxx)
+						    bzflag/admin/am_edit|bzflag/admin/mkinstalldirs|configure.ac|plugins/HoldTheFlag/HoldTheFlag.cpp|plugins/nagware/nagware.cpp|src/bzflag/ScoreboardRenderer.cxx)
 							sed -i -e 's/\$Id: .* \$/$Id$/' -e 's/\$Revision: .* \$/$Revision$/' $SUBDIR$file	# unexpand keywords
 							;;
 						esac
