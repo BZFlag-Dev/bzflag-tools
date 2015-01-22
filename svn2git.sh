@@ -446,18 +446,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							;;
 						esac
 						;;
-					    22)
-						svn export -q --force $SVN_REPO/$LOCATION/$repo@$rev $repo				# the nuclear option from a subdirectory
-						(cd $repo && git rm -q -f -r INSTALL bzflag.kdevprj bzflag debian/bzflag.suid debian/changelog)
-						git add $repo
-						;;
-					    297)
-						git status | awk '/deleted by us/ {print $4}' | xargs git rm -q -f
-						(cd $repo && git rm -q -f -r .cvsignore AUTHORS COPYING ChangeLog bzflag.lsm configs data/*.wav debian include man misc package src win32)
-						EXCEPTIONS=bzflag/admin/am_edit,bzflag/admin/mkinstalldirs
-						SUBDIR=
-						;;
-					    507|895|995|6880|6909|12515|12685|12759|12836|12895|16223|20867|20988)
+					    22|507|895|995|6880|6909|12515|12685|12759|12836|12895|16223|20867|20988)
 						svn export -q --force $SVN_REPO/$LOCATION/$repo@$rev $repo				# the nuclear option from a subdirectory
 						git add $repo
 						for file in `git status | awk 'BEGIN{ORS=","} $1 == "modified:" {print $2}'` ; do	# ORS matches IFS
@@ -465,10 +454,19 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							git add $file
 						done
 						case $rev in
+						    22)
+							(cd $repo && git rm -q -f -r INSTALL bzflag.kdevprj bzflag debian/bzflag.suid debian/changelog)
+							;;
 						    12759|12895)
 							git status | awk '/new file:/ {print $3}' | xargs git rm -q -f
 							;;
 						esac
+						;;
+					    297)
+						git status | awk '/deleted by us/ {print $4}' | xargs git rm -q -f
+						(cd $repo && git rm -q -f -r .cvsignore AUTHORS COPYING ChangeLog bzflag.lsm configs data/*.wav debian include man misc package src win32)
+						EXCEPTIONS=bzflag/admin/am_edit,bzflag/admin/mkinstalldirs
+						SUBDIR=
 						;;
 					    1587)
 						git status | awk '/new file:/ {print $3}' | xargs git rm -f
