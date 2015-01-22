@@ -39,13 +39,14 @@ done | sort -n -k2 | while read dir rev repo ; do
 			svn revert -q -R .
 			svn up -q -r $lastrev
 			svn propdel -q -R svn:keywords .
+			wait	# serialize
 			svn diff --ignore-properties | patch -s -p0 -R
 			diff -r -x .git -x .svn $GITDIR $SVNDIR
 		fi
 		lastrev=$rev
 	fi
 	case $dir in
-	    trunk*)
+	    branches|branches/gamestats_live|branches/gsoc_bzauthd_db|trunk*)
 		realdir=$dir
 		;;
 	    *)
@@ -68,6 +69,7 @@ done | sort -n -k2 | while read dir rev repo ; do
 		cd $realdir
 		git clone -q --shared $BASE/svn2git.$repo .
 	fi
-	git checkout -q :/$dir@$rev.$UPSTREAM_UUID
+	wait	# serialize
+	git checkout -q :/$dir@$rev.$UPSTREAM_UUID &	# parallelize
 done
 echo ''
