@@ -180,9 +180,9 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		git branch -D gsoc_bzauthd gsoc_bzauthd_trunk
 	elif [ $svn_repo_name = web ] ; then		# admin and db repos are already done
 		# conjoin the admin and master branches
-		git checkout :/@8126.$UPSTREAM_UUID
+		git checkout :/@8130.$UPSTREAM_UUID
 		git merge --no-commit -Xours :/@8149.$UPSTREAM_UUID
-		git rm -q -f -r .cvsignore [^m]* master_ban.txt
+		git rm -q -f -r .cvsignore *
 		LOCATION=trunk/admin
 		rev=8157
 		for file in master-bans.txt ; do
@@ -280,7 +280,7 @@ case $combined_repo in
 	origin=${combined_repo}-rc2
 	;;
     bzflag-web)
-	origin=${combined_repo}-rc1
+	origin=${combined_repo}-rc2
 	;;
 esac
 git remote add origin git@github.com:BZFlag-Dev/$origin.git

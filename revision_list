@@ -1163,6 +1163,7 @@ default,bzflag,,,
 8091,bzflag,inline_tag,trunk,v1_11_12
 8111,bzflag,inline_tag,trunk,v1_11_14
 8126,admin,auto,,
+8130,admin,auto,,
 8133,web,auto,,
 8135,web,auto,,
 8142,web,auto,,
