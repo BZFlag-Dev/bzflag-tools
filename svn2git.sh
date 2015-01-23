@@ -357,6 +357,15 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 						AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
 						git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" -F .git/COMMIT_EDITMSG
+					elif [ $rev -eq 8428 ] ; then
+						# fix an error introduced when git-svn mis-attached the commit
+						git reset --soft HEAD~
+						file=bzflag/src/bzflag/GUIOptionsMenu.cxx
+						svn cat $SVN_REPO/tags/v1_11_15/$file@$rev > $file
+						git add $file
+						DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
+						AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
+						git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" -F .git/COMMIT_EDITMSG
 					fi
 					git rev-parse HEAD > .git/refs/remotes/tags/$tag
 					if [ $method = rebase_tag_inline ] ; then
