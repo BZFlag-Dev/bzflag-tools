@@ -1297,7 +1297,7 @@ default,bzflag,,,
 10229,bzeditw32,auto,,
 10230,bzeditw32,auto,,
 10245,admin,auto,,
-10258,bzflag,rebase_tag_inline,trunk,v2_0_2
+10259,bzflag,merge,trunk,tags/v2_0_2
 10260,admin,auto,,
 10307,pybzflag,auto,,
 10308,admin,auto,,
