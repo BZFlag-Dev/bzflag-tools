@@ -55,8 +55,11 @@ done | sort -n -k2 | while read dir rev repo ; do
 		lastrev=$rev
 	fi
 	case $dir in
-	    branches|branches/experimental/2_4_OSX_Lion_Rebuild_branch|branches/experimental/v2_99_*_branch|branches/gamestats_live|branches/gsoc_bzauthd_db|branches/summer_of_code/gsoc_[^i]*|tags/soc-bz*|tags/v2_0_10_RC[23]|tags/v2_0_1[246]|tags/v2_4_?|tags/v3_*|trunk*)
+	    branches|branches/experimental/2_4_OSX_Lion_Rebuild_branch|branches/experimental/v2_99_*_branch|branches/gamestats_live|branches/gsoc_bzauthd_db|branches/summer_of_code/gsoc_[^i]*|tags/soc-bz*|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_1[246]|tags/v2_4_?|tags/v3_*|trunk*)
 		realdir=$dir
+		;;
+	    tags/v1_6_[45])
+		realdir=$dir/bzeditw32
 		;;
 	    *)
 		realdir=$dir/bzflag
