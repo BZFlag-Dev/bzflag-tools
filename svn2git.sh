@@ -183,6 +183,9 @@ while read rev repo method branch tag ; do
 		if [ $NEXT_REVISION -le $ENDING_REVISION -a $NEXT_REVISION -eq "$rev" ] ; then
 			if [[ $TARGET_REPO =~ ^($repo)$ ]] ; then
 				rm -f .git/COMMIT_EDITMSG .git/MERGE_MSG	# ensure that the wrong message isn't used
+				if [ $rev -eq 11814 -a $TARGET_REPO = admin ] ; then
+					method=empty
+				fi
 				case "$method" in
 				    auto)
 					git_svn_fetch $rev
@@ -200,7 +203,13 @@ while read rev repo method branch tag ; do
 					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'use HTML::Entities; undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print decode_entities(\$_)'`"
 					case "$branch" in
 					    trunk|tags/*)
-						LOCATION=$branch
+						if [ $rev -eq 11814 ] ; then
+							AUTHOR='cvs2svn <davidtrowbridge@users.sourceforge.net>'
+							LOCATION=tags/$tag/$TARGET_REPO
+							tag=
+						else
+							LOCATION=$branch
+						fi
 						;;
 					    *)
 						case $rev in
@@ -350,23 +359,33 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git commit --allow-empty -F .git/COMMIT_EDITMSG
 						git cherry-pick --continue
 					fi
-					if [ $rev -eq 347 ] ; then
-						# bzwtransform deletion was lost when git-svn mis-attached the commit
+					case $rev in
+					    347|8428|11814)
+						# restore changes lost when git-svn attached the commit too far back
 						git reset --soft HEAD~
-						git rm -q -r $repo/bzwtransform
+						EXCEPTIONS=	# none by default
+						case $rev in
+						    347)
+							git rm -q -r $repo/bzwtransform
+							;;
+						    8428)
+							EXCEPTIONS=src/bzflag/GUIOptionsMenu.cxx
+							;;
+						    11814)
+							EXCEPTIONS=man/bzw.5.in
+							;;
+						esac
+						for f in $EXCEPTIONS ; do
+							file=$TARGET_REPO/$f
+							# copy the desired file version directly from the Subversion repository
+							svn cat $SVN_REPO/tags/$tag/$file@$rev > $file
+							git add $file
+						done
 						DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 						AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
 						git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" -F .git/COMMIT_EDITMSG
-					elif [ $rev -eq 8428 ] ; then
-						# fix an error introduced when git-svn mis-attached the commit
-						git reset --soft HEAD~
-						file=bzflag/src/bzflag/GUIOptionsMenu.cxx
-						svn cat $SVN_REPO/tags/v1_11_15/$file@$rev > $file
-						git add $file
-						DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
-						AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
-						git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" -F .git/COMMIT_EDITMSG
-					fi
+						;;
+					esac
 					git rev-parse HEAD > .git/refs/remotes/tags/$tag
 					if [ $method = rebase_tag_inline ] ; then
 						git rev-parse HEAD > .git/refs/remotes/$branch

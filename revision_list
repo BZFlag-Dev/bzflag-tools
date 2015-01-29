@@ -1334,7 +1334,7 @@ default,bzflag,,,
 11794,db,auto,,
 11797,db,auto,,
 11800,db,auto,,
-11814,bzflag,rebase_tag_branch,trunk,v2_0_5_b1
+11814,admin|bzflag,rebase_tag_branch,trunk,v2_0_5_b1
 11815,bzflag,merge,trunk,tags/v2_0_5_b1
 11963,bzflag,rebase_tag_inline,v2_0branch,merge-2_0-2_1-1
 11968,bzflag,merge,trunk,tags/merge-2_0-2_1-1
