@@ -360,7 +360,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git cherry-pick --continue
 					fi
 					case $rev in
-					    347|8428|11814)
+					    347|8428|11814|12894)
 						# restore changes lost when git-svn attached the commit too far back
 						git reset --soft HEAD~
 						EXCEPTIONS=	# none by default
@@ -373,6 +373,10 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							;;
 						    11814)
 							EXCEPTIONS=man/bzw.5.in
+							;;
+						    12894)
+							# separate list items here with commas to match IFS setting
+							EXCEPTIONS=ChangeLog,src/date/buildDate.cxx
 							;;
 						esac
 						for f in $EXCEPTIONS ; do
