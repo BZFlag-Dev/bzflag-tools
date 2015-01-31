@@ -360,7 +360,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						git cherry-pick --continue
 					fi
 					case $rev in
-					    347|8428|11814|12894)
+					    347|8428|11814|12894|15219)
 						# restore changes lost when git-svn attached the commit too far back
 						git reset --soft HEAD~
 						EXCEPTIONS=	# none by default
@@ -377,6 +377,9 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						    12894)
 							# separate list items here with commas to match IFS setting
 							EXCEPTIONS=ChangeLog,src/date/buildDate.cxx
+							;;
+						    15219)
+							git rm -q -r $repo
 							;;
 						esac
 						for f in $EXCEPTIONS ; do
@@ -562,6 +565,11 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						;;
 					    14675)
 						EXCEPTIONS=src/bzflag/HUDRenderer.cxx,src/bzflag/RadarRenderer.cxx,src/bzflag/bzflag.cxx,src/bzrobots/Makefile.am,src/bzrobots/botplaying.cxx,src/other/freetype/builds/unix/configure
+						;;
+					    15300)
+						git rm -q -f *
+						git checkout $branch -- $repo
+						EXCEPTIONS=AUTHORS
 						;;
 					    17271)
 						# remove ambiguity created by the way we implemented r16945 (part 2)
