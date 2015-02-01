@@ -29,10 +29,27 @@ mkdir $GITDIR
 lastrev=1
 svn checkout -q $SVN_REPO@$lastrev $SVNDIR	# empty tree
 
+(
 for repo in $REPO_LIST ; do
 	# use awk to remove UPSTREAM_REPO/ and to convert @ to a space
 	GIT_DIR=$BASE/svn2git.$repo/.git git log --all | awk \$1==\"git-svn-id:\"\&\&\$3==\"$UPSTREAM_UUID\"\{print\ gensub\(\"@\",\"\ \",1,gensub\(\"$UPSTREAM_REPO/\",\"\",1,\$2\)\),\"$repo\"\} 
-done | sort -n -k2 | while read dir rev repo ; do
+done
+# add commits that completely delete a branch or tag
+echo tags/V1_10_6 13939 trash
+echo tags/merge-2_0-2_1-1 13940 trash
+echo tags/merge-2_0-2_1-2 13941 trash
+echo tags/merge-2_0-2_1-3 13942 trash
+echo tags/merge-2_0-2_1-4 13943 trash
+echo tags/merge-2_0-2_1-5 13944 trash
+echo tags/merge-2_0-2_1-6 13945 trash
+echo tags/merge-2_0-2_1-7 13946 trash
+echo tags/merge-2_0-2_1-8 13947 trash
+echo tags/merge-2_0-2_1-9 13948 trash
+echo tags/merge-2_0-2_1-10 13949 trash
+echo tags/merge-2_0-2_1-11 13950 trash
+echo branches/ftgl 14692 trash
+echo branches/remove_flag_id 15875 trash
+) | sort -n -k2 | while read dir rev repo ; do
 	if [ $rev -gt $lastrev ] ; then
 		case $lastrev in
 		    8130)
@@ -40,6 +57,59 @@ done | sort -n -k2 | while read dir rev repo ; do
 			cd $BASE			# be somewhere else
 			rm -r $GITDIR/trunk/admin/.git
 			rmdir $GITDIR/trunk/admin	# should be empty
+			;;
+		    14252)
+			wait				# serialize
+			mkdir $GITDIR/trunk/bzworkbench/windows
+			;;
+		    14253|14258)
+			wait				# serialize
+			mkdir $GITDIR/trunk/bzworkbench/windows/.settings
+			;;
+		    14257)
+			wait				# serialize
+			mkdir $GITDIR/trunk/bzworkbench/windows/Debug
+			;;
+		    14300)
+			wait				# serialize
+			mkdir $GITDIR/trunk/bzworkbench/render
+			;;
+		    14716|15220)
+			wait				# serialize
+			# put relaybot.cpp where Subversion expects it to be
+			# $dir has advanced, but $realdir conveniently has not
+			mkdir $GITDIR/$realdir/../relaybot
+			mv $GITDIR/$realdir/src/other/libirc/examples $GITDIR/$realdir/../relaybot/src
+			if [ $lastrev -eq 14716 ] ; then
+				rmdir $GITDIR/$realdir/src/other/libirc
+			else
+				mkdir $GITDIR/$realdir/src/other/libirc/examples
+			fi
+			;;
+		    14750)
+			wait				# serialize
+			mkdir $GITDIR/branches/gsoc_irc/bzflag/src/other/libirc/examples
+			;;
+		    15217)
+			wait				# serialize
+			mkdir $GITDIR/tags/soc-bzworkbench/windows/.settings $GITDIR/tags/soc-bzworkbench/windows/Debug
+			;;
+		    15218)
+			wait				# serialize
+			mkdir -p $GITDIR/trunk/bzwgen/MSVC/VC71 $GITDIR/trunk/bzwgen/MSVC/VC8
+			;;
+		    15545)
+			wait				# serialize
+			mkdir $GITDIR/trunk/bzworkbench/src
+			;;
+		    15546)
+			wait				# serialize
+			mv $GITDIR/trunk/bzworkbench/windows/.settings $GITDIR/trunk/bzworkbench/windows/Debug $GITDIR/trunk/bzworkbench/src/windows
+			rmdir $GITDIR/trunk/bzworkbench/windows
+			;;
+		    15586)
+			wait				# serialize
+			mkdir -p $GITDIR/trunk/bzflag/bots/testbot
 			;;
 		esac
 		if [ $rev -ge $STARTING_REVISION ] ; then
@@ -55,7 +125,7 @@ done | sort -n -k2 | while read dir rev repo ; do
 		lastrev=$rev
 	fi
 	case $dir in
-	    branches|branches/experimental/2_4_OSX_Lion_Rebuild_branch|branches/experimental/v2_99_*_branch|branches/gamestats_live|branches/gsoc_bzauthd_db|branches/summer_of_code/gsoc_[^i]*|tags/soc-bz*|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_1[246]|tags/v2_4_?|tags/v3_*|trunk*)
+	    branches|branches/experimental/2_4_OSX_Lion_Rebuild_branch|branches/experimental/v2_99_*_branch|branches/ftgl|branches/gamestats_live|branches/gsoc_bzauthd_db|branches/summer_of_code/gsoc_[^i]*|tags/soc-bz*|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_1[246]|tags/v2_4_?|tags/v3_*|trunk*)
 		realdir=$dir
 		;;
 	    tags/v1_6_[45])
@@ -65,7 +135,7 @@ done | sort -n -k2 | while read dir rev repo ; do
 		realdir=$dir/bzflag
 		;;
 	esac
-#	echo $rev $realdir $repo
+#	echo $rev $realdir $repo ; continue
 	echo -n "$rev "
 	cd $GITDIR
 	wait	# serialize before modifiying the Git tree
@@ -74,13 +144,27 @@ done | sort -n -k2 | while read dir rev repo ; do
 		mkdir branches tags trunk
 		continue
 		;;
+	    14524|16945)
+		# in Subversion only an empty directory was created, but
+		# in Git it is simplest to branch with an unchanged file tree
+		mkdir $dir	# not $realdir!
+		continue
+		;;
 	esac
 	if [ -d $realdir ] ; then
-		cd $realdir
+		case $repo in
+		    trash)
+			rm -r $dir &	# parallelize
+			continue
+			;;
+		    *)
+			cd $realdir
+			;;
+		esac
 	else
 		mkdir -p $realdir
 		cd $realdir
-		git clone -q --shared $BASE/svn2git.$repo .
+		git clone -q --shared --no-checkout $BASE/svn2git.$repo .
 	fi
 	git checkout -q :/$dir@$rev.$UPSTREAM_UUID &	# parallelize
 done
