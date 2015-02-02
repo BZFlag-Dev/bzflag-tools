@@ -213,6 +213,9 @@ while read rev repo method branch tag ; do
 						;;
 					    *)
 						case $rev in
+						    15902)
+							LOCATION=tags/v2_0_10_RC1
+							;;
 						    16016)
 							LOCATION=tags/v2_0_10_RC3
 							;;
