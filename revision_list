@@ -2357,7 +2357,6 @@ default,bzflag,,,
 16077,web,auto,,
 16078,web,auto,,
 16156,web,auto,,
-16208,bzflag,rebase_tag_inline,v2_0branch,v2_0_10
 16211,db,auto,,
 16212,db,auto,,
 16213,db,auto,,
