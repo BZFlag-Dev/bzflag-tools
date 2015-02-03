@@ -2458,6 +2458,7 @@ default,bzflag,,,
 16983,bzwgen,auto,,
 16986,bzwgen,auto,,
 16988,bzwgen,auto,,
+17083,bzflag,merge,:/@17067.08b3d480,trunk
 17163,db,auto,,
 17164,db,auto,,
 17165,db|pybzflag|web,auto,,
