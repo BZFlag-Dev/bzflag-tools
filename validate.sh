@@ -32,7 +32,7 @@ svn checkout -q $SVN_REPO@$lastrev $SVNDIR	# empty tree
 (
 for repo in $REPO_LIST ; do
 	# use awk to remove UPSTREAM_REPO/ and to convert @ to a space
-	GIT_DIR=$BASE/svn2git.$repo/.git git log --all | awk \$1==\"git-svn-id:\"\&\&\$3==\"$UPSTREAM_UUID\"\{print\ gensub\(\"@\",\"\ \",1,gensub\(\"$UPSTREAM_REPO/\",\"\",1,\$2\)\),\"$repo\"\} 
+	GIT_DIR=$BASE/svn2git.$repo/.git git log --all | awk \$1==\"git-svn-id:\"\&\&\$3==\"$UPSTREAM_UUID\"\{print\ gensub\(\"@\",\"\ \",1,gensub\(\"$UPSTREAM_REPO/\",\"\",1,\$2\)\),\"$repo\"\}
 done
 # add commits that completely delete a branch or tag
 echo tags/V1_10_6 13939 trash
@@ -111,6 +111,40 @@ echo branches/remove_flag_id 15875 trash
 			wait				# serialize
 			mkdir -p $GITDIR/trunk/bzflag/bots/testbot
 			;;
+		    16354)
+			wait				# serialize
+			mkdir $GITDIR/trunk/db/bzgrpmgr/img
+			;;
+		    16519)
+			wait				# serialize
+			mkdir $GITDIR/trunk/bzflag/data/geometry/tank/low $GITDIR/trunk/bzflag/data/geometry/tank/medium
+			;;
+		    16574)
+			wait				# serialize
+			mv $GITDIR/trunk/bzflag/data/geometry/tank/* $GITDIR/trunk/bzflag/data/models/tank
+			rmdir $GITDIR/trunk/bzflag/data/geometry/tank $GITDIR/trunk/bzflag/data/geometry
+			;;
+		    16946)
+			wait				# serialize
+			mkdir $GITDIR/branches/v2_99_shot_branch/data/models/tank/low $GITDIR/branches/v2_99_shot_branch/data/models/tank/medium
+			;;
+		    16968|17271)
+			wait				# serialize
+			# $dir has advanced, but $realdir conveniently has not
+			rmdir $GITDIR/$realdir/data/models/tank/low $GITDIR/$realdir/data/models/tank/medium $GITDIR/$realdir/data/models/tank $GITDIR/$realdir/data/models
+			;;
+		    17431)
+			wait				# serialize
+			mkdir -p $GITDIR/trunk/bzauthd/MSVC/VC8
+			;;
+		    17432)
+			wait				# serialize
+			mkdir $GITDIR/trunk/bzauthd/MSVC/VC7.1
+			;;
+		    17433)
+			wait				# serialize
+			mkdir $GITDIR/trunk/bzauthd/tcp-net/src $GITDIR/trunk/bzauthd/tcp-net/include
+			;;
 		esac
 		if [ $rev -ge $STARTING_REVISION ] ; then
 			cd $SVNDIR
@@ -125,7 +159,7 @@ echo branches/remove_flag_id 15875 trash
 		lastrev=$rev
 	fi
 	case $dir in
-	    branches|branches/experimental/2_4_OSX_Lion_Rebuild_branch|branches/experimental/v2_99_*_branch|branches/ftgl|branches/gamestats_live|branches/gsoc_bzauthd_db|branches/summer_of_code/gsoc_[^i]*|tags/soc-bz*|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_1[246]|tags/v2_4_?|tags/v3_*|trunk*)
+	    branches|branches*/2_4_OSX_Lion_Rebuild_branch|branches/ftgl|branches/gamestats_live|branches*/gsoc_[^i]*|branches*/v2_99_*_branch|tags/soc-bz*|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_10RC3|tags/v2_0_1[246]|tags/v2_4_?|tags/v3_*|trunk*)
 		realdir=$dir
 		;;
 	    tags/v1_6_[45])
@@ -144,10 +178,27 @@ echo branches/remove_flag_id 15875 trash
 		mkdir branches tags trunk
 		continue
 		;;
-	    14524|16945)
+	    14524|15902|16945)
 		# in Subversion only an empty directory was created, but
 		# in Git it is simplest to branch with an unchanged file tree
-		mkdir $dir	# not $realdir!
+		mkdir $dir		# not $realdir
+		continue
+		;;
+	    16016)
+		mv tags/v2_0_10RC3 $dir	# not $realdir
+		continue
+		;;
+	    16946)
+		# r19645 created an empty directory; now we will populate it
+		rmdir $dir
+		# fall through for normal processing
+		;;
+	    17409)
+		mv branches/gsoc_08_libbzw $dir	# not $realdir
+		continue
+		;;
+	    17840)
+		rm -r tags/v2_0_12 &	# parallelize
 		continue
 		;;
 	esac
