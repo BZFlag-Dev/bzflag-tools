@@ -219,6 +219,9 @@ while read rev repo method branch tag ; do
 						    16016)
 							LOCATION=tags/v2_0_10_RC3
 							;;
+						    17840)
+							LOCATION=tags/v2_0_12
+							;;
 						    21390)
 							LOCATION=tags/v1_8abort
 							;;
