@@ -2502,7 +2502,7 @@ default,bzflag,,,
 17443,bzauthd,auto,,
 17444,bzauthd,auto,,
 17445,bzauthd,auto,,
-17446,bzauthd,auto,,
+17446,bzauthd,merge,:/@17444.08b3d480,trunk
 17447,bzauthd,empty,trunk,
 17448,bzauthd,auto,,
 17449,bzauthd,auto,,
