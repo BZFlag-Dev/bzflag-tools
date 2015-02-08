@@ -10,6 +10,8 @@
 # IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
+SOURCE="`dirname $0`"
+SOURCE="`readlink -f $SOURCE`"			# use full path
 REPO_LIST='bzflag-archive bzflag-bzflag bzflag-tools bzflag-web bzworkbench'
 UPSTREAM_REPO=https://svn.code.sf.net/p/bzflag/code
 UPSTREAM_UUID=08b3d480-bf2c-0410-a26f-811ee3361c24
@@ -160,11 +162,26 @@ echo branches/remove_flag_id 15875 trash
 		esac
 		if [ $rev -ge $STARTING_REVISION ] ; then
 			cd $SVNDIR
-			svn revert -q -R .
+			if ! svn revert -q -R . ; then
+				for file in plugin_HTTP.cpp plugin_HTTP.h ; do
+					mv /tmp/$file branches/gsoc_server_listing/plugins/plugin_utils/$file
+				done
+				svn status --no-ignore
+			fi
 			svn update -q -r $lastrev
 			# undo keyword expansion, which Git does not support
 			svn propdel -q -R svn:keywords .
 			svn diff --ignore-properties | patch -s -p0 -R
+			case $lastrev in
+			    1833[3-9]|183[45]?|1836[0-8])
+				# svn fails with "E135000: Inconsistent line ending style" on these files
+				# correct plugin_HTTP.cpp MD5=3cfec4dd8bbdb6b4753c2720b41a1356
+				# correct plugin_HTTP.h   MD5=be721291b3336256e08d127a35ba1b02
+				for file in plugin_HTTP.cpp plugin_HTTP.h ; do
+					mv branches/gsoc_server_listing/plugins/plugin_utils/$file /tmp	# save for later
+					cp $SOURCE/$file branches/gsoc_server_listing/plugins/plugin_utils/$file
+				done
+			esac
 			wait	# serialize before reading the Git tree
 			diff -r -x .git -x .svn $GITDIR $SVNDIR
 		fi
