@@ -145,6 +145,18 @@ echo branches/remove_flag_id 15875 trash
 			wait				# serialize
 			mkdir $GITDIR/trunk/bzauthd/tcp-net/src $GITDIR/trunk/bzauthd/tcp-net/include
 			;;
+		    18215)
+			wait				# serialize
+			mkdir $GITDIR/branches/gsoc_collisions/gsoc_bzauthd
+			;;
+		    18216)
+			wait				# serialize
+			rmdir $GITDIR/branches/gsoc_collisions/gsoc_bzauthd
+			;;
+		    18221)
+			wait				# serialize
+			mkdir $GITDIR/branches/gsoc_bzauthd/src/bzAuthCommon
+			;;
 		esac
 		if [ $rev -ge $STARTING_REVISION ] ; then
 			cd $SVNDIR
