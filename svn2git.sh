@@ -201,35 +201,37 @@ while read rev repo method branch tag ; do
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
 					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'use HTML::Entities; undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print decode_entities(\$_)'`"
-					case "$branch" in
-					    trunk|tags/*)
-						if [ $rev -eq 11814 ] ; then
-							AUTHOR='cvs2svn <davidtrowbridge@users.sourceforge.net>'
-							LOCATION=tags/$tag/$TARGET_REPO
-							tag=
-						else
-							LOCATION=$branch
-						fi
+					case $rev in
+					    11814)
+						AUTHOR='cvs2svn <davidtrowbridge@users.sourceforge.net>'
+						LOCATION=tags/$tag/$TARGET_REPO
+						tag=
+						;;
+					    15902)
+						LOCATION=tags/v2_0_10_RC1
+						;;
+					    16016)
+						LOCATION=tags/v2_0_10_RC3
+						;;
+					    17840)
+						LOCATION=tags/v2_0_12
+						;;
+					    18372|18373)
+						LOCATION=trunk/gsoc_libbzw
+						;;
+					    21390)
+						LOCATION=tags/v1_8abort
+						;;
+					    21391)
+						LOCATION=tags/$branch
+						;;
+					    21394)
+						LOCATION=branches/v1_10
 						;;
 					    *)
-						case $rev in
-						    15902)
-							LOCATION=tags/v2_0_10_RC1
-							;;
-						    16016)
-							LOCATION=tags/v2_0_10_RC3
-							;;
-						    17840)
-							LOCATION=tags/v2_0_12
-							;;
-						    21390)
-							LOCATION=tags/v1_8abort
-							;;
-						    21391)
-							LOCATION=tags/$branch
-							;;
-						    21394)
-							LOCATION=branches/v1_10
+						case "$branch" in
+						    trunk|tags/*)
+							LOCATION=$branch
 							;;
 						    *)
 							LOCATION=branches/$branch

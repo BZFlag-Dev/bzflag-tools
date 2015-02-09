@@ -226,8 +226,8 @@ echo branches/remove_flag_id 15875 trash
 		mv branches/gsoc_08_libbzw $dir	# not $realdir
 		continue
 		;;
-	    17840)
-		rm -r tags/v2_0_12 &	# parallelize
+	    17840|18373)
+		rm -r $dir &		# parallelize
 		continue
 		;;
 	esac
