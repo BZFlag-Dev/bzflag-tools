@@ -26,7 +26,7 @@ else
 fi
 
 cd $BASE					# be somewhere else
-rm -rf $GITDIR $SVNDIR
+rm -rf /var$GITDIR $GITDIR $SVNDIR
 mkdir $GITDIR
 lastrev=1
 svn checkout -q $SVN_REPO@$lastrev $SVNDIR	# empty tree
@@ -229,6 +229,13 @@ echo branches/remove_flag_id 15875 trash
 	    17840|18373)
 		rm -r $dir &		# parallelize
 		continue
+		;;
+	    18415)
+		cd $BASE
+		mv $GITDIR /var$GITDIR	# /tmp is almost full
+		GITDIR=/var$GITDIR	# use /var/tmp from now on
+		cd $GITDIR
+		sync
 		;;
 	esac
 	if [ -d $realdir ] ; then
