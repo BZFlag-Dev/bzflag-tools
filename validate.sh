@@ -188,7 +188,7 @@ echo branches/remove_flag_id 15875 trash
 		lastrev=$rev
 	fi
 	case $dir in
-	    branches|branches*/2_4_OSX_Lion_Rebuild_branch|branches/ftgl|branches/gamestats_live|branches*/gsoc_[^i]*|branches*/v2_99_*_branch|tags/soc-bz*|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_10RC3|tags/v2_0_1[246]|tags/v2_4_?|tags/v3_*|trunk*)
+	    branches|branches*/2_4_OSX_Lion_Rebuild_branch|branches/ftgl|branches/gamestats_live|branches*/gsoc_[^i]*|branches/trepan|branches*/v2_99_*_branch|tags/soc-bz*|tags/GSoC2008/*|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_10RC3|tags/v2_0_1[246]|tags/v2_4_?|tags/v3_*|trunk*)
 		realdir=$dir
 		;;
 	    tags/v1_6_[45])
@@ -236,6 +236,10 @@ echo branches/remove_flag_id 15875 trash
 		GITDIR=/var$GITDIR	# use /var/tmp from now on
 		cd $GITDIR
 		sync
+		;;
+	    18417)
+		mkdir -p $dir/{d.sanders,h.reiser,i.szakats,j.bodine,k.kisielewicz,l.rewega} &	# parallelize
+		continue
 		;;
 	esac
 	if [ -d $realdir ] ; then

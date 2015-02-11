@@ -219,6 +219,30 @@ while read rev repo method branch tag ; do
 					    18372|18373)
 						LOCATION=trunk/gsoc_libbzw
 						;;
+					    18417)
+						LOCATION=tags/GSoC2008
+						;;
+					    18424)
+						LOCATION=tags/GSoC2008/d.sanders/gsoc_server_listing
+						;;
+					    18425)
+						LOCATION=tags/GSoC2008/h.reiser/bzflag
+						;;
+					    18426)
+						LOCATION=tags/GSoC2008/i.szakats/gsoc_bzauthd
+						;;
+					    18427)
+						LOCATION=tags/GSoC2008/l.rewega/gsoc_libbzw
+						;;
+					    18428)
+						LOCATION=tags/GSoC2008/k.kisielewicz/bzwgen
+						;;
+					    18429)
+						LOCATION=tags/GSoC2008/j.bodine/gsoc_collisions
+						;;
+					    18430)
+						LOCATION=tags/GSoC2008/j.bodine/v2_99_shot_branch
+						;;
 					    21390)
 						LOCATION=tags/v1_8abort
 						;;
@@ -244,8 +268,10 @@ while read rev repo method branch tag ; do
 					else
 						# create a new branch with this empty commit
 						git checkout -b remotes/$branch remotes/$tag
-						git mv $repo/* .
-						rmdir $repo
+						if [ $rev -ne 18427 ] ; then
+							git mv $repo/* .
+							rmdir $repo
+						fi
 					fi
 					git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
 
@@ -612,6 +638,14 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						EXCEPTIONS=MSVC/VC8/bzflag.vcproj,include/ServerItem.h,src/game/ServerItem.cxx
 						SUBDIR=
 						;;
+					    18544)
+						svn export -q --force $SVN_REPO/$LOCATION@$rev .					# the nuclear option with no subdirectory
+						git add .
+						for file in `git status | awk 'BEGIN{ORS=","} $1 == "modified:" {print $2}'` ; do	# ORS matches IFS
+							sed -i -e 's/\$Id: .* \$/$Id$/' -e 's/\$Revision: .* \$/$Revision$/' $file	# unexpand keywords
+							git add $file
+						done
+						;;
 					    19840)
 						git rm -q -r MSVC/VC8
 						git rm -q -f src/ogl/OpenGLContext.cxx src/other/freetype/builds/win32/visualc/freetype_vc8.vcproj src/other/freetype/include/freetype/ftcid.h src/other/freetype/include/freetype/internal/services/svcid.h src/other/freetype/include/freetype/internal/services/svttglyf.h
@@ -825,7 +859,8 @@ EOF
 	git branch 1.7 remotes/v1_7 && git branch -d -r v1_7
 
 	# remove obsolete Subversion branches and tags that are not branch tips
-	git branch -d -r 2_4_OSX_Lion_Rebuild_branch ftgl gsoc_08_libbzw remove_flag_id trepan tags/V1_10_6 tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/merge-2_0-2_1-10 tags/merge-2_0-2_1-11 tags/merge-2_0-2_1-12 tags/pre-mesh tags/preMeshDrawInfo tags/soc-irc tags/v1_11_12 tags/v1_11_14 tags/v1_11_15 tags/v1_11_16 tags/v1_7c_2 tags/v1_7d_5 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_7_4_Beta tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v20020226 tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_0_5_b1 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
+	git branch -d -r 2_4_OSX_Lion_Rebuild_branch ftgl gsoc_08_libbzw gsoc_libbzw_tag remove_flag_id trepan tags/V1_10_6 tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/merge-2_0-2_1-10 tags/merge-2_0-2_1-11 tags/merge-2_0-2_1-12 tags/pre-mesh tags/preMeshDrawInfo tags/soc-irc tags/v1_11_12 tags/v1_11_14 tags/v1_11_15 tags/v1_11_16 tags/v1_7c_2 tags/v1_7d_5 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_7_4_Beta tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v20020226 tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_0_5_b1 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
+	git branch -D remotes/gsoc_libbzw_tag	# not a remote branch (don't know why -d doesn't work)
 
 	# fix some e-mail addresses and full names
 	CANONICAL_AUTHORS='

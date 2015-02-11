@@ -2781,7 +2781,7 @@ default,bzflag,,,
 18424,bzflag,empty,gsoc_server_listing,
 18425,bzflag,empty,trunk,
 18426,bzflag,empty,gsoc_bzauthd,
-18427,bzflag,empty,gsoc_libbzw,
+18427,bzflag,empty,gsoc_libbzw_tag,gsoc_libbzw~
 18428,bzwgen,empty,trunk,
 18429,bzflag,empty,gsoc_collisions,
 18430,bzflag,empty,v2_99_shot_branch,
@@ -2802,6 +2802,7 @@ default,bzflag,,,
 18515,admin,auto,,
 18516,admin,auto,,
 18517,bzflag,merge -Xsubtree=bzflag -Xours,trunk,gsoc_server_listing
+18544,bzflag,merge,gsoc_libbzw,gsoc_libbzw_tag
 18558,bzflag,merge,:/@18554.08b3d480,trunk
 18591,db,auto,,
 18655,db,auto,,
