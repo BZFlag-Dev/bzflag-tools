@@ -131,7 +131,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		for file in $EXCEPTIONS ; do
 			svn cat $SVN_REPO/$LOCATION/$file@$rev > $SUBDIR$file
 			case $file in
-			    configure.ac|plugins/HoldTheFlag/HoldTheFlag.cpp|plugins/nagware/nagware.cpp|src/bzflag/ScoreboardRenderer.cxx)
+			    bzflag/admin/am_edit|bzflag/admin/mkinstalldirs|configure.ac|plugins/HoldTheFlag/HoldTheFlag.cpp|plugins/configure.ac|plugins/nagware/nagware.cpp|src/bzflag/ScoreboardRenderer.cxx)
 				sed -i -e 's/\$Id: .* \$/$Id$/' -e 's/\$Revision: .* \$/$Revision$/' $SUBDIR$file	# unexpand keywords
 				;;
 			esac
@@ -151,7 +151,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		for file in $EXCEPTIONS ; do
 			svn cat $SVN_REPO/$LOCATION/$file@$rev > $SUBDIR$file
 			case $file in
-			    configure.ac|plugins/HoldTheFlag/HoldTheFlag.cpp|plugins/nagware/nagware.cpp|src/bzflag/ScoreboardRenderer.cxx)
+			    bzflag/admin/am_edit|bzflag/admin/mkinstalldirs|configure.ac|plugins/HoldTheFlag/HoldTheFlag.cpp|plugins/configure.ac|plugins/nagware/nagware.cpp|src/bzflag/ScoreboardRenderer.cxx)
 				sed -i -e 's/\$Id: .* \$/$Id$/' -e 's/\$Revision: .* \$/$Revision$/' $SUBDIR$file	# unexpand keywords
 				;;
 			esac
