@@ -159,6 +159,14 @@ echo branches/remove_flag_id 15875 trash
 			wait				# serialize
 			mkdir $GITDIR/branches/gsoc_bzauthd/src/bzAuthCommon
 			;;
+		    19111|19840)
+			wait				# serialize
+			mkdir $GITDIR/$dir/src/other/glew/{bin,lib}
+			;;
+		    19446)
+			wait				# serialize
+			mkdir -p $GITDIR/trunk/web/mainsite/oldwiki/applets/TWikiDrawPlugin
+			;;
 		esac
 		if [ $rev -ge $STARTING_REVISION ] ; then
 			cd $SVNDIR
@@ -226,7 +234,7 @@ echo branches/remove_flag_id 15875 trash
 		mv branches/gsoc_08_libbzw $dir	# not $realdir
 		continue
 		;;
-	    17840|18373)
+	    17840|18373|18911)
 		rm -r $dir &		# parallelize
 		continue
 		;;
@@ -239,6 +247,18 @@ echo branches/remove_flag_id 15875 trash
 		;;
 	    18417)
 		mkdir -p $dir/{d.sanders,h.reiser,i.szakats,j.bodine,k.kisielewicz,l.rewega} &	# parallelize
+		continue
+		;;
+	    19307)
+		# rebased in Git; place it correctly for the Subversion view
+		cd $realdir/libgcrypt
+		git show :/$dir@$rev.$UPSTREAM_UUID | patch -s -p4
+		cd $GITDIR
+		continue
+		;;
+	    19450)
+		# simulate the Subversion external link
+		git clone -q --shared -b masterban $BASE/svn2git.$repo $realdir/mainsite/bans &	# parallelize
 		continue
 		;;
 	esac
