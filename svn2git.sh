@@ -656,6 +656,10 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 						EXCEPTIONS=src/bzfs/bzfs.cxx
 						SUBDIR=
 						;;
+					    21398)
+						chmod 755 $repo/include/PlayerInfo.h
+						git add $repo/include/PlayerInfo.h
+						;;
 					    22442)
 						git mv $repo/gamestats/libraries/Qore/tests libraries/Qore
 						EXCEPTIONS=config/config.php
@@ -687,6 +691,8 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'use HTML::Entities; undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print decode_entities(\$_)'`"
 					if [ $rev -eq 11616 ] ; then
 						LOCATION=$branch	# git-svn-id must match the expectation of "svn fetch -r 11617"
+					elif [ $rev -eq 21398 ] ; then
+						LOCATION=branches/v2_0
 					fi
 					git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
 

@@ -3226,8 +3226,8 @@ default,bzflag,,,
 21393,bzflag,rebase_tag_branch,trunk,v2_99archive
 21394,bzflag,empty,v1_10branch,
 # 21395 trunk -> v2_99archive
-21396,bzflag,rebase_branch,v2_0branch,trunk
-21398,tidy,auto,,	# mv branches/v2_0branch branches/v2_0
+21396,bzflag,rebase_branch,v2_0branch~,trunk
+21398,bzflag,merge,:/@21385.08b3d480,v2_0branch
 21399,tidy,auto,,	# mv v1_7 v1_10 v2_0 branches/release_maint/
 21401,branch_note,auto,,
 21427,db,auto,,
