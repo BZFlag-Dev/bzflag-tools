@@ -226,6 +226,7 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 		git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
 
 git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
+		git cherry-pick --allow-empty :/@22225.$UPSTREAM_UUID
 		git branch new_master	# an easy way to mark the current location
 		git rebase --keep-empty -Xours new_master :/@22369.$UPSTREAM_UUID | tr \\r \\n
 		git cherry-pick --allow-empty :/@22427.$UPSTREAM_UUID	# merge fails to keep it
