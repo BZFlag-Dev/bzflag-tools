@@ -878,7 +878,8 @@ test $GIT_AUTHOR_EMAIL = allejo@users.noreply.github.com && export GIT_AUTHOR_EM
 test $GIT_AUTHOR_EMAIL = allejo@me.com && export GIT_AUTHOR_NAME=allejo'
 
 	# change committer info to match the author's
-	git filter-branch --env-filter "$CANONICAL_AUTHORS$COMMITTER_IS_AUTHOR" -- trunk..2.4 trunk..2.5 | tr \\r \\n
+	# show the full Subverion trunk path for r22830
+	git filter-branch --env-filter "$CANONICAL_AUTHORS$COMMITTER_IS_AUTHOR" --msg-filter "$MSG_FILTER" -- trunk..2.4 trunk..2.5 | tr \\r \\n
 	rm -r .git/refs/original	# discard old commits saved by filter-branch
 
 	# multiple passes are required to update commit hashes in commit messages
