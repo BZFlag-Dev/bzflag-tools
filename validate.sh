@@ -51,6 +51,13 @@ echo tags/merge-2_0-2_1-10 13949 trash
 echo tags/merge-2_0-2_1-11 13950 trash
 echo branches/ftgl 14692 trash
 echo branches/remove_flag_id 15875 trash
+# add commits that move or create directories
+echo branches/experimental 21384 reorg
+echo . 21386 reorg
+echo branches/summer_of_code 21388 reorg
+echo branches/release_maint 21399 reorg
+# add commit that should have only been in Git
+echo trunk/bzflag 22829 bzflag
 ) | sort -n -k2 | while read dir rev repo ; do
 	if [ $rev -gt $lastrev ] ; then
 		case $lastrev in
@@ -159,13 +166,51 @@ echo branches/remove_flag_id 15875 trash
 			wait				# serialize
 			mkdir $GITDIR/branches/gsoc_bzauthd/src/bzAuthCommon
 			;;
-		    19111|19840)
+		    19111|19840|21402|21560|22053|22528|22532)
 			wait				# serialize
-			mkdir $GITDIR/$dir/src/other/glew/{bin,lib}
+			# $dir has advanced, but $realdir conveniently has not
+			mkdir $GITDIR/$realdir/src/other/glew/{bin,lib}
 			;;
 		    19446)
 			wait				# serialize
 			mkdir -p $GITDIR/trunk/web/mainsite/oldwiki/applets/TWikiDrawPlugin
+			;;
+		    20701)
+			wait				# serialize
+			# $dir has advanced, but $realdir conveniently has not
+			mkdir $GITDIR/$realdir/src/other/ares/m4
+			;;
+		    21077|21206)
+			wait				# serialize
+			# $dir has advanced, but $realdir conveniently has not
+			if [ $lastrev -eq 21077 ] ; then
+				mkdir $GITDIR/$realdir/src/other/ares/m4
+			fi
+			mkdir $GITDIR/$realdir/src/other/glew/{bin,lib}
+			# copy all but bzflag to fill out the v3_0_alpha* tags
+			cp -r $GITDIR/trunk/[^b]* $GITDIR/trunk/bz[^f]* $GITDIR/$realdir/.. &	# parallelize
+			;;
+		    21454)
+			wait				# serialize
+			mkdir -p $GITDIR/trunk/bzflag/package/win32/nsis
+			;;
+		    21574)
+			wait				# serialize
+			rmdir $GITDIR/$realdir/src/other/glew/* $GITDIR/$realdir/src/other/glew $GITDIR/$realdir/src/other
+			mkdir $GITDIR/$realdir/other_src/glew/{bin,lib}
+			;;
+		    22224)
+			wait				# serialize
+			rm -r $GITDIR/trunk/db/*
+			mkdir $GITDIR/trunk/db/{images,support}
+			;;
+		    22427)
+			wait				# serialize
+			mkdir $GITDIR/trunk/web/gamestats
+			;;
+		    22534)
+			wait				# serialize
+			mkdir -p $GITDIR/branches/experimental/2_4_OSX_Lion_Rebuild_branch/MacOSX/{BZFlag.xcworkspace,BZFlag/BZFlag.xcodeproj,Common/Common.xcodeproj,Game/Game.xcodeproj}
 			;;
 		esac
 		if [ $rev -ge $STARTING_REVISION ] ; then
@@ -176,6 +221,12 @@ echo branches/remove_flag_id 15875 trash
 				done
 				svn status --no-ignore
 			fi
+			for ext in trunk/web/mainsite tags/v3_0_alpha1/web/mainsite tags/v3_0_alpha2/web/mainsite ; do
+				if [ -d $ext/bans ] ; then
+					# reference local copy of repo
+					svn propset -q svn:externals "bans $SVN_REPO/trunk/admin" $ext
+				fi
+			done
 			svn update -q -r $lastrev
 			# undo keyword expansion, which Git does not support
 			svn propdel -q -R svn:keywords .
@@ -196,7 +247,7 @@ echo branches/remove_flag_id 15875 trash
 		lastrev=$rev
 	fi
 	case $dir in
-	    branches|branches*/2_4_OSX_Lion_Rebuild_branch|branches/ftgl|branches/gamestats_live|branches*/gsoc_[^i]*|branches/trepan|branches*/v2_99_*_branch|tags/soc-bz*|tags/GSoC2008/*|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_10RC3|tags/v2_0_1[246]|tags/v2_4_?|tags/v3_*|trunk*)
+	    branches|branches*/2_4_OSX_Lion_Rebuild_branch|branches/ftgl|branches/gamestats_live|branches*/gsoc_[^i]*|branches/trepan|branches*/v2_99_*_branch|tags/soc-bz*|tags/GSoC2008/*|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_10RC3|tags/v2_0_1[246]|tags/v2_4_?|trunk*)
 		realdir=$dir
 		;;
 	    tags/v1_6_[45])
@@ -215,7 +266,7 @@ echo branches/remove_flag_id 15875 trash
 		mkdir branches tags trunk
 		continue
 		;;
-	    14524|15902|16945)
+	    14524|15902|16945|21393)
 		# in Subversion only an empty directory was created, but
 		# in Git it is simplest to branch with an unchanged file tree
 		mkdir $dir		# not $realdir
@@ -234,7 +285,7 @@ echo branches/remove_flag_id 15875 trash
 		mv branches/gsoc_08_libbzw $dir	# not $realdir
 		continue
 		;;
-	    17840|18373|18911)
+	    17840|18373|18911|20677|21389|21392|22225)
 		rm -r $dir &		# parallelize
 		continue
 		;;
@@ -259,6 +310,57 @@ echo branches/remove_flag_id 15875 trash
 	    19450)
 		# simulate the Subversion external link
 		git clone -q --shared -b masterban $BASE/svn2git.$repo $realdir/mainsite/bans &	# parallelize
+		continue
+		;;
+	    21384)
+		mkdir $dir
+		mv branches/v2_0_cs_branch branches/v2_99_net_branch branches/v2_99_shot_branch $dir
+		continue
+		;;
+	    21386)
+		mkdir branches/release_maint branches/summer_of_code
+		continue
+		;;
+	    21388)
+		mv branches/gsoc_* $dir
+		continue
+		;;
+	    21390)
+		rm -r tags/v1_7temp $dir &	# parallelize
+		continue
+		;;
+	    21391)
+		mv branches/v1_8 $dir
+		continue
+		;;
+	    21394)
+		mv branches/v1_10branch $dir
+		continue
+		;;
+	    21395)
+		mv trunk/bzflag $dir
+		continue
+		;;
+	    21398)
+		mv branches/v2_0branch $dir
+		# fall through for normal processing
+		;;
+	    21399)
+		mv branches/v1_7 branches/v1_10 branches/v2_0 $dir
+		continue
+		;;
+	    21401)
+		GIT_DIR=$BASE/svn2git.$repo/.git git cat-file --textconv branch_note:BRANCHES.txt > $dir/BRANCHES.txt
+		continue
+		;;
+	    22829)
+		cd $realdir
+		git show ':/^Use only 1 level of square' | patch -s -p1
+		continue
+		;;
+	    22830)
+		cd $realdir
+		git show :/$dir@$rev.$UPSTREAM_UUID | patch -s -p1
 		continue
 		;;
 	esac
