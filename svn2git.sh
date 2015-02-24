@@ -397,10 +397,13 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					    347|8428|11814|12894|15219)
 						# restore changes lost when git-svn attached the commit too far back
 						git reset --soft HEAD~
+						DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
+						AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
 						EXCEPTIONS=	# none by default
 						case $rev in
 						    347)
 							git rm -q -r $repo/bzwtransform
+							AUTHOR='cvs2svn <davidtrowbridge@users.sourceforge.net>'
 							;;
 						    8428)
 							EXCEPTIONS=src/bzflag/GUIOptionsMenu.cxx
@@ -422,8 +425,6 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 							svn cat $SVN_REPO/tags/$tag/$file@$rev > $file
 							git add $file
 						done
-						DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
-						AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
 						git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" -F .git/COMMIT_EDITMSG
 						;;
 					esac
@@ -689,11 +690,17 @@ git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
 					DATE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<date>==s and s=</date>.*==s and print'`"
 					AUTHOR="`svn log --xml -r $rev $SVN_REPO | perl -wle 'undef \$/; \$_ = <>; s=.*<author>==s and s=</author>.*==s and print'`"
 					MESSAGE="`svn log --xml -r $rev $SVN_REPO | perl -wle 'use HTML::Entities; undef \$/; \$_ = <>; s=.*<msg>==s and s=</msg>.*==s and print decode_entities(\$_)'`"
-					if [ $rev -eq 11616 ] ; then
+					case $rev in
+					    1612)
+						AUTHOR='David Trowbridge <davidtrowbridge@users.sourceforge.net>'
+						;;
+					    11616)
 						LOCATION=$branch	# git-svn-id must match the expectation of "svn fetch -r 11617"
-					elif [ $rev -eq 21398 ] ; then
+						;;
+					    21398)
 						LOCATION=branches/v2_0
-					fi
+						;;
+					esac
 					git commit --allow-empty "--date=$DATE" "--author=$AUTHOR" "-m$MESSAGE
 
 git-svn-id: $UPSTREAM_REPO/$LOCATION@$rev $UPSTREAM_UUID"
