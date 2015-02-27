@@ -247,11 +247,8 @@ echo trunk/bzflag 22829 bzflag
 		lastrev=$rev
 	fi
 	case $dir in
-	    branches|branches*/2_4_OSX_Lion_Rebuild_branch|branches/ftgl|branches/gamestats_live|branches*/gsoc_[^i]*|branches/trepan|branches*/v2_99_*_branch|tags/soc-bz*|tags/GSoC2008/*|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_10RC3|tags/v2_0_1[246]|tags/v2_4_?|trunk*)
+	    branches|branches*/2_4_OSX_Lion_Rebuild_branch|branches/ftgl|branches/gamestats_live|branches*/gsoc_[^i]*|branches/trepan|branches*/v2_99_*_branch|tags/soc-bz*|tags/GSoC2008/*|tags/v1_6_[45]/bzeditw32|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_10RC3|tags/v2_0_1[246]|tags/v2_4_?|trunk*)
 		realdir=$dir
-		;;
-	    tags/v1_6_[45])
-		realdir=$dir/bzeditw32
 		;;
 	    *)
 		realdir=$dir/bzflag
