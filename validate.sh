@@ -86,13 +86,12 @@ echo trunk/bzflag 22829 bzflag
 		    14716|15220)
 			wait				# serialize
 			# put relaybot.cpp where Subversion expects it to be
-			# $dir has advanced, but $realdir conveniently has not
-			mkdir $GITDIR/$realdir/../relaybot
-			mv $GITDIR/$realdir/src/other/libirc/examples $GITDIR/$realdir/../relaybot/src
+			mkdir $GITDIR/$lastdir/../relaybot
+			mv $GITDIR/$lastdir/src/other/libirc/examples $GITDIR/$lastdir/../relaybot/src
 			if [ $lastrev -eq 14716 ] ; then
-				rmdir $GITDIR/$realdir/src/other/libirc
+				rmdir $GITDIR/$lastdir/src/other/libirc
 			else
-				mkdir $GITDIR/$realdir/src/other/libirc/examples
+				mkdir $GITDIR/$lastdir/src/other/libirc/examples
 			fi
 			;;
 		    14750)
@@ -139,8 +138,7 @@ echo trunk/bzflag 22829 bzflag
 			;;
 		    16968|17271)
 			wait				# serialize
-			# $dir has advanced, but $realdir conveniently has not
-			rmdir $GITDIR/$realdir/data/models/tank/low $GITDIR/$realdir/data/models/tank/medium $GITDIR/$realdir/data/models/tank $GITDIR/$realdir/data/models
+			rmdir $GITDIR/$lastdir/data/models/tank/low $GITDIR/$lastdir/data/models/tank/medium $GITDIR/$lastdir/data/models/tank $GITDIR/$lastdir/data/models
 			;;
 		    17431)
 			wait				# serialize
@@ -168,8 +166,7 @@ echo trunk/bzflag 22829 bzflag
 			;;
 		    19111|19840|21402|21560|22053|22528|22532)
 			wait				# serialize
-			# $dir has advanced, but $realdir conveniently has not
-			mkdir $GITDIR/$realdir/src/other/glew/{bin,lib}
+			mkdir $GITDIR/$lastdir/src/other/glew/{bin,lib}
 			;;
 		    19446)
 			wait				# serialize
@@ -177,18 +174,16 @@ echo trunk/bzflag 22829 bzflag
 			;;
 		    20701)
 			wait				# serialize
-			# $dir has advanced, but $realdir conveniently has not
-			mkdir $GITDIR/$realdir/src/other/ares/m4
+			mkdir $GITDIR/$lastdir/src/other/ares/m4
 			;;
 		    21077|21206)
 			wait				# serialize
-			# $dir has advanced, but $realdir conveniently has not
 			if [ $lastrev -eq 21077 ] ; then
-				mkdir $GITDIR/$realdir/src/other/ares/m4
+				mkdir $GITDIR/$lastdir/src/other/ares/m4
 			fi
-			mkdir $GITDIR/$realdir/src/other/glew/{bin,lib}
+			mkdir $GITDIR/$lastdir/src/other/glew/{bin,lib}
 			# copy all but bzflag to fill out the v3_0_alpha* tags
-			cp -r $GITDIR/trunk/[^b]* $GITDIR/trunk/bz[^f]* $GITDIR/$realdir/.. &	# parallelize
+			cp -r $GITDIR/trunk/[^b]* $GITDIR/trunk/bz[^f]* $GITDIR/$lastdir/.. &	# parallelize
 			;;
 		    21454)
 			wait				# serialize
@@ -196,8 +191,8 @@ echo trunk/bzflag 22829 bzflag
 			;;
 		    21574)
 			wait				# serialize
-			rmdir $GITDIR/$realdir/src/other/glew/* $GITDIR/$realdir/src/other/glew $GITDIR/$realdir/src/other
-			mkdir $GITDIR/$realdir/other_src/glew/{bin,lib}
+			rmdir $GITDIR/$lastdir/src/other/glew/* $GITDIR/$lastdir/src/other/glew $GITDIR/$lastdir/src/other
+			mkdir $GITDIR/$lastdir/other_src/glew/{bin,lib}
 			;;
 		    22224)
 			wait				# serialize
@@ -246,15 +241,8 @@ echo trunk/bzflag 22829 bzflag
 		fi
 		lastrev=$rev
 	fi
-	case $dir in
-	    branches|branches*/2_4_OSX_Lion_Rebuild_branch|branches/ftgl|branches/gamestats_live|branches*/gsoc_[^i]*|branches/trepan|branches*/v2_99_*_branch|tags/soc-bz*|tags/GSoC2008/*|tags/v1_6_[45]/bzeditw32|tags/v2_0_5_b1/admin|tags/v2_0_10_RC[23]|tags/v2_0_10RC3|tags/v2_0_1[246]|tags/v2_4_?|trunk*)
-		realdir=$dir
-		;;
-	    *)
-		realdir=$dir/bzflag
-		;;
-	esac
-#	echo $rev $realdir $repo ; continue
+	lastdir=$dir
+#	echo $rev $dir $repo ; continue
 	echo -n "$rev "
 	cd $GITDIR
 	wait	# serialize before modifiying the Git tree
@@ -266,11 +254,11 @@ echo trunk/bzflag 22829 bzflag
 	    14524|15902|16945|21393)
 		# in Subversion only an empty directory was created, but
 		# in Git it is simplest to branch with an unchanged file tree
-		mkdir $dir		# not $realdir
+		mkdir $dir
 		continue
 		;;
 	    16016)
-		mv tags/v2_0_10RC3 $dir	# not $realdir
+		mv tags/v2_0_10RC3 $dir
 		continue
 		;;
 	    16946)
@@ -279,10 +267,10 @@ echo trunk/bzflag 22829 bzflag
 		# fall through for normal processing
 		;;
 	    17409)
-		mv branches/gsoc_08_libbzw $dir	# not $realdir
+		mv branches/gsoc_08_libbzw $dir
 		continue
 		;;
-	    17840|18373|18911|20677|21389|21392|22225)
+	    17840|18373|18911|20677|22225)
 		rm -r $dir &		# parallelize
 		continue
 		;;
@@ -299,14 +287,14 @@ echo trunk/bzflag 22829 bzflag
 		;;
 	    19307)
 		# rebased in Git; place it correctly for the Subversion view
-		cd $realdir/libgcrypt
+		cd $dir/libgcrypt
 		git show :/$dir@$rev.$UPSTREAM_UUID | patch -s -p4
 		cd $GITDIR
 		continue
 		;;
 	    19450)
 		# simulate the Subversion external link
-		git clone -q --shared -b masterban $BASE/svn2git.$repo $realdir/mainsite/bans &	# parallelize
+		git clone -q --shared -b masterban $BASE/svn2git.$repo $dir/mainsite/bans &	# parallelize
 		continue
 		;;
 	    21384)
@@ -322,16 +310,20 @@ echo trunk/bzflag 22829 bzflag
 		mv branches/gsoc_* $dir
 		continue
 		;;
+	    21389|21392)
+		rm -r `dirname $dir` &		# parallelize
+		continue
+		;;
 	    21390)
-		rm -r tags/v1_7temp $dir &	# parallelize
+		rm -r tags/v1_7temp `dirname $dir` &	# parallelize
 		continue
 		;;
 	    21391)
-		mv branches/v1_8 $dir
+		mv branches/v1_8 `dirname $dir`
 		continue
 		;;
 	    21394)
-		mv branches/v1_10branch $dir
+		mv branches/v1_10branch `dirname $dir`
 		continue
 		;;
 	    21395)
@@ -339,7 +331,7 @@ echo trunk/bzflag 22829 bzflag
 		continue
 		;;
 	    21398)
-		mv branches/v2_0branch $dir
+		mv branches/v2_0branch `dirname $dir`
 		# fall through for normal processing
 		;;
 	    21399)
@@ -351,29 +343,29 @@ echo trunk/bzflag 22829 bzflag
 		continue
 		;;
 	    22829)
-		cd $realdir
+		cd $dir
 		git show ':/^Use only 1 level of square' | patch -s -p1
 		continue
 		;;
 	    22830)
-		cd $realdir
+		cd $dir
 		git show :/$dir@$rev.$UPSTREAM_UUID | patch -s -p1
 		continue
 		;;
 	esac
-	if [ -d $realdir ] ; then
+	if [ -d $dir ] ; then
 		case $repo in
 		    trash)
 			rm -r $dir &	# parallelize
 			continue
 			;;
 		    *)
-			cd $realdir
+			cd $dir
 			;;
 		esac
 	else
-		mkdir -p $realdir
-		cd $realdir
+		mkdir -p $dir
+		cd $dir
 		git clone -q --shared --no-checkout $BASE/svn2git.$repo .
 	fi
 	git checkout -q :/$dir@$rev.$UPSTREAM_UUID &	# parallelize

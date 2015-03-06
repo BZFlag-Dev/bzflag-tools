@@ -773,8 +773,30 @@ if [ $TARGET_REPO = tools ] ; then
 elif [ $TARGET_REPO = custom_plugins ] ; then
 	TRUNK_SUBDIR=$TRUNK_SUBDIR/irclink
 fi
-MSG_FILTER="$MSG_FILTER\\;s=/\(trunk\\|tags/v1_6_.\)\\\@=/\\\$1/$TRUNK_SUBDIR\\\@="
-if [ $TARGET_REPO = tools ] ; then
+
+# build a regular expression of paths to be extended
+branches=bzflag
+branches="$branches|experimental/v2_99continuing"
+branches="$branches|gsoc_irc"
+branches="$branches|remove_flag_id"
+branches="$branches|v._[^9][^@]*"
+branches="branches/($branches)"
+tags="[mp][^@]+"
+tags="$tags|soc-irc"
+tags="$tags|[Vv][13][^@]+"
+tags="$tags|v20020226"
+tags="$tags|v2_0_(.|4_rc.|5_b1|10(_RC1)?)"
+tags="$tags|v2_99archive"
+tags="tags/($tags)"
+re=`echo "$branches|trunk|$tags" | sed 's/(/(?:/g'`	# no indexed variables so far
+# provide escapes for the Git shell and for @ in Perl
+re=`echo ";s=/($re)@=/\\$1/$TRUNK_SUBDIR@=" | sed -e 's/\([$;()?|]\)/\\\\\1/g' -e 's/@/\\\\\\\@/g'`
+MSG_FILTER="$MSG_FILTER$re"
+
+if [ $TARGET_REPO = bzflag ] ; then
+	# add exceptions for r14524, r15902, and r21393
+	MSG_FILTER="$MSG_FILTER\\;s=/$TRUNK_SUBDIR\\\@\\(14524\\|15902\\|21393\\)=\\\@\\\$1="
+elif [ $TARGET_REPO = tools ] ; then
 	MSG_FILTER="$MSG_FILTER\\;s=/BZStatCollector\\\@22327=\\\@22327="
 fi
 
