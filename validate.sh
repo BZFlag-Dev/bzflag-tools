@@ -58,6 +58,7 @@ echo branches/summer_of_code 21388 reorg
 echo branches/release_maint 21399 reorg
 # add commit that should have only been in Git
 echo trunk/bzflag 22829 bzflag
+echo . 99999 eof
 ) | sort -n -k2 | while read dir rev repo ; do
 	if [ $rev -gt $lastrev ] ; then
 		case $lastrev in
@@ -350,6 +351,9 @@ echo trunk/bzflag 22829 bzflag
 	    22830)
 		cd $dir
 		git show :/$dir@$rev.$UPSTREAM_UUID | patch -s -p1
+		continue
+		;;
+	    99999)	# end marker
 		continue
 		;;
 	esac
