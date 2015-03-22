@@ -19,5 +19,5 @@ svn log --xml $SVN_REPO | sed -e 's=\.[0-9][0-9][0-9][0-9][0-9][0-9]Z</date>=Z</
 
 for repo in bzflag-bzflag bzflag-archive bzflag-tools bzflag-web bzworkbench ; do
 	cd $BASE/svn2git.$repo
-	git log --date=iso --grep=git-svn-id:
+	git log --date=iso --all --grep=git-svn-id:
 done | `dirname $0`/git_log_to_xml.pl > $BASE/log.git

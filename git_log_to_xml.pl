@@ -11,9 +11,9 @@ use strict;
 # IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-my ($revision, $author, $date, $msg);
+my ($revision, $author, $date, $msg, @entries);
 
-sub print_log_entry()
+sub add_log_entry()
 {
 if (defined $author) {
 	$author = "<author>$author</author>\n";
@@ -28,15 +28,14 @@ chomp $msg;
 $msg =~ s/&/&amp;/g;
 $msg =~ s/</&lt;/g;
 $msg =~ s/>/&gt;/g;
-print "<logentry\n   revision=\"$revision\">\n$author<date>$date</date>\n<msg>$msg\n</msg>\n</logentry>\n";
+$entries[$revision] = "<logentry\n   revision=\"$revision\">\n$author<date>$date</date>\n<msg>$msg\n</msg>\n</logentry>\n";
 $revision = $author = $date = $msg = undef;
 }
 
-print '<?xml version="1.0" encoding="UTF-8"?>', "\n<log>\n";
 while (<>) {
 	if (/^commit [0-9a-f]{40}$/) {
 		# flush previous
-		print_log_entry if (defined $revision or defined $date or defined $msg);
+		add_log_entry if (defined $revision or defined $date or defined $msg);
 		}
 	elsif (/^Merge: [0-9a-f]{7} [0-9a-f]{7}$/) {
 		# ignore
@@ -55,5 +54,9 @@ while (<>) {
 		$msg .= $_;
 		}
 	}
-print_log_entry;
+add_log_entry;
+print '<?xml version="1.0"?>', "\n<log>\n";
+for my $ent (reverse @entries) {
+	print $ent;
+}
 print "</log>\n";
