@@ -28,7 +28,7 @@ chomp $msg;
 $msg =~ s/&/&amp;/g;
 $msg =~ s/</&lt;/g;
 $msg =~ s/>/&gt;/g;
-$entries[$revision] = "<logentry\n   revision=\"$revision\">\n$author<date>$date</date>\n<msg>$msg\n</msg>\n</logentry>\n";
+$entries[$revision] = "<logentry\n   revision=\"$revision\">\n$author<date>$date</date>\n<msg>$msg</msg>\n</logentry>\n";
 $revision = $author = $date = $msg = undef;
 }
 
@@ -57,6 +57,6 @@ while (<>) {
 add_log_entry;
 print '<?xml version="1.0"?>', "\n<log>\n";
 for my $ent (reverse @entries) {
-	print $ent;
+	print $ent if (defined $ent);
 }
 print "</log>\n";
