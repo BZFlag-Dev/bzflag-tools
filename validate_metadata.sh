@@ -15,7 +15,7 @@ UPSTREAM_REPO=https://svn.code.sf.net/p/bzflag/code
 UPSTREAM_UUID=08b3d480-bf2c-0410-a26f-811ee3361c24
 SVN_REPO=file:///scratch/bzflag/bzflag.svn	# $UPSTREAM_REPO will be slower
 
-svn log --xml $SVN_REPO | sed -e 's=\.[0-9][0-9][0-9][0-9][0-9][0-9]Z</date>=Z</date>=' -e 's=\(.\)</msg>=\1\n</msg>=' -e 's/>JeffM2501</>jeffm2501</' -e 's/  *$//' > $BASE/log.svn
+svn log --xml $SVN_REPO | `dirname $0`/gitify_svn_xml_log.pl > $BASE/log.svn
 
 for repo in bzflag-bzflag bzflag-archive bzflag-tools bzflag-web bzworkbench ; do
 	cd $BASE/svn2git.$repo
