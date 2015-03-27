@@ -32,14 +32,17 @@ foreach my $logentry ($root->getElementsByTagName($childname)) {
 		$elements{author} = lc "<author>$elements{author}</author>\n"
 		}
 	else {
-		$elements{author} = '';
+		$elements{author} = '';	# e.g., cvs2svn
 		}
 	$elements{date} =~ s/\.\d{6}Z$/Z/;
-	$elements{msg} =~ s/^\n+//;
-	$elements{msg} =~ s/\s+$//;
-	$elements{msg} =~ s/&/&amp;/g;
-	$elements{msg} =~ s/</&lt;/g;
-	$elements{msg} =~ s/>/&gt;/g;
-	print "<$childname\n   revision=\"$revision\">\n$elements{author}<date>$elements{date}</date>\n<msg>$elements{msg}</msg>\n</$childname>\n";
+	# need UTF-8 (2 bytes) instead of ISO-8859-1 (1 byte) encoding
+	my $msg = $elements{msg} || '';	# ensure it is defined
+	$msg =~ s/^\n+//;		# remove leading newlines
+	$msg =~ s/ +\n/\n/g;		# remove spaces at the end of lines
+	$msg =~ s/\s+$//;		# remove whitespace at the end
+	$msg =~ s/&/&amp;/g;
+	$msg =~ s/</&lt;/g;
+	$msg =~ s/>/&gt;/g;
+	print "<$childname\n   revision=\"$revision\">\n$elements{author}<date>$elements{date}</date>\n<msg>$msg</msg>\n</$childname>\n";
 	}
 print "</$rootname>\n";
