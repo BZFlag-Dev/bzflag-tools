@@ -41,7 +41,9 @@ while (<>) {
 		# ignore
 		}
 	elsif (/^Author: ([^<]+) <([^\@]+)\@users\.sourceforge\.net>$/) {
-		$author = $2 unless ($1 eq 'cvs2svn');
+		if ($1 ne 'cvs2svn') {
+			$author = ($1 eq 'uid125564') ? $1 : $2;
+			}
 		}
 	elsif (/^Date:   (\d\d\d\d-\d\d-\d\d) (\d\d:\d\d:\d\d) \+0000$/) {
 		$date = "$1T${2}Z";
