@@ -11,7 +11,19 @@ use strict;
 # IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
+use File::Basename ('dirname');
 use XML::LibXML;
+
+# Get the list of Subversion commits that are not it Git at all.
+my %not_in_git;
+my $revlist = (dirname $0) . '/revision_list';
+open(REVISIONS, '<', $revlist) or die "$revlist: $!\n";
+while (<REVISIONS>) {
+	if (/^(\d+),tidy,/) {
+		$not_in_git{$1} = 0 unless ($1 == 22830);
+		}
+	}
+close REVISIONS or warn "Cannot close $revlist: $!\n";
 
 my $tree = XML::LibXML->new()->parse_fh('STDIN');
 my $root = $tree->getDocumentElement;
@@ -20,6 +32,7 @@ print "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<$rootname>\n";
 my $childname = 'logentry';
 foreach my $logentry ($root->getElementsByTagName($childname)) {
 	my $revision = $logentry->getAttribute('revision');
+	next if (defined $not_in_git{$revision});
 	my %elements = ();
 	foreach my $element (qw(author date msg)) {
 		my @element_list = $logentry->getElementsByTagName($element);
