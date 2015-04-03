@@ -51,6 +51,7 @@ foreach my $logentry ($root->getElementsByTagName($childname)) {
 		}
 	$elements{date} =~ s/\.\d{6}Z$/Z/;
 	my $msg = $elements{msg} || '';	# ensure it is defined
+	$msg =~ s/CVS:.*//g;		# the same ugliness was removed in the Git repo
 	$msg =~ s/^\n+//;		# remove leading newlines
 	$msg =~ s/ +\n/\n/g;		# remove spaces at the end of lines
 	$msg =~ s/\s+$//;		# remove whitespace at the end
