@@ -57,7 +57,7 @@ while (<>) {
 		}
 	}
 add_log_entry;
-print '<?xml version="1.0"?>', "\n<log>\n";
+print '<?xml version="1.0" encoding="UTF-8"?>', "\n<log>\n";
 for my $ent (reverse @entries) {
 	print $ent if (defined $ent);
 }

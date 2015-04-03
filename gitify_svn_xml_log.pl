@@ -14,6 +14,8 @@ use strict;
 use File::Basename ('dirname');
 use XML::LibXML;
 
+binmode(STDOUT, ':utf8');	# UTF-8 (2 bytes) instead of ISO-8859-1 (1 byte)
+
 # Get the list of Subversion commits that are not it Git at all.
 my %not_in_git;
 my $revlist = (dirname $0) . '/revision_list';
@@ -48,7 +50,6 @@ foreach my $logentry ($root->getElementsByTagName($childname)) {
 		$elements{author} = '';	# e.g., cvs2svn
 		}
 	$elements{date} =~ s/\.\d{6}Z$/Z/;
-	# need UTF-8 (2 bytes) instead of ISO-8859-1 (1 byte) encoding
 	my $msg = $elements{msg} || '';	# ensure it is defined
 	$msg =~ s/^\n+//;		# remove leading newlines
 	$msg =~ s/ +\n/\n/g;		# remove spaces at the end of lines
