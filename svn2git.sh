@@ -839,7 +839,9 @@ if [ $TARGET_REPO = bzflag -a $NEXT_REVISION -gt 22835 ] ; then
 	git cherry-pick 0a610186a030ea8d1b07ffa1a62df2faf4b70426
 	git cherry-pick b98fcdebc2b1f772ce2ac5967ac77b65bd43b4e7..06795ff4102d62b9e93ab0fe034d29038070ed4a
 	git cherry-pick 7d77503938ce6b7309d313f2c9051b77d3894ec3..879bf3e863df7277e8400cd03848fe1d252d317b
-	git cherry-pick dc6b5226449a5e9140b89a2b906a239792f68071..import3/v2_4_x # merge is now unnecessary
+	git cherry-pick dc6b5226449a5e9140b89a2b906a239792f68071..9c6becb28fd91ec868bc3b2696059e6573982079
+	git cherry-pick 159b068c56302afc8e999364afa38e9d2a892f6d..a7aa8c2df4988093a84636bf570cc38a3fd20f5b
+	git cherry-pick 273a44248080f653dce6dce0c3de91da6374e391..import3/v2_4_x # merge is now unnecessary
 	git branch new_2.4		# temporary non-conflicting branch name
 	git checkout new_2.5
 	git cherry-pick ${PARENT}..':/^update version'
@@ -895,7 +897,7 @@ EOF
 
 	# remove obsolete Subversion branches and tags that are not branch tips
 	git branch -d -r 2_4_OSX_Lion_Rebuild_branch ftgl gsoc_08_libbzw gsoc_libbzw_tag remove_flag_id trepan tags/V1_10_6 tags/merge-2_0-2_1-1 tags/merge-2_0-2_1-2 tags/merge-2_0-2_1-3 tags/merge-2_0-2_1-4 tags/merge-2_0-2_1-5 tags/merge-2_0-2_1-6 tags/merge-2_0-2_1-7 tags/merge-2_0-2_1-8 tags/merge-2_0-2_1-9 tags/merge-2_0-2_1-10 tags/merge-2_0-2_1-11 tags/merge-2_0-2_1-12 tags/pre-mesh tags/preMeshDrawInfo tags/soc-irc tags/v1_11_12 tags/v1_11_14 tags/v1_11_15 tags/v1_11_16 tags/v1_7c_2 tags/v1_7d_5 tags/v1_7d_6 tags/v1_7d_7 tags/v1_7d_8 tags/v1_7d_9 tags/v1_7temp tags/v1_7_4_Beta tags/v1_8abort tags/v1_9_4_Beta tags/v1_9_6_Beta tags/v1_9_7_Beta tags/v1_9_8_Beta tags/v1_9_9_Beta tags/v20020226 tags/v2_0_10RC3 tags/v2_0_10_RC1 tags/v2_0_10_RC2 tags/v2_0_12.deleted tags/v2_0_4_rc1 tags/v2_0_4_rc4 tags/v2_0_4_rc5 tags/v2_0_5_b1 tags/v2_99archive tags/v3_0_alpha1 tags/v3_0_alpha2 || true
-	git branch -D remotes/gsoc_libbzw_tag	# not a remote branch (don't know why -d doesn't work)
+	git branch -D remotes/gsoc_libbzw_tag || true	# not a remote branch (don't know why -d doesn't work)
 
 	# fix some e-mail addresses and full names
 	CANONICAL_AUTHORS='
